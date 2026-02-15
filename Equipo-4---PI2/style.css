@@ -94,6 +94,17 @@ body {
     transform: scale(1.1);
 }
 
+.notif-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    background: rgb(255, 196, 0);
+    border-radius: 50%;
+    border: 1px solid white;
+}
+
 /* --- Derecha --- */
 .right-buttons {
     display: flex;
@@ -130,6 +141,12 @@ body {
 
 .search-box:hover {
     background: rgba(255,255,255,0.25);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-bottom: 2px solid #95bb8c98;
+    box-shadow: 0 0 10px rgba(228, 228, 228, 0.395);
 }
 
 /* Botón idioma */
@@ -193,6 +210,31 @@ body {
 
     filter: saturate(.8) contrast(1.01);
     z-index: -1;
+}
+
+.slogan {
+    position: fixed;
+    left: 50px;
+    bottom: 30px;
+    color: rgba(224, 234, 218, 0.9);
+    font-family: 'Playfair Display', serif;
+    font-weight: 200;
+    font-size: clamp(14px, 2vw, 18px);
+    max-width: 600px;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeInSlogan 1s forwards 0.5s;
+
+    transform: translateZ(0); /* FORZAR que sea fixed */
+    will-change: transform;
+}
+
+@keyframes fadeInSlogan {
+    to {
+        opacity: 1;
+    }
 }
 
 .logo {
