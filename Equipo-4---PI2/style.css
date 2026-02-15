@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.login-box {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+
+    padding: 10px 20px;
+
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+
+    color: white;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.login-box:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-3px);
+}
+
+.home {
+    position: relative;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.home::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url("imagenes/Colima, volcan.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: saturate(.8) contrast(1.01);
+    z-index: -1;
+}
+
+.logo {
+    font-family: 'League Spartan', sans-serif;
+    font-size: clamp(60px, 12vw, 180px);
+    font-weight: 700;
+    color: white;
+    letter-spacing: 5px;
+}
+
+.glass {
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.9),
+        rgba(255,255,255,0.4)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    -webkit-text-stroke: 1px rgba(255,255,255,0.7);
+
+    text-shadow:
+        0 2px 4px rgba(0,0,0,0.3),
+        0 0 15px rgba(255,255,255,0.2);
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+.noticias {
+    height: 100vh;
+    background-color: #fff;
+    padding: 50px;
+}
