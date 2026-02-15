@@ -24,11 +24,11 @@ body {
     padding: 10px 20px;
 
     background: rgba(255, 255, 255, 0.08); /* glassmorphism */
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 15px;
     border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.156);
 }
 
 .top-bar > * {
@@ -114,14 +114,16 @@ body {
 
 /* Buscador premium */
 .search-box {
+    width: 780px;
+    padding: 10px 5px;
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 8px 15px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(180, 192, 182, 0.237);
     backdrop-filter: blur(12px);
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.255);
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     transition: 0.4s ease;
 }
@@ -132,11 +134,11 @@ body {
     background: transparent;
     color: white;
     font-size: 16px;
-    width: 150px;
+    width: 720px;
 }
 
 .search-box i {
-    color: white;
+    color: rgba(254, 254, 254, 0.893);
 }
 
 .search-box:hover {
@@ -213,16 +215,16 @@ body {
 }
 
 .slogan {
-    position: fixed;
-    left: 50px;
+    position: absolute;
+    left: 370px;
     bottom: 30px;
-    color: rgba(224, 234, 218, 0.9);
+    color: rgba(255, 255, 255, 0);
     font-family: 'Playfair Display', serif;
-    font-weight: 200;
+    font-weight: 180;
     font-size: clamp(14px, 2vw, 18px);
     max-width: 600px;
     line-height: 1.2;
-    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0);
     z-index: 9999;
     opacity: 0;
     animation: fadeInSlogan 1s forwards 0.5s;
@@ -243,6 +245,9 @@ body {
     font-weight: 700;
     color: white;
     letter-spacing: 5px;
+    text-shadow: 
+    0 2px 6px rgba(0,0,0,0.6),
+    0 0 15px rgba(255,255,255,0.2);
 }
 
 .glass {
