@@ -284,3 +284,432 @@ body {
     background-color: #fff;
     padding: 50px;
 }
+/* ========== SECCIÓN CATEGORÍAS ========== */
+.categorias {
+    padding: 80px 50px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecf0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.categorias::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+}
+
+.categorias-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #2c3e2f;
+    margin-bottom: 50px;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+    animation: fadeInUp 0.8s ease;
+}
+
+.categorias-titulo::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #8fc1a0, #4a7c5c);
+    border-radius: 2px;
+}
+
+.categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1300px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+/* Tarjeta individual */
+.categoria-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: white;
+    height: 400px;
+    position: relative;
+    animation: fadeInUp 0.8s ease backwards;
+}
+
+.categoria-card:nth-child(1) { animation-delay: 0.2s; }
+.categoria-card:nth-child(2) { animation-delay: 0.4s; }
+.categoria-card:nth-child(3) { animation-delay: 0.6s; }
+
+.categoria-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* IMAGEN - Ahora con !important para forzar que se vea */
+.card-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    position: relative;
+    transition: transform 0.6s ease;
+}
+
+.categoria-card:hover .card-image {
+    transform: scale(1.05);
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.5) 40%,
+        rgba(0, 0, 0, 0.2) 80%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 30px 25px;
+    color: white;
+    transition: background 0.4s ease;
+}
+
+.categoria-card:hover .card-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+}
+
+.card-titulo {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.card-descripcion {
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    max-width: 90%;
+    transform: translateY(0);
+    transition: transform 0.3s ease 0.05s;
+}
+
+/* ===== BOTÓN ORIGINAL RESTAURADO ===== */
+.card-boton {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-boton i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.card-boton:hover {
+    background: white;
+    color: #2c3e2f;
+    border-color: white;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.card-boton:hover i {
+    transform: translateX(5px);
+    color: #2c3e2f;
+}
+/* ===== FIN BOTÓN ORIGINAL ===== */
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .categorias {
+        padding: 50px 25px;
+    }
+    
+    .categorias-titulo {
+        font-size: 2rem;
+    }
+    
+    .categorias-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .categoria-card {
+        height: 350px;
+    }
+    
+    .card-titulo {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .categorias-titulo {
+        font-size: 1.8rem;
+    }
+    
+    .categoria-card {
+        height: 300px;
+    }
+    
+    .card-overlay {
+        padding: 20px;
+    }
+}
+/* ===== FOOTER CRÉDITOS COMPLETO ===== */
+.footer-creditos {
+    background: linear-gradient(135deg, #1a2a1a 0%, #2c3e2f 100%);
+    color: white;
+    padding: 50px 0;
+    border-top: 3px solid #8fc1a0;
+}
+
+.footer-contenido {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* ===== LADO IZQUIERDO - CRÉDITOS ===== */
+.creditos-lista {
+    flex: 1;
+    min-width: 250px;
+}
+
+.creditos-lista h3 {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: #8fc1a0;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.creditos-lista h3::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: #8fc1a0;
+}
+
+.creditos-lista ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.creditos-lista li {
+    font-family: Playfair Display, sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    position: relative;
+    padding-left: 20px;
+}
+
+.creditos-lista li::before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: #8fc1a0;
+    font-size: 1rem;
+}
+
+.creditos-lista li:hover {
+    color: white;
+    transform: translateX(5px);
+}
+
+/* ===== CENTRO - UBICACIÓN Y FECHA ===== */
+.ubicacion-centro {
+    text-align: center;
+    padding: 0 30px;
+    position: relative;
+}
+
+.ubicacion-centro::before,
+.ubicacion-centro::after {
+    content: "✦";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8fc1a0;
+    font-size: 1.2rem;
+    opacity: 0.6;
+}
+
+.ubicacion-centro::before {
+    left: 0;
+}
+
+.ubicacion-centro::after {
+    right: 0;
+}
+
+.ciudad {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.fecha {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.1rem;
+    color: #8fc1a0;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+/* ===== LADO DERECHO - UNIVERSIDAD ===== */
+.universidad-info {
+    flex: 1;
+    min-width: 250px;
+    text-align: right;
+}
+
+.universidad-info h3 {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #8fc1a0;
+    letter-spacing: 2px;
+}
+
+.universidad-info p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .footer-contenido {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    
+    .creditos-lista {
+        text-align: center;
+    }
+    
+    .creditos-lista h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .creditos-lista li {
+        padding-left: 0;
+    }
+    
+    .creditos-lista li::before {
+        display: none;
+    }
+    
+    .ubicacion-centro {
+        order: 3;
+        padding: 20px 0;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .ubicacion-centro::before,
+    .ubicacion-centro::after {
+        display: none;
+    }
+    
+    .universidad-info {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-creditos {
+        padding: 40px 0;
+    }
+    
+    .creditos-lista h3,
+    .universidad-info h3 {
+        font-size: 1.3rem;
+    }
+    
+    .creditos-lista li {
+        font-size: 1rem;
+    }
+    
+    .universidad-info p {
+        font-size: 1rem;
+    }
+    
+    .ciudad {
+        font-size: 1.1rem;
+    }
+    
+    .fecha {
+        font-size: 1rem;
+    }
+}
