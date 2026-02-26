@@ -1,0 +1,267 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #0d0d0d;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedor {
+    flex: 1;
+    display: flex;
+}
+
+/* ---------- LADO IZQUIERDO ---------- */
+
+.login-section {
+    width: 50%;
+    padding: 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 3; /* Encima de todo */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.logo h2 {
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.circulo {
+    width: 40px;
+    height: 40px;
+    background-color: #275f2d;
+    border-radius: 50%;
+}
+
+.card {
+    background: rgba(47, 47, 47, 0.7);
+    backdrop-filter: blur(18px);
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-left: 20px;
+    border: 1px solid #c6a87d;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+}
+
+.card h3 {
+    color: #c6a87d;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: #f1f1f1;
+    font-size: 14px;
+}
+
+.password {
+    position: relative;
+}
+
+.password .eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.password .eye img {
+    width: 25px;
+    height: auto;
+    display: block;
+}
+
+/* ---------- SWITCH ---------- */
+
+.switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 2px;
+    top: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+    background-color: #2196f3;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(20px);
+}
+
+/* ---------- BOTONES ---------- */
+
+.extras {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.extras a {
+    color: #f77f00;
+    text-decoration: none;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #b08968;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background: #9c6644;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 20px 0;
+}
+
+.btn-google {
+    width: 100%;
+    padding: 10px;
+    background: #323232;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.btn-google img {
+    width: 18px;
+}
+
+.register {
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.register a {
+    color: #f77f00;
+    text-decoration: none;
+}
+
+/* ---------- LADO DERECHO ---------- */
+
+.image-section {
+    width: 50%;
+    position: relative;
+    overflow: visible;
+}
+
+.jaguar {
+    position: absolute;
+    bottom: -60px;
+    right: 40px;
+    width: 118%;
+    height: auto;
+    object-fit: contain;
+    z-index: 0; /* Más atrás */
+}
+
+.planta {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 1250px;  /* Ajusta tamaño aquí */
+
+    height: 300px;
+    z-index: 1;    /* Encima del jaguar, debajo del login */
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 13px;
+    color: #ccc;
+    font-weight: 600;
+    background: transparent;
+}
+
+.icono {
+    width: 18px;
+    height: 18px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+    .contenedor {
+        flex-direction: column;
+    }
+
+    .login-section,
+    .image-section {
+        width: 100%;
+    }
+
+    .image-section {
+        height: 300px;
+    }
+}
