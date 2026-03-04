@@ -11,11 +11,14 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;  
 }
 
 .contenedor {
     flex: 1;
     display: flex;
+    height: 100vh;   /* fuerza layout exacto al viewport */
+
 }
 
 /* ---------- LADO IZQUIERDO ---------- */
@@ -58,6 +61,43 @@ body {
     margin-left: 20px;
     border: 1px solid #c6a87d;
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.forms {
+    position: relative;
+}
+
+.form {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.5s ease;
+}
+
+.form.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+}
+
+.switch-text {
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.switch-text span {
+    color: #f77f00;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .card h3 {
@@ -265,3 +305,4 @@ footer {
         height: 300px;
     }
 }
+
