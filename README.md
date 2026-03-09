@@ -1,9 +1,5 @@
 <!-- TITULO GRANDE --> <h1 align="center">🌿 ECOLIMA</h1> <p align="center"> <b>Explorando la biodiversidad del estado de Colima</b> </p> <p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="900"> </p>
 
-Explorando la biodiversidad de Colima
-<p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="800"> </p> <p align="center"> Plataforma digital dedicada a difundir la riqueza natural del estado de Colima </p>
-🌎 Descripción General
-
 ECOLIMA es una plataforma web diseñada para difundir información confiable sobre la biodiversidad del estado de Colima.
 
 El sitio permite explorar especies, ecosistemas y datos ambientales de manera clara, visual y accesible para la sociedad, promoviendo el conocimiento del patrimonio natural del estado.
