@@ -1,4 +1,7 @@
 # 🌿 ECOLIMA
+
+![Volcán de Colima](E-Colima/assets/Home/Colima,%20volcan.jpg)
+
 📖 DESCRIPCION GENERAL
 
 ECOLIMA es una plataforma web diseñada para difundir información confiable sobre la biodiversidad del estado de Colima. El sitio permite explorar especies, ecosistemas y datos ambientales de manera clara, visual y accesible para la sociedad.
