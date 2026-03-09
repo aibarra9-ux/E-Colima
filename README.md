@@ -4,7 +4,7 @@ ECOLIMA es una plataforma web diseñada para difundir información confiable sob
 
 El sitio permite explorar especies, ecosistemas y datos ambientales de manera clara, visual y accesible para la sociedad, promoviendo el conocimiento del patrimonio natural del estado.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Objetivo
 
