@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +41,15 @@
                 <i class="fas fa-search"></i>
             </div>
             <div class="lang-box">ES / EN</div>
-            <a href="../Login/login.html" class="login-box">Iniciar sesión</a>
+            <?php if(isset($_SESSION['usuario'])): ?>
+
+                <a href="../Login/logout.php" class="login-box">Cerrar sesión</a>
+
+            <?php else: ?>
+
+                <a href="../Login/login.php" class="login-box">Iniciar sesión</a>
+
+            <?php endif; ?>        
         </div>
     </div>
     <div class="home">

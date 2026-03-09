@@ -20,14 +20,29 @@
 
             <div class="card">
                 <h3>Hola de nuevo, ¿Qué tal?</h3>
+                <?php if(isset($_GET['error'])): ?>
+                    <div class="login-error" style="color: #ff4d4f !important;">
+                        <span style="color: #ff4d4f !important;">⚠</span>
+                        <span style="color: #ff4d4f !important;">
+                            <?php
+                                if($_GET['error'] == "usuario"){
+                                    echo "Usuario no encontrado";
+                                }
+                                if($_GET['error'] == "password"){
+                                    echo "Contraseña incorrecta";
+                                }
+                            ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
 
-                <form>
+                <form action="procesar_login.php" method="POST">
                     <div class="input-group">
-                        <input type="text" placeholder="Nombre de usuario">
+                        <input type="text" name="username" placeholder="Nombre de usuario" required>
                     </div>
 
                     <div class="input-group password">
-                        <input type="password" placeholder="Ingresar contraseña">
+                        <input type="password" name = "password" placeholder="Ingresar contraseña" required>
                         <span class="eye">
                             <img src="../../assets/Login/ojo_abierto.png" alt="mostrar contraseña">
                         </span>
@@ -53,7 +68,7 @@
 
                     <p class="register">
                         No tienes una cuenta aún?
-                        <a href="registro.html">Regístrate</a>
+                        <a href="registro.php">Regístrate</a>
                     </p>
 
                 </form>
