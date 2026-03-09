@@ -30,6 +30,8 @@ Facilitar el acceso a información ambiental confiable sobre la biodiversidad de
 
 🎓 Plataforma informativa para estudiantes y público general
 
+---
+
 🌄 Inspiración del proyecto
 
 Colima posee una enorme diversidad natural: volcanes, selvas, costas y una gran variedad de especies.
