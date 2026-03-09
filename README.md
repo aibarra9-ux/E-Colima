@@ -1,4 +1,5 @@
 🌿 ECOLIMA
+
 Explorando la biodiversidad de Colima
 <p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="800"> </p> <p align="center"> Plataforma digital dedicada a difundir la riqueza natural del estado de Colima </p>
 🌎 Descripción General
