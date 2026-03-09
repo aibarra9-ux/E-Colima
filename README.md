@@ -16,7 +16,7 @@ Facilitar el acceso a información ambiental confiable sobre la biodiversidad de
 
 🦋 Conservación de los ecosistemas regionales
 
-═══════════════════════════════════════
+<p align="center">────────────────────────</p>
 
 🌳 Características
 
