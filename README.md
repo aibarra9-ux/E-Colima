@@ -1,4 +1,4 @@
-<!-- TITULO GRANDE --> <h1 align="center">🌿 ECOLIMA</h1> <p align="center"> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <b>Explorando la biodiversidad del estado de Colima</b> </p> <p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="900"> </p>
+<!-- TITULO GRANDE --> <h1 align="center">🌿 ECOLIMA</h1> <p align="center"> ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <b>Explorando la biodiversidad del estado de Colima</b> </p> <p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="900"> </p>
 
 ECOLIMA es una plataforma web diseñada para difundir información confiable sobre la biodiversidad del estado de Colima.
 
