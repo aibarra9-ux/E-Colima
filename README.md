@@ -1,31 +1,36 @@
-# 🌿 ECOLIMA
+🌿 ECOLIMA
+Explorando la biodiversidad de Colima
+<p align="center"> <img src="assets/Home/Colima,%20volcan.jpg" width="800"> </p> <p align="center"> Plataforma digital dedicada a difundir la riqueza natural del estado de Colima </p>
+🌎 Descripción General
 
-![Volcán de Colima](assets/Home/Colima,%20volcan.jpg)
+ECOLIMA es una plataforma web diseñada para difundir información confiable sobre la biodiversidad del estado de Colima.
 
-📖 DESCRIPCION GENERAL
+El sitio permite explorar especies, ecosistemas y datos ambientales de manera clara, visual y accesible para la sociedad, promoviendo el conocimiento del patrimonio natural del estado.
 
-ECOLIMA es una plataforma web diseñada para difundir información confiable sobre la biodiversidad del estado de Colima. El sitio permite explorar especies, ecosistemas y datos ambientales de manera clara, visual y accesible para la sociedad.
+🎯 Objetivo
 
-🎯 OBJETIVO
+Facilitar el acceso a información ambiental confiable sobre la biodiversidad de Colima, fomentando:
 
-El objetivo del proyecto es facilitar el acceso a información ambiental confiable sobre la biodiversidad de Colima, promoviendo el conocimiento, la educación ambiental y la conciencia sobre la conservación de los ecosistemas regionales.
+🌱 Educación ambiental
 
-🌳 CARACTERÍSTICAS 
+🌿 Conciencia ecológica
 
-Información sobre especies y ecosistemas del estado de Colima
+🦋 Conservación de los ecosistemas regionales
 
-Diseño visual atractivo enfocado en la naturaleza
+🌳 Características
 
-Navegación simple e intuitiva
+✨ El proyecto incluye:
 
-Plataforma informativa para estudiantes y público general
+🌺 Información sobre especies y ecosistemas de Colima
 
-Tecnologías utilizadas
+🎨 Diseño visual enfocado en la naturaleza
 
-HTML
+🧭 Navegación simple e intuitiva
 
-CSS
+🎓 Plataforma informativa para estudiantes y público general
 
-JavaScript
+🌄 Inspiración del proyecto
 
-GitHub para control de versiones
+Colima posee una enorme diversidad natural: volcanes, selvas, costas y una gran variedad de especies.
+
+ECOLIMA busca convertirse en una herramienta digital que permita explorar, aprender y valorar estos ecosistemas.
