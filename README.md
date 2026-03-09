@@ -1,6 +1,6 @@
 # 🌿 ECOLIMA
 
-![Volcán de Colima](E-Colima/assets/Home/Colima,%20volcan.jpg)
+![Volcán de Colima](assets/Home/Colima,%20volcan.jpg)
 
 📖 DESCRIPCION GENERAL
 
