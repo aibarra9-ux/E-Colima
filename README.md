@@ -8,6 +8,8 @@ El sitio permite explorar especies, ecosistemas y datos ambientales de manera cl
 
 🎯 Objetivo
 
+---
+
 Facilitar el acceso a información ambiental confiable sobre la biodiversidad de Colima, fomentando:
 
 🌱 Educación ambiental
@@ -19,6 +21,8 @@ Facilitar el acceso a información ambiental confiable sobre la biodiversidad de
 ---
 
 🌳 Características
+
+---
 
 ✨ El proyecto incluye:
 
@@ -33,6 +37,8 @@ Facilitar el acceso a información ambiental confiable sobre la biodiversidad de
 ---
 
 🌄 Inspiración del proyecto
+
+---
 
 Colima posee una enorme diversidad natural: volcanes, selvas, costas y una gran variedad de especies.
 
