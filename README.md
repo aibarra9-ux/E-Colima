@@ -16,6 +16,8 @@ Facilitar el acceso a información ambiental confiable sobre la biodiversidad de
 
 🦋 Conservación de los ecosistemas regionales
 
+═══════════════════════════════════════
+
 🌳 Características
 
 ✨ El proyecto incluye:
