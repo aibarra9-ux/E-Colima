@@ -22,6 +22,31 @@ body {
 }
 
 /* ---------- LADO IZQUIERDO ---------- */
+.back-home{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+
+    padding: 10px 18px;
+    border-radius: 10px;
+
+    background: rgba(47,47,47,0.85);
+    border: 1px solid #c6a87d;
+
+    color: #c6a87d;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+
+    backdrop-filter: blur(10px);
+    transition: all 0.25s ease;
+}
+
+.back-home:hover{
+    background: #c6a87d;
+    color: #1a1a1a;
+    transform: translateY(-2px);
+}
 
 .login-section {
     width: 50%;
@@ -32,24 +57,7 @@ body {
     z-index: 3; /* Encima de todo */
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 40px;
-}
 
-.logo h2 {
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-.circulo {
-    width: 40px;
-    height: 40px;
-    background-color: #275f2d;
-    border-radius: 50%;
-}
 
 .card {
     background: rgba(47, 47, 47, 0.7);
@@ -61,6 +69,7 @@ body {
     margin-left: 20px;
     border: 1px solid #c6a87d;
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+    margin-top: 40px;
 }
 
 .card {
@@ -121,6 +130,10 @@ body {
     transition: 0.3s;
 }
 
+.input-group:hover {
+    box-shadow: 0 5px 10px rgba(73, 148, 223, 0.4);
+}
+
 
 .password {
     position: relative;
@@ -135,7 +148,7 @@ body {
 }
 
 .password .eye img {
-    width: 25px;
+    width: 20px;
     height: auto;
     display: block;
 }
@@ -200,7 +213,7 @@ body {
 .btn-login {
     width: 100%;
     padding: 12px;
-    background: #b08968;
+    background: #b0689f;
     font-size: 16px;
     border: none;
     border-radius: 8px;
@@ -209,14 +222,14 @@ body {
     cursor: pointer;
     margin-bottom: 20px;
     transition: 0.3s ease;
-    background: linear-gradient(135deg, #b089b0, white);
+    background: linear-gradient(135deg, #d0802b, rgb(217, 149, 13));
 
 }
 
 .btn-login:hover {
     transform: translateY(-3px);
     background: linear-gradient(135deg, #b08968, #f77f00);
-    box-shadow: 0 8px 20px rgba(58, 123, 213, 0.4);
+    box-shadow: 0 8px 20px rgba(234, 235, 236, 0.4);
 }
 
 .divider {
@@ -241,6 +254,11 @@ body {
 
 .btn-google img {
     width: 18px;
+}
+
+.btn-google:hover {
+    background: linear-gradient(135deg, #323232, #323232);
+    box-shadow: 0 8px 20px rgba(234, 235, 236, 0.4);
 }
 
 .register {
@@ -317,11 +335,13 @@ footer {
 
 .login-error {
     color: #ff4d4f !important;
+    position: relative;
     background: rgba(255, 77, 79, 0.12) !important;
     border: 1px solid rgba(255, 77, 79, 0.3) !important;
     border-radius: 10px !important;
     padding: 12px 16px !important;
-    margin-bottom: 25px !important;
+    margin-bottom: 0px !important;
+    top: -20px !important;
     font-size: 14px !important;
     font-weight: 500 !important;
     display: flex !important;
@@ -332,7 +352,7 @@ footer {
 
 .login-error span {
     color: #ff4d4f !important;
-    line-height: 1.4 !important;
+    line-height: 0.6 !important;
 }
 
 .login-error span:first-child {
@@ -340,4 +360,20 @@ footer {
 }
 
 
+
+#errorPassword{
+    display: none;
+
+    color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.12);
+    border: 1px solid rgba(255, 77, 79, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(2px);
+}
 
