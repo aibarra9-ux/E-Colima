@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Proyecto Integrador - Login</title>
+    <title>Login</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 <body>
 
@@ -12,24 +13,35 @@
 
         <!-- Lado izquierdo -->
         <div class="login-section">
-
-            <div class="logo">
-                <h2>Proyecto<br>Integrador</h2>
-                <div class="circulo"></div>
-            </div>
+            <a href="../Home/home.php" class="back-home">← Volver</a>
 
             <div class="card">
                 <h3>Hola de nuevo, ¿Qué tal?</h3>
+                <?php if(isset($_GET['error'])): ?>
+                    <div class="login-error" style="color: #ff4d4f !important;">
+                        <span style="color: #ff4d4f !important;">⚠</span>
+                        <span style="color: #ff4d4f !important;">
+                            <?php
+                                if($_GET['error'] == "usuario"){
+                                    echo "Usuario no encontrado";
+                                }
+                                if($_GET['error'] == "password"){
+                                    echo "Contraseña incorrecta";
+                                }
+                            ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
 
-                <form>
+                <form action="procesar_login.php" method="POST">
                     <div class="input-group">
-                        <input type="text" placeholder="Nombre de usuario">
+                        <input type="text" name="username" placeholder="Nombre de usuario" required>
                     </div>
 
                     <div class="input-group password">
-                        <input type="password" placeholder="Ingresar contraseña">
+                        <input type="password" name = "password" id="password"placeholder="Ingresar contraseña" required>
                         <span class="eye">
-                            <img src="../../assets/Login/ojo_abierto.png" alt="mostrar contraseña">
+                            <img src="../../assets/Login/eye-off-fill.png" id="togglePassword" alt="mostrar contraseña">
                         </span>
                     </div>
 
@@ -53,7 +65,7 @@
 
                     <p class="register">
                         No tienes una cuenta aún?
-                        <a href="#">Regístrate</a>
+                        <a href="registro.php">Regístrate</a>
                     </p>
 
                 </form>
@@ -68,10 +80,6 @@
         </div>
 
     </div>
-
-    <footer>
-        © 2026 Proyecto Integrador. Todos los derechos reservados
-    </footer>
-
+   <script src="../../JavaScript/Login/login.js"></script>
 </body>
 </html>

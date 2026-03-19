@@ -11,14 +11,42 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;  
 }
 
 .contenedor {
     flex: 1;
     display: flex;
+    height: 100vh;   /* fuerza layout exacto al viewport */
+
 }
 
 /* ---------- LADO IZQUIERDO ---------- */
+.back-home{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+
+    padding: 10px 18px;
+    border-radius: 10px;
+
+    background: rgba(47,47,47,0.85);
+    border: 1px solid #c6a87d;
+
+    color: #c6a87d;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+
+    backdrop-filter: blur(10px);
+    transition: all 0.25s ease;
+}
+
+.back-home:hover{
+    background: #c6a87d;
+    color: #1a1a1a;
+    transform: translateY(-2px);
+}
 
 .login-section {
     width: 50%;
@@ -29,24 +57,7 @@ body {
     z-index: 3; /* Encima de todo */
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 40px;
-}
 
-.logo h2 {
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-.circulo {
-    width: 40px;
-    height: 40px;
-    background-color: #275f2d;
-    border-radius: 50%;
-}
 
 .card {
     background: rgba(47, 47, 47, 0.7);
@@ -58,6 +69,44 @@ body {
     margin-left: 20px;
     border: 1px solid #c6a87d;
     box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+    margin-top: 40px;
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.forms {
+    position: relative;
+}
+
+.form {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.5s ease;
+}
+
+.form.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+}
+
+.switch-text {
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.switch-text span {
+    color: #f77f00;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .card h3 {
@@ -76,7 +125,15 @@ body {
     border: none;
     background: #f1f1f1;
     font-size: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    outline: none;
+    transition: 0.3s;
 }
+
+.input-group:hover {
+    box-shadow: 0 5px 10px rgba(73, 148, 223, 0.4);
+}
+
 
 .password {
     position: relative;
@@ -91,7 +148,7 @@ body {
 }
 
 .password .eye img {
-    width: 25px;
+    width: 20px;
     height: auto;
     display: block;
 }
@@ -156,18 +213,23 @@ body {
 .btn-login {
     width: 100%;
     padding: 12px;
-    background: #b08968;
+    background: #b0689f;
+    font-size: 16px;
     border: none;
     border-radius: 8px;
     color: white;
     font-weight: bold;
     cursor: pointer;
     margin-bottom: 20px;
-    transition: 0.3s;
+    transition: 0.3s ease;
+    background: linear-gradient(135deg, #d0802b, rgb(217, 149, 13));
+
 }
 
 .btn-login:hover {
-    background: #9c6644;
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #b08968, #f77f00);
+    box-shadow: 0 8px 20px rgba(234, 235, 236, 0.4);
 }
 
 .divider {
@@ -192,6 +254,11 @@ body {
 
 .btn-google img {
     width: 18px;
+}
+
+.btn-google:hover {
+    background: linear-gradient(135deg, #323232, #323232);
+    box-shadow: 0 8px 20px rgba(234, 235, 236, 0.4);
 }
 
 .register {
@@ -265,3 +332,48 @@ footer {
         height: 300px;
     }
 }
+
+.login-error {
+    color: #ff4d4f !important;
+    position: relative;
+    background: rgba(255, 77, 79, 0.12) !important;
+    border: 1px solid rgba(255, 77, 79, 0.3) !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 0px !important;
+    top: -20px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    backdrop-filter: blur(2px) !important;
+}
+
+.login-error span {
+    color: #ff4d4f !important;
+    line-height: 0.6 !important;
+}
+
+.login-error span:first-child {
+    font-size: 18px !important;
+}
+
+
+
+#errorPassword{
+    display: none;
+
+    color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.12);
+    border: 1px solid rgba(255, 77, 79, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(2px);
+}
+
