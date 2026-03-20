@@ -192,6 +192,51 @@ body {
     transform: scale(1.05);
 }
 
+.alerta {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #61936398;
+    color: white;
+
+    padding: 12px 22px;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+
+    z-index: 9999;
+
+    opacity: 0;
+    animation: entrar 0.4s ease forwards;
+}
+
+@keyframes entrar {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes salir {
+    from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+}
+
 .home {
     position: relative;
     height: 100vh;

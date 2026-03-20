@@ -33,7 +33,7 @@ session_start();
                 <span class="notif-dot"></span>
             </div>
         </div>
-
+        
         <!-- Derecha: buscador + idioma + login -->
         <div class="right-buttons">
             <div class="search-box">
@@ -52,6 +52,16 @@ session_start();
             <?php endif; ?>        
         </div>
     </div>
+
+    <?php if(isset($_SESSION['mensaje'])): ?>
+        <div class="alerta">
+            <?php 
+                echo $_SESSION['mensaje']; 
+                unset($_SESSION['mensaje']);
+            ?>
+        </div>
+    <?php endif; ?>
+
     <div class="home">
         <h1 class="logo">
             E<span class="glass">CO</span>LIMA
@@ -100,6 +110,15 @@ session_start();
         </p>
     </section>
 
+    <script>
+    setTimeout(() => {
+        const alerta = document.querySelector('.alerta');
+        if(alerta){
+            alerta.style.display = 'none';
+        }
+    }, 3000); // 3 segundos
+    </script>
+
     <!-- ===== FOOTER CRÉDITOS ===== -->
     <footer class="footer-creditos">
         <div class="footer-contenido">
@@ -128,5 +147,17 @@ session_start();
             </div>
         </div>
     </footer>
+    <script>
+    setTimeout(() => {
+        const alerta = document.querySelector('.alerta');
+        if(alerta){
+            alerta.style.animation = "salir 0.4s ease forwards";
+
+            setTimeout(() => {
+                alerta.remove();
+            }, 400);
+        }
+    }, 1500); // ⏱ dura 2.5 segundos
+    </script>
 </body>
 </html>
