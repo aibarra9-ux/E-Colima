@@ -54,7 +54,7 @@ session_start();
     </div>
 
     <?php if(isset($_SESSION['mensaje'])): ?>
-        <div class="alerta">
+        <div class="alerta <?php echo $_SESSION['tipo'] ?? ''; ?>">
             <?php 
                 echo $_SESSION['mensaje']; 
                 unset($_SESSION['mensaje']);
@@ -63,11 +63,16 @@ session_start();
     <?php endif; ?>
 
     <div class="home">
+        
+        <?php if(isset($_GET['success']) && isset($_SESSION['usuario'])): ?>
+            <p class="bienvenida">Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>
+        <?php endif; ?>
+        
         <h1 class="logo">
             E<span class="glass">CO</span>LIMA
         </h1>
-
-    </div>  
+        
+    </div>
 
     <div class="slogan">
         Colima es un museo vivo de biodiversidad, donde cada especie y cada paisaje cuentan una historia; explora, aprende y descubre cómo conservar estos tesoros naturales con información completa y confiable.

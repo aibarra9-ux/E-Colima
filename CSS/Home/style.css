@@ -192,51 +192,6 @@ body {
     transform: scale(1.05);
 }
 
-.alerta {
-    position: fixed;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    background-color: #61936398;
-    color: white;
-
-    padding: 12px 22px;
-    border-radius: 12px;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-
-    z-index: 9999;
-
-    opacity: 0;
-    animation: entrar 0.4s ease forwards;
-}
-
-@keyframes entrar {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -20px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-}
-
-@keyframes salir {
-    from {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-    to {
-        opacity: 0;
-        transform: translate(-50%, -30px);
-    }
-}
-
 .home {
     position: relative;
     height: 100vh;
@@ -259,6 +214,56 @@ body {
 
     filter: saturate(.8) contrast(1.01);
     z-index: -1;
+}
+
+.bienvenida {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    /* Pegado justo encima del logo */
+    bottom: calc(30% + 60px);
+
+    font-family: 'League Spartan', sans-serif;
+    font-size: clamp(24px, 1.4vw, 17px);
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    /* Color dorado con profundidad */
+    color: rgba(255, 255, 255, 0.673);
+    text-shadow:
+        0 0 10px rgba(198, 168, 125, 0.8),
+        0 0 25px rgba(198, 168, 125, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+
+    /* Animación */
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    animation: escribirBienvenida 2.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.35s;
+}
+
+@keyframes escribirBienvenida {
+    0% {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+        text-shadow:
+            0 0 30px rgba(198, 168, 125, 1),
+            0 0 60px rgba(198, 168, 125, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        clip-path: inset(0 0% 0 0);
+        opacity: 1;
+        text-shadow:
+            0 0 10px rgba(198, 168, 125, 0.8),
+            0 0 25px rgba(198, 168, 125, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.8);
+    }
 }
 
 .slogan {
