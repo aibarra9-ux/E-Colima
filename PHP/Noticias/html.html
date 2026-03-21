@@ -1,76 +1,104 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+    <!-- ===================== CONFIGURACIÓN ===================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección de publicaciones</title>
 
-        <title>Seccion de publicaciones</title>
-
+    <!-- ===================== TIPOGRAFÍA ===================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../CSS/Noticias/styles.css">
 
+    <!-- ===================== ESTILOS ===================== -->
+    <link rel="stylesheet" href="../../CSS/Noticias/styles.css">
 </head>
 
 <body>
 
-    <!-- ===================== SIDEBAR ===================== -->
-    <div class="sidebar" id="sidebar">
-        <button>Todos</button>
-        <button>Categoría 1</button>
-        <button>Categoría 2</button>
-        <button>Categoría 3</button>
-        <button>Categoría 4</button>
-    </div>
-    
-    <!-- AJUSTES Y ACTUALIZACIONES-->
+    <!-- ========================================================= -->
+    <!-- ======================= TOP BAR ========================== -->
+    <!-- ========================================================= -->
 
-    <!-- ===================== TOP BAR ===================== -->
-    <div class="top-bar">
-            <!-- Izquierda: logo + perfil -->
-            <div class="left-icons">
-                <div class="logo-box">
-                    <img src="../../assets/Home/logomini.png" alt="Logo" class="logo-img">
-                </div>
-                <div class="perfil-box">
-                    <i class="fas fa-user"></i>
-                    <span class="notif-dot"></span>
-                </div>
+    <div class="barra-superior">
+
+        <!-- IZQUIERDA: logo + perfil -->
+        <div class="iconos-izquierda">
+
+            <div class="caja-logo">
+                <img src="../../assets/Home/logomini.png" alt="Logo" class="imagen-logo">
             </div>
 
-            <!-- Derecha: buscador + idioma + login -->
-            <div class="right-buttons">
-                <div class="search-box">
-                    <input type="text" placeholder="Buscar...">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="lang-box">ES / EN</div>
-                <a href="../Login/login.html" class="login-box">Iniciar sesión</a>
+            <div class="caja-perfil">
+                <i class="fas fa-user"></i>
+                <span class="punto-notificacion"></span>
             </div>
-        </div>
-
-            <!-- ===================== TITULO ===================== -->
-        <div class="hero">
-
-            <h1 class="hero-title">FLORA</h1>
-            <p class="hero-text">Descubre la belleza de la naturaleza</p>
 
         </div>
-    <!-- ===================== CONTENEDOR PRINCIPAL DE TODA LA PAGINA ===================== -->
-    <div class="main-content" id="mainContent">
-        <!-- BOTONES -->
-        <div class="button-bar">
-            <button class="filter-btn">Todos</button>
-            <button class="filter-btn">Categoría 1</button>
-            <button class="filter-btn">Categoría 2</button>
-            <button class="filter-btn">Categoría 3</button>
-            <button class="filter-btn">Categoría 4</button>
+
+        <!-- DERECHA: buscador + idioma + login -->
+        <div class="botones-derecha">
+
+            <div class="caja-buscador">
+                <input type="text" placeholder="Buscar...">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="caja-idioma">ES / EN</div>
+
+            <a href="../Login/login.html" class="caja-login">Iniciar sesión</a>
+
         </div>
-        <!-- PUBLICACIONES -->
-        <div class="posts-grid" id="postsContainer"></div>
+
     </div>
 
+
+    <!-- ========================================================= -->
+    <!-- ======================= HERO ============================= -->
+    <!-- ========================================================= -->
+
+    <div class="seccion-hero">
+
+        <h1 class="titulo-hero">Titulo</h1>
+        <p class="texto-hero">Texto de la categoría prueba cambiar aqui</p>
+
+        <!-- -------- BOTONES DE FILTRO -------- -->
+        <div class="barra-botones">
+
+            <button class="boton-filtro">Todos</button>
+            <button class="boton-filtro">Subcategoría 1</button>
+            <button class="boton-filtro">Subcategoría 2</button>
+            <button class="boton-filtro">Subcategoría 3</button>
+            <button class="boton-filtro">Subcategoría 4</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- ================= CONTENIDO PRINCIPAL ==================== -->
+    <!-- ========================================================= -->
+
+    <div class="contenido-principal" id="contenedorPrincipal">
+
+        <!-- -------- PUBLICACIONES -------- -->
+        <div class="grid-publicaciones" id="contenedorPublicaciones"></div>
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- ================= BOTON SCROLL TOP ====================== -->
+    <!-- ========================================================= -->
+
+    <button class="btn-scroll-top" id="btnScrollTop" aria-label="Volver arriba">
+        <img src="../../assets/Noticias/iconoBtnTopScroll.png" alt="Volver arriba">
+    </button>
+
+    <!-- ===================== SCRIPT ===================== -->
     <script src="../../JavaScript/Noticias/script.js"></script>
+
 </body>
 </html>
