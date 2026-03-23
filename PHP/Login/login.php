@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,81 +9,89 @@
     <title>Login</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
-<body>
 
-    <div class="contenedor">
+<!-- 🔥 Detecta error -->
+<body <?php if(isset($_GET['error'])) echo 'data-error="true"'; ?>>
 
-        <!-- Lado izquierdo -->
-        <div class="login-section">
-            <a href="../Home/home.php" class="back-home">← Volver</a>
+<div class="contenedor">
 
-            <div class="card">
-                <h3>Hola de nuevo, ¿Qué tal?</h3>
-                <?php if(isset($_GET['error'])): ?>
-                    <div class="login-error" style="color: #ff4d4f !important;">
-                        <span style="color: #ff4d4f !important;">⚠</span>
-                        <span style="color: #ff4d4f !important;">
-                            <?php
-                                if($_GET['error'] == "usuario"){
-                                    echo "Usuario no encontrado";
-                                }
-                                if($_GET['error'] == "password"){
-                                    echo "Contraseña incorrecta";
-                                }
-                            ?>
-                        </span>
-                    </div>
-                <?php endif; ?>
+    <!-- LADO IZQUIERDO -->
+    <div class="login-section">
 
-                <form action="procesar_login.php" method="POST">
-                    <div class="input-group">
-                        <input type="text" name="username" placeholder="Nombre de usuario" required>
-                    </div>
+        <a href="../Home/home.php" class="back-home">← Volver</a>
 
-                    <div class="input-group password">
-                        <input type="password" name = "password" id="password"placeholder="Ingresar contraseña" required>
-                        <span class="eye">
-                            <img src="../../assets/Login/eye-off-fill.png" id="togglePassword" alt="mostrar contraseña">
-                        </span>
-                    </div>
+        <div class="card">
+            <h3>Bienvenido de nuevo 👋</h3>
 
-                    <div class="extras">
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider"></span>
-                                Recordar usuario
-                        </label>
-                        <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
-                    </div>
+            <!-- ERROR -->
+            <?php if(isset($_GET['error'])): ?>
+                <div class="login-error mostrar-error">
+                    <span>⚠</span>
+                    <span>Credenciales incorrectas</span>
+                </div>
+            <?php endif; ?>
 
-                    <button type="submit" class="btn-login">Entrar</button>
+            <form action="procesar_login.php" method="POST" id="loginForm">
 
-                    <div class="divider"></div>
+                <div class="input-group">
+                    <input type="text" name="username"
+                        minlength="4" maxlength="20"
+                        pattern="[A-Za-z0-9_.]+"
+                        placeholder="Nombre de usuario"
+                        autocomplete="username"
+                        required>
+                </div>
 
-                    <button type="button" class="btn-google">
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-                        O únete con Google
-                    </button>
+                <div class="input-group password">
+                    <input type="password" name="password" id="password"
+                        placeholder="Ingresar contraseña"
+                        autocomplete="current-password"
+                        required>
 
-                    <p class="register">
-                        No tienes una cuenta aún?
-                        <a href="registro.php">Regístrate</a>
-                    </p>
+                    <span class="eye">
+                        <img src="../../assets/Login/eye-off-fill.png"
+                             class="togglePassword"
+                             alt="mostrar contraseña">
+                    </span>
+                </div>
 
-                </form>
-            </div>
+                <div class="extras">
+                    <label class="switch">
+                        <input type="checkbox" name="remember">
+                        <span class="slider"></span>
+                        Recordar usuario
+                    </label>
 
-        </div>
+                    <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+                </div>
 
-        <!-- Lado derecho -->
-        <div class="image-section">
-            <img src="../../assets/Login/imagen_gajuar.png" class="jaguar" alt="Jaguar">
+                <button type="submit" class="btn-login">Entrar</button>
 
+                <div class="divider"></div>
+
+                <button type="button" class="btn-google">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg">
+                    O únete con Google
+                </button>
+
+                <p class="register">
+                    No tienes una cuenta aún?
+                    <a href="registro.php">Regístrate</a>
+                </p>
+
+            </form>
         </div>
 
     </div>
-   <script src="../../JavaScript/Login/login.js"></script>
+
+    <!-- LADO DERECHO -->
+    <div class="image-section">
+        <img src="../../assets/Login/Imagen Onza.png" class="jaguar" alt="Jaguar">
+    </div>
+
+</div>
+
+<script src="../../JavaScript/Login/login.js"></script>
 </body>
 </html>
