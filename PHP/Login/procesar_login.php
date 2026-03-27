@@ -19,7 +19,7 @@ if($resultado-> num_rows > 0)
     {
         $_SESSION['usuario'] = $usuario['username'];
 
-        header("Location: ../Home/home.php");
+        header("Location: ../Home/home.php?success=1");
         exit();
     }
     

@@ -28,10 +28,7 @@ session_start();
             <div class="logo-box">
                 <img src="../../assets/Home/logomini.png" alt="Logo" class="logo-img">
             </div>
-            <div class="perfil-box">
-                <i class="fas fa-user"></i>
-                <span class="notif-dot"></span>
-            </div>
+            
         </div>
         
         <!-- Derecha: buscador + idioma + login -->
@@ -100,6 +97,18 @@ session_start();
                     <h3 class="card-titulo">Fauna</h3>
                     <p class="card-descripcion">Conoce las fascinantes especies animales que habitan en los diversos ecosistemas de Colima</p>
                     <button class="card-boton">Leer más <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-card">
+            <div class="card-image" style="background-image: url('../../assets/Ecosistemas/Ecosistemas categoria.png');">
+                <div class="card-overlay">
+                    <h3 class="card-titulo">Ecosistemas</h3>
+                    <p class="card-descripcion">Conoce los fascinantes ecosistemas terrestres del estado de Colima</p>
+                    <a class="card-boton" href="../Ecosistemas/ecosistemas.php">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                
                 </div>
             </div>
         </div>

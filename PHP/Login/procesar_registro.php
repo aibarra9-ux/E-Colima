@@ -7,7 +7,7 @@ include("conexion.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nombre = $_POST['nombre'];
+    $nombre = $_POST['username'];
     $correo = $_POST['correo'];
     $password = $_POST['password'];
     $confirmar = $_POST['confirmar'];
@@ -33,7 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($e->getCode() == 1062) {
             $_SESSION['error_registro'] = "duplicado";
         } else {
-            $_SESSION['error_registro'] = "general";
+            echo "Error real: " . $e->getMessage(); // 👈 DEBUG
+            exit();
         }
         header("Location: registro.php");
         exit();
