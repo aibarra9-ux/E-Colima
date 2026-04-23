@@ -5,61 +5,61 @@
 const publicaciones = [
 
 {
-titulo:"Bosque tropical",
+titulo:"Águila Real de Colima",
 descripcion:"Ejemplo de publicación.",
 imagen:"https://picsum.photos/600/900?1"
 },
 
 {
-titulo:"Plantas silvestres",
+titulo:"Iguana Negra de Colima",
 descripcion:"Descripción breve.",
 imagen:"https://picsum.photos/600/900?2"
 },
 
 {
-titulo:"Vegetación",
+titulo:"Zorro de Colima",
 descripcion:"Otra publicación.",
 imagen:"https://picsum.photos/600/900?3"
 },
 
 {
-titulo:"Bosque tropical",
+titulo:"Ocelote de Colima",
 descripcion:"Ejemplo de publicación.",
 imagen:"https://picsum.photos/600/900?4"
 },
 
 {
-titulo:"Plantas silvestres",
+titulo:"Tigrillo de Colima",
 descripcion:"Descripción breve.",
 imagen:"https://picsum.photos/600/900?5"
 },
 
 {
-titulo:"Vegetación",
+titulo:"Venado Cola Blanca de Colima",
 descripcion:"Otra publicación.",
 imagen:"https://picsum.photos/600/900?6"
 },
 
 {
-titulo:"Bosque tropical",
+titulo:"Jabali de Collar de Colima",
 descripcion:"Ejemplo de publicación.",
 imagen:"https://picsum.photos/600/900?7"
 },
 
 {
-titulo:"Plantas silvestres",
+titulo:"Ardilla de Colima",
 descripcion:"Descripción breve.",
 imagen:"https://picsum.photos/600/900?8"
 },
 
 {
-titulo:"Vegetación",
+titulo:"Topacaminos de Colima",
 descripcion:"Otra publicación.",
 imagen:"https://picsum.photos/600/900?9"
 },
 
 {
-titulo:"Vegetación",
+titulo:"TZanate de Colima",
 descripcion:"Otra publicación.",
 imagen:"https://picsum.photos/600/900?10"
 },
