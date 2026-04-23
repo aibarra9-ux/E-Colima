@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 jaguarBloqueado = false;
 
-                // 🔥 FORZAR imagen normal
+                //  FORZAR imagen normal
                 jaguar.src = "../../assets/Login/Imagen Onza.png";
                 password.dispatchEvent(new Event("input"));
 
