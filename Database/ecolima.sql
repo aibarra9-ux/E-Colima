@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-02-2026 a las 17:59:49
+-- Tiempo de generación: 05-05-2026 a las 06:52:19
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -129,6 +129,16 @@ CREATE TABLE `roles` (
   `descripcion` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'Administrador', 'Un usuario con los maximos permisos, le permite realizar cualquier acción posible para usuarios con otros roles'),
+(2, 'Editor', 'Es un usuario que tiene los permisos para revisar y aprobar o rechazar la publicacion de publicaciones'),
+(3, 'Autor', 'Es un usuario que tiene la capacidad de escribir nuevas publicaciones y publicarlas siempre y cuando sean aprobadas por el Editor'),
+(4, 'Usuario', 'Es el rol básico que tieen un usuario al registrarse, le permite interactuar con las publicaciones');
+
 -- --------------------------------------------------------
 
 --
@@ -140,11 +150,21 @@ CREATE TABLE `usuarios` (
   `rol_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `foto_perfil` varchar(255) DEFAULT 'default_avatar.png',
+  `banner_perfil` varchar(255) DEFAULT 'default_banner.jpg',
   `password_hash` varchar(255) NOT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   `activo` tinyint(1) DEFAULT 1,
   `fecha_eliminacion` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `rol_id`, `username`, `email`, `foto_perfil`, `banner_perfil`, `password_hash`, `fecha_registro`, `activo`, `fecha_eliminacion`) VALUES
+(5, 1, 'aibarra9', 'aibarra9@ucol.mx', 'perfil_5_1777946251.jpg', 'banner_5_1777954998.png', '$2y$10$fjHoUV3lt8QX5mYItHxYWOIF1dv4h6ySy49T0o6MXEIGN9NQNTLMO', '2026-03-26 01:03:06', 1, NULL),
+(7, 4, 'Diego', 'anastacio@gmail.com', 'default_avatar.png', 'default_banner.jpg', '$2y$10$lLGqVlANRCQjLkTROS1dn.8vZM8K3k5/IuoedYIY8NN6Qqk0kOm9G', '2026-03-27 15:12:07', 1, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -263,13 +283,13 @@ ALTER TABLE `recursos_multimedia`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

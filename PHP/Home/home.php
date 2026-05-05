@@ -28,7 +28,10 @@ session_start();
             <div class="logo-box">
                 <img src="../../assets/Home/logomini.png" alt="Logo" class="logo-img">
             </div>
-            
+             <div class="perfil-box" onclick="window.location.href='../Perfil/dashboard_perfil.php'">
+                <i class="fas fa-user"></i>
+                <span class="notif-dot"></span>
+            </div>
         </div>
         
         <!-- Derecha: buscador + idioma + login -->
