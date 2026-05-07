@@ -110,9 +110,10 @@ $porcentaje_base = ($data_roles['total'] > 0) ? round(($data_roles['base'] / $da
             <nav class="sidebar-menu">
                 <ul>
                     <li><a href="dashboard_perfil.php"><i class="fa-solid fa-user"></i> Perfil</a></li>
-                    <li><a href="#"><i class="fa-regular fa-file"></i> Publicaciones</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-circle-check"></i> Validar Publicaciones</a></li>
+                    <li><a href="dashboard_publicaciones.php"><i class="fa-regular fa-file"></i> Publicaciones</a></li>
                     <li><a href="dashboard_usuarios.php"><i class="fa-solid fa-users"></i> Usuarios</a></li>
-                    <li><a href="#"><i class="fa-solid fa-bell"></i> Notificaciones</a></li>
+                    <li><a href="dashboard_solicitudes.php"><i class="fa-solid fa-id-card-clip"></i> Solucitudes</a></li>
                     <li class="active"><a href="dashboard_estadisticas.php"><i class="fa-solid fa-chart-line"></i> Estadisticas</a></li>
                     <li><a href="#"><i class="fa-solid fa-gear"></i> Configuración</a></li>
                 </ul>
