@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+// 1. Mantenemos las cabeceras de caché (son vitales para que el botón "Atrás" no mienta)
+header("Cache-Control: no-cache, no-store, must-revalidate"); 
+header("Pragma: no-cache"); 
+header("Expires: 0"); 
+
+// 2. Quitamos la redirección forzosa. 
+$sesion_activa = isset($_SESSION['usuario']);
+
 ?>
 
 <!DOCTYPE html>
@@ -286,6 +295,16 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
+
+<script>
+// Forzar recarga si se regresa con la flecha del navegador
+window.addEventListener('pageshow', function(event) {
+    // Si la página viene del caché del historial
+    if (event.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) {
+        window.location.reload();
+    }
+});
+</script>
 
 </body>
 </html>
