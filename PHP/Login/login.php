@@ -25,12 +25,29 @@ session_start();
             <h3>Bienvenido de nuevo 👋</h3>
 
             <!-- ERROR -->
-            <?php if(isset($_GET['error'])): ?>
-                <div class="login-error mostrar-error">
-                    <span>⚠</span>
-                    <span>Credenciales incorrectas</span>
-                </div>
-            <?php endif; ?>
+           <?php if(isset($_GET['error'])): ?>
+    <div class="login-error mostrar-error">
+        <span>⚠</span>
+        <span>
+            <?php 
+                switch($_GET['error']) {
+                    case 'acceso_denegado':
+                        echo "No tienes permisos de administrador.";
+                        break;
+                    case 'no_autorizado':
+                        echo "Inicia sesión para acceder a esta área.";
+                        break;
+                    case 'password':
+                    case 'usuario':
+                        echo "Credenciales incorrectas.";
+                        break;
+                    default:
+                        echo "Ha ocurrido un error inesperado.";
+                }
+            ?>
+        </span>
+    </div>
+<?php endif; ?>
 
             <form action="procesar_login.php" method="POST" id="loginForm">
 
