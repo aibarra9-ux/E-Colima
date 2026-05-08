@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO usuarios (rol_id, username, email, password_hash, activo)
-    VALUES (4, '$nombre', '$correo', '$passwordHash', 1)";
+    VALUES (4, '$nombre', '$correo', '$passwordHash', 4)";
 
     try {
         $conn->query($sql);

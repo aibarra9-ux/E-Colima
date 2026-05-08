@@ -19,6 +19,72 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 
 
+    <style>
+/* Capa de fondo con desenfoque */
+.modal-overlay {
+    display: none; /* Se activa con JS */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(8px);
+    z-index: 9999; /* Por encima de todo */
+    justify-content: center;
+    align-items: center;
+}
+
+/* El rectángulo de cristal (Glassmorphism) */
+.modal-content {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    width: 380px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    color: white;
+    margin: 15px 0;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 1.8rem;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+/* Botón Cancelar - Verde claro semi-transparente */
+.btn-cancelar {
+    background: rgba(144, 238, 144, 0.3);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* Botón Confirmar - Verde bosque oscuro */
+.btn-confirmar {
+    background: #2d5a27;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.btn-confirmar:hover { background: #1e3d1a; transform: scale(1.05); }
+.btn-cancelar:hover { background: rgba(144, 238, 144, 0.5); }
+</style>
+
 </head>
 <body>
 
@@ -40,7 +106,7 @@ session_start();
             <div class="lang-box">ES / EN</div>
             <?php if(isset($_SESSION['usuario'])): ?>
 
-                <a href="../Login/logout.php" class="login-box">Cerrar sesión</a>
+                <a href="#" class="login-box" onclick="mostrarModal(event)">Cerrar sesión</a>
 
             <?php else: ?>
 
@@ -173,5 +239,50 @@ session_start();
         }
     }, 1500); // ⏱ dura 2.5 segundos
     </script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ahora sí, buscamos los elementos cuando el HTML ya está listo
+    const modal = document.getElementById('modalCerrarSesion');
+    const btnCancelar = document.getElementById('btnCancelar');
+
+    // Función para abrir el modal (esta puede quedar fuera o dentro)
+    window.mostrarModal = function(event) {
+        event.preventDefault(); 
+        if(modal) modal.style.display = 'flex';
+    }
+
+    // Solo asignamos el clic si el botón realmente existe
+    if (btnCancelar) {
+        btnCancelar.onclick = function() {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Cerrar al hacer clic fuera del cuadro
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+});
+</script>
+
+    <div id="modalCerrarSesion" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-paw" style="color: #9bedb7; font-size: 2rem; margin-bottom: 10px; transform: rotate(-20px);"></i>
+            <h2>¿CERRAR SESIÓN?</h2>
+            <p style="color: #ffffff; font-weight: 600; font-size: 0.95rem; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; line-height: 1.4; text-shadow: 0px 1px 2px rgba(0,0,0,0.2);">
+            Si cierras sesión, tendrás que volver a ingresar para ver tu perfil e interactuar en las publicaciones.
+        </p>
+        </div>
+        <div class="modal-buttons">
+            <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
+            <a href="../Login/logout.php" class="btn-confirmar">Aceptar</a>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
