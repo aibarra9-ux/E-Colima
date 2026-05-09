@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ECOLIMA – Perfil</title>
+  <link rel="stylesheet" href="../../CSS/Perfil/Perfil.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div style="height: 70px;">
+    <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+  </div>
+
+  <div class="sidebar-nav">
+    <a href="admin.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Panel de administrador
+    </a>
+    <a href="solicitarPermisos.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Solicitar cambio de Permisos
+    </a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <button class="nav-item" onclick="openConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      Configuración
+    </button>
+    <button class="nav-item danger" onclick="cerrarSesion()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Cerrar sesión
+    </button>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div class="profile-hero">
+      <img class="cover" src="https://images.unsplash.com/photo-1491466424936-e304919aada7?w=500&q=80" alt="Portada"/>
+      <div class="profile-avatar-wrap">
+        <img class="profile-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" alt="Avatar"/>
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-name" contenteditable="true" title="Haz clic para editar">Juan Carlos Bodoque</div>
+      <div class="profile-role" contenteditable="true" title="Haz clic para editar">Administrador</div>
+
+      <div class="profile-stat">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 19.54A10 10 0 1 0 17 8z"/></svg>
+        <span class="profile-stat-text">+100 Publicaciones</span>
+      </div>
+
+      <div class="profile-bio" contenteditable="true" title="Haz clic para editar tu biografía">
+        "Soy un biólogo de más de 10 años de experiencia, me dedico a proteger los ecosistemas de Colima"
+      </div>
+    </div>
+  </div>
+
+  <!-- Feed Panel -->
+  <div class="feed-panel">
+
+    <!-- Tabs -->
+    <div class="feed-tabs">
+      <button class="tab-btn active" data-tab="megusta" onclick="switchTab('megusta', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Me gusta
+      </button>
+      <button class="tab-btn" data-tab="publicaciones" onclick="switchTab('publicaciones', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Publicaciones
+      </button>
+      <button class="tab-btn" data-tab="validaciones" onclick="switchTab('validaciones', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Validaciones
+      </button>
+    </div>
+
+    <!-- Feed Content -->
+    <div class="feed-list" id="feedList"></div>
+  </div>
+</main>
+
+<!-- ══ FAB ══ -->
+<button class="fab" onclick="openModal()" title="Nueva publicación">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<!-- ══ CONFIG DRAWER ══ -->
+<div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
+<aside class="config-drawer" id="configDrawer">
+  <div class="drawer-header">
+    <h2>⚙️ Configuración</h2>
+    <button class="drawer-close" onclick="closeConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="config-group">
+      <label>Nombre de usuario</label>
+      <input class="config-input" type="text" id="cfgName" placeholder="Tu nombre"/>
+    </div>
+    <div class="config-group">
+      <label>Correo electrónico</label>
+      <input class="config-input" type="email" id="cfgEmail" placeholder="correo@ejemplo.com"/>
+    </div>
+    <div class="config-group">
+      <label>Contraseña nueva</label>
+      <input class="config-input" type="password" id="cfgPass" placeholder="••••••••"/>
+    </div>
+
+    <div class="config-toggle-row">
+      <span>Notificaciones por correo</span>
+      <div class="toggle on" id="tgl1" onclick="toggleSwitch('tgl1')"></div>
+    </div>
+    <div class="config-toggle-row">
+      <span>Perfil público</span>
+      <div class="toggle on" id="tgl2" onclick="toggleSwitch('tgl2')"></div>
+    </div>
+    <div class="config-toggle-row">
+      <span>Modo oscuro</span>
+      <div class="toggle" id="tgl3" onclick="toggleSwitch('tgl3')"></div>
+    </div>
+
+    <button class="btn-save" onclick="guardarConfig()">Guardar cambios</button>
+  </div>
+</aside>
+
+<!-- ══ NEW POST MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🌿 Nueva publicación</h2>
+      <button class="drawer-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input class="config-input" type="text" id="postTitle" placeholder="Título de la publicación"/>
+      <textarea class="modal-textarea" id="postBody" placeholder="¿Qué quieres compartir sobre los ecosistemas de Colima?"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-publish" onclick="publicar()">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ─── TAB DATA ─── */
+  const tabData = {
+    megusta: [
+      { title: "🌊 Costas de Colima – monitoreo de playas", body: "Revisamos las condiciones actuales de los arrecifes costeros y documentamos la biodiversidad marina presente en la temporada.", tag: "Ecosistemas" },
+      { title: "🦋 Polinizadores urbanos en Colima capital", body: "Un proyecto colaborativo con escuelas locales para identificar especies de mariposas y abejas en parques y jardines.", tag: "Biodiversidad" },
+      { title: "🌳 Reforestación en la sierra – avance", body: "Plantamos 3,200 árboles nativos de encino y copal en la zona alta. Los primeros datos de supervivencia superan el 85%.", tag: "Reforestación" },
+    ],
+    publicaciones: [],
+    validaciones: [
+      { title: "✅ Validación: Especie endémica confirmada", body: "El avistamiento reportado en el volcán de Colima fue validado como Dendrophthora colimaensis, especie endémica del estado.", tag: "Validado" },
+    ],
+  };
+
+  /* ─── RENDER FEED ─── */
+  let activeTab = 'megusta';
+
+  function renderFeed(tab) {
+    const list = document.getElementById('feedList');
+    const posts = tabData[tab];
+    list.innerHTML = '';
+
+    if (posts.length === 0) {
+      const card = document.createElement('div');
+      card.className = 'feed-card';
+      card.style.minHeight = '180px';
+      card.innerHTML = `<div class="feed-empty" style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Sin contenido todavía</span>
+      </div>`;
+      list.appendChild(card);
+      return;
+    }
+
+    posts.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'feed-card';
+      card.style.animationDelay = (i * 0.07) + 's';
+      card.innerHTML = `<div class="post-inner">
+        <span class="post-tag">${p.tag}</span>
+        <div class="post-title">${p.title}</div>
+        <div class="post-body">${p.body}</div>
+      </div>`;
+      list.appendChild(card);
+    });
+  }
+
+  function switchTab(tab, btn) {
+    activeTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderFeed(tab);
+  }
+
+  /* ─── CONFIG DRAWER ─── */
+  function openConfig() {
+    document.getElementById('cfgName').value = document.querySelector('.profile-name').textContent.trim();
+    document.getElementById('configOverlay').classList.add('open');
+    document.getElementById('configDrawer').classList.add('open');
+  }
+  function closeConfig() {
+    document.getElementById('configOverlay').classList.remove('open');
+    document.getElementById('configDrawer').classList.remove('open');
+  }
+  function toggleSwitch(id) {
+    document.getElementById(id).classList.toggle('on');
+  }
+  function guardarConfig() {
+    const name = document.getElementById('cfgName').value.trim();
+    if (name) document.querySelector('.profile-name').textContent = name;
+    closeConfig();
+    showToast('✅ Configuración guardada');
+  }
+
+  /* ─── NEW POST MODAL ─── */
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('postTitle').focus(), 200);
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postBody').value = '';
+  }
+  function publicar() {
+    const title = document.getElementById('postTitle').value.trim();
+    const body  = document.getElementById('postBody').value.trim();
+    if (!title && !body) { showToast('⚠️ Escribe algo antes de publicar'); return; }
+
+    // Base de conexión: aquí se llamaría al API/backend
+    const newPost = { title: title || '(Sin título)', body: body || '', tag: 'Nueva' };
+
+    tabData.publicaciones.unshift(newPost);
+    closeModal();
+    showToast('🌿 Publicación creada');
+
+    // Si ya estás en la pestaña publicaciones, refresca
+    if (activeTab === 'publicaciones') renderFeed('publicaciones');
+  }
+
+  /* ─── CERRAR SESIÓN ─── */
+  function cerrarSesion() {
+    if (confirm('¿Seguro que quieres cerrar sesión?')) {
+      showToast('👋 Cerrando sesión...');
+      setTimeout(() => window.location.href = 'index.html', 1200);
+    }
+  }
+
+  /* ─── TOAST ─── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ─── KEYBOARD ─── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeConfig(); closeModal(); }
+  });
+
+  /* ─── INIT ─── */
+  renderFeed('megusta');
+</script>
+</body>
+</html>
