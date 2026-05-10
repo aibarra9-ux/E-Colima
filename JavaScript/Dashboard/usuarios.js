@@ -14,12 +14,12 @@ async function cargarUsuarios() {
         try {
             usuarios = JSON.parse(textoCargado);
         } catch (e) {
-            console.error("El servidor no envió JSON válido. Envió esto:", textoCargado);
+            console.error("El servidor no envió JSON válido:", textoCargado);
             return;
         }
 
         if (usuarios.error) {
-            alert("Error de Base de Datos: " + usuarios.error);
+            alert("Error: " + usuarios.error);
             return;
         }
 
@@ -27,46 +27,55 @@ async function cargarUsuarios() {
         tbody.innerHTML = '';
 
         usuarios.forEach(user => {
+            // --- DEFINICIÓN DE VARIABLES (El paso que faltaba) ---
             const nombreReal = user.username || "Sin nombre";
             const correoReal = user.email || "Sin correo";
             const fechaReal = user.fecha_registro || "No disponible";
-            
-            // Lógica para la foto: si no existe en la BD, usamos la default
             const fotoReal = user.foto_perfil ? user.foto_perfil : 'default_avatar.png';
+            
+            // Lógica de seguridad
+            const esAdmin = (user.rol_id == 1);
+            const soyYo = (typeof miIdDeSesion !== 'undefined' && user.id == miIdDeSesion);
 
             const row = document.createElement('tr');
             row.innerHTML = `
-    <td>
-        <div class="user-info-cell" style="display: flex; align-items: center; gap: 12px;">
-            <div class="user-img-wrapper" style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%; border: 2px solid var(--green-pale);">
-                <img src="../../assets/Fotos_perfil/${fotoReal}" 
-                     alt="Avatar" 
-                     style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-            <span style="font-weight: 700; color: var(--text-dark);">${nombreReal}</span>
-        </div>
-    </td>
-    <td style="color: var(--text-mid); font-weight: 600;">${correoReal}</td>
-    <td style="color: var(--gray-400); font-size: 0.85rem;">${fechaReal}</td>
-    <td>
-        <select class="role-select" onchange="gestionarCambioRol(${user.id}, this)">
-            <option value="1" ${user.rol_id == 1 ? 'selected' : ''}>Administrador</option>
-            <option value="2" ${user.rol_id == 2 ? 'selected' : ''}>Editor</option>
-            <option value="3" ${user.rol_id == 3 ? 'selected' : ''}>Autor</option>
-            <option value="4" ${user.rol_id == 4 ? 'selected' : ''}>Usuario</option>
-        </select>
-    </td>
-    <td style="text-align: center;">
-        <button class="btn-action-delete" onclick="eliminarUsuario(${user.id}, '${nombreReal}')" title="Eliminar usuario">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
-        </button>
-    </td>
-`;
+                <td>
+                    <div class="user-info-cell" style="display: flex; align-items: center; gap: 12px;">
+                        <div class="user-img-wrapper" style="width: 40px; height: 40px; min-width: 40px; overflow: hidden; border-radius: 50%; border: 2px solid var(--green-pale);">
+                            <img src="../../assets/Fotos_perfil/${fotoReal}" 
+                                 alt="Avatar" 
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <span style="font-weight: 700; color: var(--text-dark);">
+                            ${nombreReal} ${soyYo ? '<small style="color:var(--green-mid)">(Tú)</small>' : ''}
+                        </span>
+                    </div>
+                </td>
+                <td style="color: var(--text-mid); font-weight: 600;">${correoReal}</td>
+                <td style="color: var(--gray-400); font-size: 0.85rem;">${fechaReal}</td>
+                <td>
+                    <select class="role-select" 
+                            ${esAdmin ? 'disabled' : ''} 
+                            onchange="gestionarCambioRol(${user.id}, this)"
+                            style="${esAdmin ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+                        <option value="1" ${user.rol_id == 1 ? 'selected' : ''}>Administrador</option>
+                        <option value="2" ${user.rol_id == 2 ? 'selected' : ''}>Editor</option>
+                        <option value="3" ${user.rol_id == 3 ? 'selected' : ''}>Autor</option>
+                        <option value="4" ${user.rol_id == 4 ? 'selected' : ''}>Usuario</option>
+                    </select>
+                </td>
+                <td style="text-align: center;">
+                    ${(esAdmin || soyYo) ? 
+                        `<span style="color: #cbd5e1;" title="Protegido">🔒</span>` : 
+                        `<button class="btn-action-delete" onclick="eliminarUsuario(${user.id}, '${nombreReal}')" title="Eliminar usuario">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>`
+                    }
+                </td>
+            `;
             tbody.appendChild(row);
         });
     } catch (error) {
@@ -97,43 +106,42 @@ async function gestionarCambioRol(userId, selectElement) {
     });
 
     if (result.isConfirmed) {
-        const formData = new FormData();
-        formData.append('id', userId);
-        formData.append('rol_id', nuevoRol); // Cambiado 'rol' a 'rol_id' para que coincida con el PHP
+    const formData = new FormData();
+    formData.append('id', userId);
+    formData.append('rol_id', nuevoRol);
 
-        try {
-            // Usamos la ruta que ya tienes confirmada
-            const res = await fetch('../../PHP/Perfil/actualizar_rol.php', {
-                method: 'POST',
-                body: formData
-            });
+    try {
+        const res = await fetch('../../PHP/Perfil/actualizar_rol.php', {
+            method: 'POST',
+            body: formData
+        });
 
-            // Si el fetch falla (404, 500), lanzará error aquí
-            if (!res.ok) throw new Error('Error en el servidor');
+        if (!res.ok) throw new Error('Error en el servidor');
 
-            const data = await res.json();
+        const data = await res.json();
+        
+        if (data.status === 'success' || data.success) {
+            // 1. IMPORTANTE: Recargamos la tabla desde el servidor
+            // Esto actualizará el 'rol_id' en el JS y pondrá los candados automáticamente
+            await cargarUsuarios(); 
             
-            if (data.status === 'success' || data.success) {
-                // RECIÉN AQUÍ aplicamos el cambio visual definitivo
-                selectElement.value = nuevoRol;
-                selectElement.setAttribute('data-old-value', nuevoRol);
-                
-                Swal.fire({
-                    title: '¡Actualizado!',
-                    text: 'El rol ha sido modificado con éxito.',
-                    icon: 'success',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            } else {
-                throw new Error(data.message || 'Error en BD');
-            }
-        } catch (error) {
-            console.error(error);
-            Swal.fire('Error', 'No hay conexión con el servidor o error en el proceso.', 'error');
-            // Al fallar, el select ya está en valorOriginal así que no hay que hacer nada más
+            Swal.fire({
+                title: '¡Rango Actualizado!',
+                text: 'El usuario ahora tiene nuevos permisos y restricciones.',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        } else {
+            throw new Error(data.message || 'Error en BD');
         }
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Error', 'No se pudo actualizar el rol.', 'error');
+        // Revertimos el select si hubo error (opcional, ya que cargarUsuarios lo haría)
+        selectElement.value = valorOriginal;
     }
+}
     // Si cancela, el select ya regresó a valorOriginal en el paso 2.
 }
 

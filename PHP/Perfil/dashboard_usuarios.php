@@ -229,7 +229,9 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
     </div>
   </div>
 </main>
-
+<script>
+    const miIdDeSesion = <?php echo $_SESSION['usuario_id']; ?>;
+</script>
 <script src="../../JavaScript/Dashboard/usuarios.js"></script>
 <script>
     // Adaptación de funciones de UI
@@ -259,5 +261,7 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
 
    
 </script>
+
+
 </body>
 </html>
