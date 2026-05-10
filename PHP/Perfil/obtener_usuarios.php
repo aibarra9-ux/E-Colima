@@ -10,7 +10,7 @@ require_once "conexion.php";
 header('Content-Type: application/json');
 
 // Añadimos fecha_registro a la consulta
-$sql = "SELECT id, username, email, fecha_registro, foto_perfil, rol_id FROM usuarios"; 
+$sql = "SELECT id, username, email, fecha_registro, foto_perfil, rol_id FROM usuarios "; 
 $result = $conn->query($sql);
 
 if (!$result) {

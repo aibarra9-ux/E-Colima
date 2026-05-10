@@ -1,10 +1,12 @@
 
 <?php
-if (!isset($_SESSION['rol_id']) || $_SESSION['rol_id'] != 1) {
-    http_response_code(403); // Prohibido
-    echo json_encode(["error" => "No tienes permiso para ver esta información"]);
-    exit();
-}
+
+//if (!isset($_SESSION['rol_id']) || $_SESSION['rol_id'] != 1) {
+    //http_response_code(403); // Prohibido
+    //echo json_encode(["error" => "No tienes permiso para ver esta información"]);
+    //exit();
+//}
+
 // Credenciales de acceso
 $host = "localhost";
 $user = "root";  // Usuario por defecto en XAMPP
