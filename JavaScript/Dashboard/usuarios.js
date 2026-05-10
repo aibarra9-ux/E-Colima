@@ -36,32 +36,37 @@ async function cargarUsuarios() {
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>
-                    <div class="user-info-cell" style="display: flex; align-items: center; gap: 12px;">
-                        <div class="user-img-wrapper" style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%; border: 1px solid #eee;">
-                            <img src="../../assets/Fotos_perfil/${fotoReal}" 
-                                 alt="Avatar" 
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <span style="font-weight: 500;">${nombreReal}</span>
-                    </div>
-                </td>
-                <td>${correoReal}</td>
-                <td>${fechaReal}</td>
-                <td>
-                    <select class="role-selector" onchange="gestionarCambioRol(${user.id}, this)">
-                        <option value="1" ${user.rol_id == 1 ? 'selected' : ''}>Administrador</option>
-                        <option value="2" ${user.rol_id == 2 ? 'selected' : ''}>Editor</option>
-                        <option value="3" ${user.rol_id == 3 ? 'selected' : ''}>Autor</option>
-                        <option value="4" ${user.rol_id == 4 ? 'selected' : ''}>Usuario</option>
-                    </select>
-                </td>
-                <td>
-                    <button class="btn-action-delete" onclick="eliminarUsuario(${user.id}, '${nombreReal}')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            `;
+    <td>
+        <div class="user-info-cell" style="display: flex; align-items: center; gap: 12px;">
+            <div class="user-img-wrapper" style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%; border: 2px solid var(--green-pale);">
+                <img src="../../assets/Fotos_perfil/${fotoReal}" 
+                     alt="Avatar" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <span style="font-weight: 700; color: var(--text-dark);">${nombreReal}</span>
+        </div>
+    </td>
+    <td style="color: var(--text-mid); font-weight: 600;">${correoReal}</td>
+    <td style="color: var(--gray-400); font-size: 0.85rem;">${fechaReal}</td>
+    <td>
+        <select class="role-select" onchange="gestionarCambioRol(${user.id}, this)">
+            <option value="1" ${user.rol_id == 1 ? 'selected' : ''}>Administrador</option>
+            <option value="2" ${user.rol_id == 2 ? 'selected' : ''}>Editor</option>
+            <option value="3" ${user.rol_id == 3 ? 'selected' : ''}>Autor</option>
+            <option value="4" ${user.rol_id == 4 ? 'selected' : ''}>Usuario</option>
+        </select>
+    </td>
+    <td style="text-align: center;">
+        <button class="btn-action-delete" onclick="eliminarUsuario(${user.id}, '${nombreReal}')" title="Eliminar usuario">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+        </button>
+    </td>
+`;
             tbody.appendChild(row);
         });
     } catch (error) {
@@ -71,16 +76,21 @@ async function cargarUsuarios() {
 
 // 2. CAMBIAR ROL (CON SWEETALERT2)
 async function gestionarCambioRol(userId, selectElement) {
+    // 1. Guardamos el valor que tenía ANTES del cambio
+    const valorOriginal = selectElement.getAttribute('data-old-value') || selectElement.defaultValue;
     const nuevoRol = selectElement.value;
     const nombreRol = selectElement.options[selectElement.selectedIndex].text;
 
-    // Ventana de confirmación estilizada
+    // 2. IMPORTANTE: Revertimos visualmente el select de inmediato 
+    // para que no cambie hasta que el usuario confirme en el Swal.
+    selectElement.value = valorOriginal;
+
     const result = await Swal.fire({
         title: '¿Cambiar rol?',
         text: `¿Estás seguro de asignar el rango de "${nombreRol}" a este usuario?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#2d6a4f',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, cambiar',
         cancelButtonText: 'Cancelar'
@@ -89,28 +99,42 @@ async function gestionarCambioRol(userId, selectElement) {
     if (result.isConfirmed) {
         const formData = new FormData();
         formData.append('id', userId);
-        formData.append('rol', nuevoRol);
+        formData.append('rol_id', nuevoRol); // Cambiado 'rol' a 'rol_id' para que coincida con el PHP
 
         try {
+            // Usamos la ruta que ya tienes confirmada
             const res = await fetch('../../PHP/Perfil/actualizar_rol.php', {
                 method: 'POST',
                 body: formData
             });
 
+            // Si el fetch falla (404, 500), lanzará error aquí
+            if (!res.ok) throw new Error('Error en el servidor');
+
             const data = await res.json();
-            if (data.success) {
-                Swal.fire('¡Actualizado!', 'El rol ha sido modificado con éxito.', 'success');
+            
+            if (data.status === 'success' || data.success) {
+                // RECIÉN AQUÍ aplicamos el cambio visual definitivo
+                selectElement.value = nuevoRol;
+                selectElement.setAttribute('data-old-value', nuevoRol);
+                
+                Swal.fire({
+                    title: '¡Actualizado!',
+                    text: 'El rol ha sido modificado con éxito.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             } else {
-                Swal.fire('Error', 'No se pudo actualizar en la base de datos.', 'error');
-                cargarUsuarios();
+                throw new Error(data.message || 'Error en BD');
             }
         } catch (error) {
-            Swal.fire('Error', 'No hay conexión con el servidor.', 'error');
-            cargarUsuarios();
+            console.error(error);
+            Swal.fire('Error', 'No hay conexión con el servidor o error en el proceso.', 'error');
+            // Al fallar, el select ya está en valorOriginal así que no hay que hacer nada más
         }
-    } else {
-        cargarUsuarios(); // Revierte el select
     }
+    // Si cancela, el select ya regresó a valorOriginal en el paso 2.
 }
 
 // 3. ELIMINAR USUARIO (CON SWEETALERT2)
@@ -176,36 +200,57 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Referencias con IDs actualizados del nuevo Dashboard
     const btnEdit = document.querySelector('.btn-edit-main');
-    const modal = document.getElementById('modalEdit');
-    const closeModal = document.getElementById('closeModal');
-    const btnCancel = document.getElementById('btnCancel');
+    const modal = document.getElementById('configDrawer'); // Cambiado a configDrawer
+    const overlay = document.getElementById('configOverlay'); // Añadido el fondo oscuro
     const form = document.getElementById('formEditarPerfil');
 
-    // Abrir modal
-    btnEdit.onclick = () => modal.style.display = 'flex';
-
-    // Cerrar modal
-    const cerrar = () => modal.style.display = 'none';
-    closeModal.onclick = cerrar;
-    btnCancel.onclick = cerrar;
-
-    // Enviar datos
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-
-        const response = await fetch('actualizar_perfil.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-        if (result.status === 'success') {
-            alert("¡Cambios guardados con éxito!");
-            location.reload(); // Recarga para ver los cambios en el Dashboard
-        } else {
-            alert("Hubo un error: " + result.message);
-        }
+    // Funciones seguras para cerrar
+    const cerrar = () => {
+        if(modal) modal.classList.remove('open');
+        if(overlay) overlay.classList.remove('open');
     };
+
+    // 2. Abrir (Solo si el botón existe)
+    if (btnEdit && modal && overlay) {
+        btnEdit.onclick = () => {
+            modal.classList.add('open');
+            overlay.classList.add('open');
+        };
+    }
+
+    // 3. Cerrar (Solo si los elementos existen)
+    const btnCloseX = document.getElementById('closeModal');
+    const btnCancel = document.getElementById('btnCancel');
+
+    if (btnCloseX) btnCloseX.onclick = cerrar;
+    if (btnCancel) btnCancel.onclick = cerrar;
+    if (overlay) overlay.onclick = cerrar;
+
+    // 4. Enviar datos (AJAX)
+    if (form) {
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('actualizar_perfil.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    Swal.fire('¡Éxito!', 'Cambios guardados correctamente', 'success')
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire('Error', result.message, 'error');
+                }
+            } catch (error) {
+                console.error("Error en el envío:", error);
+                // Si llegamos aquí es porque falló el fetch (404 o error de red)
+            }
+        };
+    }
 });

@@ -1,125 +1,90 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Referencias
-    const btnAbrir = document.getElementById('btnEditarPerfil');
-    const modal = document.getElementById('modalEdit');
-    const btnCerrarX = document.getElementById('closeModal');
-    const btnCancelar = document.getElementById('btnCancel');
+    // 1. Referencias (ACTUALIZADAS AL NUEVO HTML)
+    const modal = document.getElementById('configDrawer'); // El panel lateral
+    const overlay = document.getElementById('configOverlay'); // El fondo oscuro
     const form = document.getElementById('formEditarPerfil');
 
-    // 2. Abrir Modal
-    if (btnAbrir) {
-        btnAbrir.addEventListener('click', (e) => {
-            e.preventDefault(); // Evita cualquier salto de página
-            modal.style.display = 'flex';
-        });
-    }
-
-    // 3. Funciones para cerrar
-    const cerrarModal = () => {
-        modal.style.display = 'none';
+    // Funciones de cierre consistentes con tu HTML
+    const cerrarConfig = () => {
+        if(modal) modal.classList.remove('open');
+        if(overlay) overlay.classList.remove('open');
     };
 
-    if (btnCerrarX) btnCerrarX.onclick = cerrarModal;
-    if (btnCancelar) btnCancelar.onclick = cerrarModal;
-
-    // Cerrar si hacen clic fuera del cuadro blanco
-    window.onclick = (event) => {
-        if (event.target == modal) cerrarModal();
-    };
-
-    // 4. Procesar el Formulario (AJAX)
+    // 2. Procesar el Formulario (AJAX)
     if (form) {
         form.onsubmit = async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
 
             try {
-                // Asegúrate de que la ruta sea correcta según donde esté este JS
+                // CORRECCIÓN DE RUTA: Ajusta esta ruta a donde realmente esté tu PHP
+                // Si el PHP está en la misma carpeta que el dashboard, déjalo así.
+                // Si está en una carpeta superior usa: ../actualizar_perfil.php
                 const response = await fetch('actualizar_perfil.php', {
                     method: 'POST',
                     body: formData
                 });
 
+                // Si el servidor responde 404 o 500, esto atrapará el error antes del .json()
+                if (!response.ok) throw new Error('Archivo no encontrado en el servidor');
+
                 const result = await response.json();
                 
-                // Dentro del .then o tras el await del fetch:
                 if (result.status === 'success') {
-                // 1. Cerramos el modal primero
-                modal.style.display = 'none';
+                    cerrarConfig(); // Cerramos el panel lateral
 
-                // 2. Mostramos la alerta
-                Swal.fire({
-                    title: '¡Actualizado!',
-                    text: 'Tu perfil se ha actualizado correctamente.',
-                    icon: 'success',
-                    confirmButtonColor: '#39cb39',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    // Esto asegura que la alerta esté por encima de cualquier cosa
-                    didOpen: () => {
-                        const container = document.querySelector('.swal2-container');
-                        if (container) container.style.zIndex = '10001';
-                    }
-                }).then(() => {
-                    location.reload();
-                });
-            }
+                    Swal.fire({
+                        title: '¡Actualizado!',
+                        text: 'Tu perfil se ha actualizado correctamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#39cb39',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', result.message || 'Error desconocido', 'error');
+                }
             } catch (error) {
-                console.error("Error:", error);
-                alert("No se pudo conectar con el servidor.");
+                console.error("Error detallado:", error);
+                Swal.fire('Error de conexión', 'No se pudo contactar con el archivo actualizar_perfil.php. Revisa la ruta en el JS.', 'error');
             }
         };
     }
 });
 
+// --- SUBIR FOTO ---
 document.getElementById('inputFoto').addEventListener('change', function(e) {
     const archivo = e.target.files[0];
     if (!archivo) return;
 
-    // Validar que sea imagen y no pese más de 2MB
     if (!archivo.type.startsWith('image/')) {
-        Swal.fire('Error', 'Por favor selecciona una imagen válida', 'error');
-        return;
-    }
-    if (archivo.size > 2 * 1024 * 1024) {
-        Swal.fire('Error', 'La imagen es demasiado pesada (Máx 2MB)', 'error');
+        Swal.fire('Error', 'Selecciona una imagen válida', 'error');
         return;
     }
 
     const formData = new FormData();
     formData.append('foto', archivo);
 
-    // Mostrar carga
-    Swal.fire({
-        title: 'Subiendo...',
-        didOpen: () => { Swal.showLoading(); }
-    });
+    Swal.fire({ title: 'Subiendo...', didOpen: () => { Swal.showLoading(); } });
 
-    fetch('subir_foto.php', {
+    fetch('subir_foto.php', { // <--- VERIFICA QUE ESTE ARCHIVO ESTÉ EN LA MISMA CARPETA
         method: 'POST',
         body: formData
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Foto actualizada!',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => {
-                location.reload(); // Recarga para actualizar todas las fotos en el dashboard
-            });
+            location.reload();
         } else {
             Swal.fire('Error', data.message, 'error');
         }
     })
-    .catch(err => {
-        console.error(err);
-        Swal.fire('Error', 'No se pudo subir la imagen', 'error');
-    });
+    .catch(err => Swal.fire('Error', 'No se pudo conectar con subir_foto.php', 'error'));
 });
 
+// --- SUBIR BANNER ---
 document.getElementById('inputBanner').addEventListener('change', function(e) {
     const archivo = e.target.files[0];
     if (!archivo) return;
@@ -127,12 +92,9 @@ document.getElementById('inputBanner').addEventListener('change', function(e) {
     const formData = new FormData();
     formData.append('banner', archivo);
 
-    Swal.fire({
-        title: 'Actualizando portada...',
-        didOpen: () => { Swal.showLoading(); }
-    });
+    Swal.fire({ title: 'Actualizando portada...', didOpen: () => { Swal.showLoading(); } });
 
-    fetch('subir_banner.php', { // Crearemos este archivo
+    fetch('subir_banner.php', { // <--- VERIFICA QUE ESTE ARCHIVO ESTÉ EN LA MISMA CARPETA
         method: 'POST',
         body: formData
     })
@@ -143,5 +105,6 @@ document.getElementById('inputBanner').addEventListener('change', function(e) {
         } else {
             Swal.fire('Error', data.message, 'error');
         }
-    });
+    })
+    .catch(err => Swal.fire('Error', 'No se pudo conectar con subir_banner.php', 'error'));
 });

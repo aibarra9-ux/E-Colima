@@ -15,26 +15,31 @@ async function cargarSolicitudes() {
         }
 
         solicitudes.forEach(sol => {
-            const tr = document.createElement('tr');
-            const claseRol = sol.rol_solicitado == 1 ? 'badge-admin' : 'badge-user';
-            
-            tr.innerHTML = `
-                <td><strong>${sol.username}</strong></td>
-                <td><span class="badge-rol ${claseRol}">${sol.rol_nombre}</span></td>
-                <td style="max-width: 400px; color: #4a5568;">${sol.motivo}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button title="Aprobar" class="btn-approve" onclick="gestionarSolicitud(${sol.id}, 'aprobar')">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-                        <button title="Rechazar" class="btn-reject" onclick="gestionarSolicitud(${sol.id}, 'rechazar')">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                </td>
-            `;
-            container.appendChild(tr);
-        });
+    const tr = document.createElement('tr');
+    // Aseguramos que la clase del badge dependa del ID del rol (ajusta si Admin no es 1)
+    const claseRol = sol.rol_solicitado == 1 ? 'badge-admin' : 'badge-user';
+    
+    // Extraemos solo la fecha (YYYY-MM-DD) del campo fecha_creacion
+    const fechaLimpia = sol.fecha_creacion ? sol.fecha_creacion.split(' ')[0] : '---';
+
+    tr.innerHTML = `
+        <td><strong>${sol.username}</strong></td>
+        <td><span class="badge-rol ${claseRol}">${sol.rol_nombre || 'Sin Rol'}</span></td>
+        <td style="max-width: 400px; color: #4a5568;">${sol.motivo}</td>
+        <td style="color: #94a3b8; font-weight: 600;">${fechaLimpia}</td>
+        <td>
+            <div class="action-buttons">
+                <button title="Aprobar" class="btn-approve" onclick="gestionarSolicitud(${sol.id}, 'aprobar')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
+                <button title="Rechazar" class="btn-reject" onclick="gestionarSolicitud(${sol.id}, 'rechazar')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </td>
+    `;
+    container.appendChild(tr);
+});
     } catch (error) {
         console.error("Error cargando solicitudes:", error);
     }
