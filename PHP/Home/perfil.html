@@ -5,34 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ECOLIMA – Perfil</title>
   <link rel="stylesheet" href="../../CSS/Perfil/Perfil.css"/>
+  <script src="../../JavaScript/Perfil/perfil.js" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
 <!-- ══ SIDEBAR ══ -->
 <nav class="sidebar">
-  <div style="height: 70px;">
-    <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+  <div style="height: 70px; display: flex; align-items: center;">
+    <a href="../../PHP/Home/home.html" style="display: flex; align-items: center; text-decoration: none; gap: 10px;">
+      <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+      <span style="font-family: sans-serif; font-weight: 700; font-size: 22px; color: #1a3a2a; letter-spacing: 2px;">ECOLIMA</span>
+    </a>
   </div>
 
   <div class="sidebar-nav">
     <a href="admin.html" class="nav-item active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <img src="" alt="" class="nav-icon"/>
       Panel de administrador
     </a>
     <a href="solicitarPermisos.html" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <img src="" alt="" class="nav-icon"/>
       Solicitar cambio de Permisos
     </a>
   </div>
 
   <div class="sidebar-bottom">
     <button class="nav-item" onclick="openConfig()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      <img src="" alt="" class="nav-icon"/>
       Configuración
     </button>
     <button class="nav-item danger" onclick="cerrarSesion()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <img src="" alt="" class="nav-icon"/>
       Cerrar sesión
     </button>
   </div>
@@ -156,130 +160,5 @@
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<script>
-  /* ─── TAB DATA ─── */
-  const tabData = {
-    megusta: [
-      { title: "🌊 Costas de Colima – monitoreo de playas", body: "Revisamos las condiciones actuales de los arrecifes costeros y documentamos la biodiversidad marina presente en la temporada.", tag: "Ecosistemas" },
-      { title: "🦋 Polinizadores urbanos en Colima capital", body: "Un proyecto colaborativo con escuelas locales para identificar especies de mariposas y abejas en parques y jardines.", tag: "Biodiversidad" },
-      { title: "🌳 Reforestación en la sierra – avance", body: "Plantamos 3,200 árboles nativos de encino y copal en la zona alta. Los primeros datos de supervivencia superan el 85%.", tag: "Reforestación" },
-    ],
-    publicaciones: [],
-    validaciones: [
-      { title: "✅ Validación: Especie endémica confirmada", body: "El avistamiento reportado en el volcán de Colima fue validado como Dendrophthora colimaensis, especie endémica del estado.", tag: "Validado" },
-    ],
-  };
-
-  /* ─── RENDER FEED ─── */
-  let activeTab = 'megusta';
-
-  function renderFeed(tab) {
-    const list = document.getElementById('feedList');
-    const posts = tabData[tab];
-    list.innerHTML = '';
-
-    if (posts.length === 0) {
-      const card = document.createElement('div');
-      card.className = 'feed-card';
-      card.style.minHeight = '180px';
-      card.innerHTML = `<div class="feed-empty" style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span>Sin contenido todavía</span>
-      </div>`;
-      list.appendChild(card);
-      return;
-    }
-
-    posts.forEach((p, i) => {
-      const card = document.createElement('div');
-      card.className = 'feed-card';
-      card.style.animationDelay = (i * 0.07) + 's';
-      card.innerHTML = `<div class="post-inner">
-        <span class="post-tag">${p.tag}</span>
-        <div class="post-title">${p.title}</div>
-        <div class="post-body">${p.body}</div>
-      </div>`;
-      list.appendChild(card);
-    });
-  }
-
-  function switchTab(tab, btn) {
-    activeTab = tab;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderFeed(tab);
-  }
-
-  /* ─── CONFIG DRAWER ─── */
-  function openConfig() {
-    document.getElementById('cfgName').value = document.querySelector('.profile-name').textContent.trim();
-    document.getElementById('configOverlay').classList.add('open');
-    document.getElementById('configDrawer').classList.add('open');
-  }
-  function closeConfig() {
-    document.getElementById('configOverlay').classList.remove('open');
-    document.getElementById('configDrawer').classList.remove('open');
-  }
-  function toggleSwitch(id) {
-    document.getElementById(id).classList.toggle('on');
-  }
-  function guardarConfig() {
-    const name = document.getElementById('cfgName').value.trim();
-    if (name) document.querySelector('.profile-name').textContent = name;
-    closeConfig();
-    showToast('✅ Configuración guardada');
-  }
-
-  /* ─── NEW POST MODAL ─── */
-  function openModal() {
-    document.getElementById('modalOverlay').classList.add('open');
-    setTimeout(() => document.getElementById('postTitle').focus(), 200);
-  }
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-    document.getElementById('postTitle').value = '';
-    document.getElementById('postBody').value = '';
-  }
-  function publicar() {
-    const title = document.getElementById('postTitle').value.trim();
-    const body  = document.getElementById('postBody').value.trim();
-    if (!title && !body) { showToast('⚠️ Escribe algo antes de publicar'); return; }
-
-    // Base de conexión: aquí se llamaría al API/backend
-    const newPost = { title: title || '(Sin título)', body: body || '', tag: 'Nueva' };
-
-    tabData.publicaciones.unshift(newPost);
-    closeModal();
-    showToast('🌿 Publicación creada');
-
-    // Si ya estás en la pestaña publicaciones, refresca
-    if (activeTab === 'publicaciones') renderFeed('publicaciones');
-  }
-
-  /* ─── CERRAR SESIÓN ─── */
-  function cerrarSesion() {
-    if (confirm('¿Seguro que quieres cerrar sesión?')) {
-      showToast('👋 Cerrando sesión...');
-      setTimeout(() => window.location.href = 'index.html', 1200);
-    }
-  }
-
-  /* ─── TOAST ─── */
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
-
-  /* ─── KEYBOARD ─── */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeConfig(); closeModal(); }
-  });
-
-  /* ─── INIT ─── */
-  renderFeed('megusta');
-</script>
 </body>
 </html>
