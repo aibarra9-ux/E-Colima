@@ -557,211 +557,169 @@ body {
         padding: 20px;
     }
 }
-/* ===== FOOTER CRÉDITOS COMPLETO ===== */
-.footer-creditos {
-    background: linear-gradient(135deg, #1a2a1a 0%, #2c3e2f 100%);
-    color: white;
-    padding: 50px 0;
-    border-top: 3px solid #8fc1a0;
+/* ================================================= */
+/* NUEVO FOOTER ESTILO ECOLIMA        */
+/* ================================================= */
+
+.footer-nuevo {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 50px 40px 30px 40px; /* Padding más ajustado */
+    font-family: 'League Spartan', sans-serif;
+    position: relative;
+    border-top: 1px solid #1a1a1a;
 }
 
-.footer-contenido {
-    max-width: 1300px;
+.footer-container {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 50px;
+    display: grid;
+    /* Proporciones: Branding grande, Licencia media, Recursos pequeño, Equipo medio */
+    grid-template-columns: 1.3fr 1fr 0.7fr 1fr; 
+    gap: 30px;
+    align-items: start;
+}
+
+/* --- TÍTULOS Y COLUMNAS (Alineación vertical corregida) --- */
+.footer-column {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column;
+    align-items: flex-start; /* Esto obliga a título y lista a iniciar en el mismo punto */
+    text-align: left;
 }
 
-/* ===== LADO IZQUIERDO - CRÉDITOS ===== */
-.creditos-lista {
-    flex: 1;
-    min-width: 250px;
+.footer-title {
+    font-size: 16px; 
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding-left: 0; /* Asegura que no tenga espacio interno */
+    margin-left: 0;  /* Asegura que no tenga margen */
 }
 
-.creditos-lista h3 {
-    font-family: 'League Spartan', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    color: #8fc1a0;
-    letter-spacing: 2px;
-    position: relative;
-}
+/* --- COLUMNA BRANDING (LOGO Y TAG) --- */
+/* --- COLUMNA BRANDING (LOGO Y TAG) --- */
 
-.creditos-lista h3::after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60px;
-    height: 2px;
-    background: #8fc1a0;
-}
-
-.creditos-lista ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.creditos-lista li {
-    font-family: Playfair Display, sans-serif;
-    font-size: 1.1rem;
-    margin-bottom: 12px;
-    color: rgba(255, 255, 255, 0.9);
-    transition: all 0.3s ease;
-    position: relative;
-    padding-left: 20px;
-}
-
-.creditos-lista li::before {
-    content: "▹";
-    position: absolute;
-    left: 0;
-    color: #8fc1a0;
-    font-size: 1rem;
-}
-
-.creditos-lista li:hover {
-    color: white;
-    transform: translateX(5px);
-}
-
-/* ===== CENTRO - UBICACIÓN Y FECHA ===== */
-.ubicacion-centro {
-    text-align: center;
-    padding: 0 30px;
-    position: relative;
-}
-
-.ubicacion-centro::before,
-.ubicacion-centro::after {
-    content: "✦";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #8fc1a0;
-    font-size: 1.2rem;
-    opacity: 0.6;
-}
-
-.ubicacion-centro::before {
-    left: 0;
-}
-
-.ubicacion-centro::after {
-    right: 0;
-}
-
-.ciudad {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-}
-
-.fecha {
-    font-family: 'League Spartan', sans-serif;
-    font-size: 1.1rem;
-    color: #8fc1a0;
-    font-weight: 400;
-    letter-spacing: 2px;
-}
-
-/* ===== LADO DERECHO - UNIVERSIDAD ===== */
-.universidad-info {
-    flex: 1;
-    min-width: 250px;
-    text-align: right;
-}
-
-.universidad-info h3 {
-    font-family: 'League Spartan', sans-serif;
-    font-size: 1.5rem;
+.logo-eco-lima {
+    display: flex;
+    justify-content: flex-start; /* Asegura que empiece desde la izquierda */
     margin-bottom: 15px;
-    color: #8fc1a0;
-    letter-spacing: 2px;
+    padding: 0; /* Elimina cualquier padding interno */
 }
 
-.universidad-info p {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-style: italic;
+.img-principal {
+    max-width: 180px; /* Aquí puedes seguir jugando con el tamaño */
+    height: auto;
+    display: block;
+    
+    /* AJUSTE DE ALINEACIÓN VISUAL */
+    /* Este margen negativo "jala" la imagen hacia la orilla. 
+       Ajusta el número según necesites hasta que lo veas perfecto */
+    margin-left: -25px; 
+}
+
+.github-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: white;
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin: 20px 0; /* El margen lateral por defecto es 0, así que está pegado a la orilla */
+    width: fit-content;
+    font-size: 13px;
+    transition: 0.3s ease;
+}
+
+.github-btn:hover {
+    border-color: #ffffff;
+    background-color: #111;
+}
+
+.facultad-tag {
+    background-color: #FFFAF0;
+    color: #000;
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 11px; /* Letra de universidad pequeña */
+    border-radius: 4px;
+    display: inline-block;
+    max-width: 250px;
+    line-height: 1.2;
+}
+
+/* --- TEXTOS Y LISTAS (Tamaño pequeño) --- */
+.box-text p {
+    font-size: 12px; /* Licencia pequeña */
     line-height: 1.5;
+    color: #bbbbbb;
+    max-width: 240px;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .footer-contenido {
-        flex-direction: column;
-        text-align: center;
+.lista-footer {
+    list-style: none !important;
+    padding: 0 !important;      /* <--- Fuerza a eliminar el espacio */
+    margin: 0 !important;       /* <--- Asegura que no haya margen externo */
+    text-align: left !important; /* <--- Fuerza a que el texto empiece a la izquierda */
+}
+
+.lista-footer li {
+    font-size: 12px; /* Recursos y nombres pequeños */
+    margin-bottom: 6px;
+    color: #dddddd;
+    font-weight: 400;
+}
+
+/* --- EQUIPO (Con fondo oscuro y margen reseteado) --- */
+.nombres-equipo li {
+    background-color: #111111;
+    padding: 4px 10px;
+    margin-bottom: 5px;
+    width: fit-content;
+    border-radius: 2px;
+    margin-left: 0 !important;
+    /* Nueva propiedad que FORZARÁ el movimiento: */
+    transform: translateX(-12px); /* Ajusta este valor hasta que quede alineado */
+    box-shadow: 2px 0 0 rgba(0,0,0,0.3); /* Opcional: mantiene sombra consistente */
+}
+
+.nombres-equipo {
+    margin-left: -10px;  /* Mueve todo el bloque de nombres hacia EQUIPO */
+    padding-left: 0;     /* Elimina espacio interno izquierdo */
+}
+
+/* --- ICONO DECORATIVO (Esquina) --- */
+.footer-decor-icon {
+    position: absolute;
+    bottom: 25px;
+    right: 40px;
+    width: 70px; /* Tamaño discreto */
+    height: auto;
+    opacity: 0.8;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
         gap: 40px;
     }
-    
-    .creditos-lista {
-        text-align: center;
-    }
-    
-    .creditos-lista h3::after {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    
-    .creditos-lista li {
-        padding-left: 0;
-    }
-    
-    .creditos-lista li::before {
-        display: none;
-    }
-    
-    .ubicacion-centro {
-        order: 3;
-        padding: 20px 0;
-        width: 100%;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .ubicacion-centro::before,
-    .ubicacion-centro::after {
-        display: none;
-    }
-    
-    .universidad-info {
-        text-align: center;
-    }
 }
 
-@media (max-width: 480px) {
-    .footer-creditos {
-        padding: 40px 0;
+@media (max-width: 600px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
-    
-    .creditos-lista h3,
-    .universidad-info h3 {
-        font-size: 1.3rem;
+    .github-btn, .nombres-equipo li, .facultad-tag {
+        margin-left: auto;
+        margin-right: auto;
     }
-    
-    .creditos-lista li {
-        font-size: 1rem;
-    }
-    
-    .universidad-info p {
-        font-size: 1rem;
-    }
-    
-    .ciudad {
-        font-size: 1.1rem;
-    }
-    
-    .fecha {
-        font-size: 1rem;
+    .footer-decor-icon {
+        display: none; /* Se oculta en móviles para no encimarse */
     }
 }

@@ -101,7 +101,7 @@ $sesion_activa = isset($_SESSION['usuario']);
         <!-- Izquierda: logo + perfil -->
         <div class="left-icons">
             <div class="logo-box">
-                <img src="../../assets/Home/logomini.png" alt="Logo" class="logo-img">
+                <img src="../../assets/Home/Logo_Oficial.png" alt="Logo" class="logo-img">
             </div>
              <div class="perfil-box" onclick="window.location.href='../Perfil/dashboard_perfil.php'">
                 <i class="fas fa-user"></i>
@@ -211,32 +211,57 @@ $sesion_activa = isset($_SESSION['usuario']);
     }, 3000); // 3 segundos
     </script>
 
-    <!-- ===== FOOTER CRÉDITOS ===== -->
-    <footer class="footer-creditos">
-        <div class="footer-contenido">
-            <!-- Lado izquierdo: Créditos con nombres -->
-            <div class="creditos-lista">
-                <h3>CRÉDITOS</h3>
-                <ul>
-                    <li>Alan Ibarra</li>
-                    <li>Dana Nava</li>
-                    <li>Miranda Montiel</li>
-                    <li>Carolina Zuñiga</li>
-                    <li>Ricardo Barba</li>
+   <!-- ===== FOOTER CRÉDITOS ===== -->
+    <footer class="footer-nuevo">
+        <div class="footer-container">
+            
+            <div class="footer-column branding">
+                <div class="logo-eco-lima">
+                    <img src="../../assets/Home/letraslogo_sinfondo.png" alt="Logo Ecolima" class="img-principal">
+                </div>
+                
+                <a href="https://github.com/aibarra9-ux/E-Colima" target="_blank" class="github-btn">
+                    <i class="fab fa-github"></i> View with GitHub
+                </a>
+
+                <div class="facultad-tag">
+                    2026 FACULTAD DE INGENIERÍA ELECTROMECÁNICA
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3 class="footer-title">LICENCIA</h3>
+                <div class="box-text">
+                    <p>Este proyecto está bajo la Licencia MIT. Eres libre de usar, copiar y modificar el software para fines personales, educativos o comerciales, manteniendo siempre el aviso de autoría original.</p>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3 class="footer-title">RECURSOS</h3>
+                <ul class="lista-footer">
+                    <li>MY SQL</li>
+                    <li>PHP</li>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JAVA SCRIPT</li>
+                    <li>GITHUB</li>
+                    <li>VISUAL STUDIO CODE</li>
+                    <li>XAMPP</li>
                 </ul>
             </div>
 
-            <!-- NUEVO: Centro - Ubicación y fecha -->
-            <div class="ubicacion-centro">
-                <p class="ciudad">Manzanillo, Colima.</p>
-                <p class="fecha">Febrero 2026</p>
+            <div class="footer-column">
+                <h3 class="footer-title">EQUIPO</h3>
+                <ul class="lista-footer nombres-equipo">
+                    <li>ALAN IBARRA</li>
+                    <li>CAROLINA ZÚÑIGA</li>
+                    <li>DANA NAVA</li>
+                    <li>MIRANDA NAVA</li>
+                    <li>RICARDO BARBA</li>
+                </ul>
             </div>
 
-            <!-- Lado derecho: Universidad -->
-            <div class="universidad-info">
-                <h3>UNIVERSIDAD DE COLIMA</h3>
-                <p>Facultad de Ingeniería Electromecánica</p>
-            </div>
+            <img src="../../assets/Home/iconologo_sinfondo.png" alt="Icono Decorativo" class="footer-decor-icon">
         </div>
     </footer>
     <script>
