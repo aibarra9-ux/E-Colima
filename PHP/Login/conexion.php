@@ -1,10 +1,8 @@
 <?php
-    $host = "127.0.0.1"; // Usar la IP es más directo para instalaciones nativas
+    $host = "localhost";
     $user = "root";
-    $pass = "c1a2r3O4"; // <--- CAMBIA ESTO POR TU CLAVE REAL
-    $db = "ECOLIMA";
-    $port = "3306"; // Si lo cambiaste en el archivo my.ini, pon 3308 aquí
-
+    $pass = "";
+    $db = "ecolima";
     // Agregamos el puerto como quinto parámetro
     $conn = new mysqli($host, $user, $pass, $db, $port);
 
