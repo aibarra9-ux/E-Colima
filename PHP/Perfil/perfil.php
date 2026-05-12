@@ -1,0 +1,133 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ECOLIMA – Perfil</title>
+  <link rel="stylesheet" href="../../CSS/Perfil/Perfil.css"/>
+  <script src="../../JavaScript/Perfil/perfil.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div style="height: 70px; display: flex; align-items: center;">
+    <a href="../Home/home.php" style="display: flex; align-items: center; text-decoration: none; gap: 10px;">
+      <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+      <span style="font-family: sans-serif; font-weight: 700; font-size: 22px; color: #1a3a2a; letter-spacing: 2px;">ECOLIMA</span>
+    </a>
+  </div>
+
+  <div class="sidebar-nav">
+    <a href="admin.html" class="nav-item active">
+      <img src="" alt="" class="nav-icon"/>
+      Panel de perfil
+    </a>
+    <a href="solicitarPermisos.html" class="nav-item">
+      <img src="" alt="" class="nav-icon"/>
+      Solicitar cambio de Permisos
+    </a>
+  </div>
+
+  <div class="sidebar-bottom">
+    <button class="nav-item" onclick="openConfig()">
+      <img src="" alt="" class="nav-icon"/>
+      Configuración
+    </button>
+    <button class="nav-item danger" onclick="cerrarSesion()">
+      <img src="" alt="" class="nav-icon"/>
+      Cerrar sesión
+    </button>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div class="profile-hero">
+      <img class="cover" src="https://images.unsplash.com/photo-1491466424936-e304919aada7?w=500&q=80" alt="Portada"/>
+      <div class="profile-avatar-wrap">
+        <img class="profile-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" alt="Avatar"/>
+      </div>
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-name" contenteditable="true" title="Haz clic para editar">Juan Carlos Bodoque</div>
+      <div class="profile-role" contenteditable="true" title="Haz clic para editar">usuario</div>
+
+      <div class="profile-bio" contenteditable="true" title="Haz clic para editar tu biografía">
+        "Soy un biólogo de más de 10 años de experiencia, me dedico a proteger los ecosistemas de Colima"
+      </div>
+    </div>
+  </div>
+
+  <!-- Feed Panel -->
+  <div class="feed-panel">
+
+    <!-- Tabs -->
+    <div class="feed-tabs">
+      <button class="tab-btn active" data-tab="megusta" onclick="switchTab('megusta', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Me gusta
+      </button>
+    </div>
+
+    <!-- Feed Content -->
+    <div class="feed-list" id="feedList"></div>
+  </div>
+</main>
+
+
+
+<!-- ══ CONFIG DRAWER ══ -->
+<div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
+<aside class="config-drawer" id="configDrawer">
+  <div class="drawer-header">
+    <h2>⚙️ Configuración</h2>
+    <button class="drawer-close" onclick="closeConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <div class="config-group">
+      <label>Nombre de usuario</label>
+      <input class="config-input" type="text" id="cfgName" placeholder="Tu nombre"/>
+    </div>
+    <div class="config-group">
+      <label>Correo electrónico</label>
+      <input class="config-input" type="email" id="cfgEmail" placeholder="correo@ejemplo.com"/>
+    </div>
+    <div class="config-group">
+      <label>Contraseña nueva</label>
+      <input class="config-input" type="password" id="cfgPass" placeholder="••••••••"/>
+    </div>
+
+    <div class="config-toggle-row">
+      <span>Notificaciones por correo</span>
+      <div class="toggle on" id="tgl1" onclick="toggleSwitch('tgl1')"></div>
+    </div>
+    <div class="config-toggle-row">
+      <span>Perfil público</span>
+      <div class="toggle on" id="tgl2" onclick="toggleSwitch('tgl2')"></div>
+    </div>
+    <div class="config-toggle-row">
+      <span>Modo oscuro</span>
+      <div class="toggle" id="tgl3" onclick="toggleSwitch('tgl3')"></div>
+    </div>
+
+    <button class="btn-save" onclick="guardarConfig()">Guardar cambios</button>
+  </div>
+</aside>
+
+
+
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+</body>
+</html>

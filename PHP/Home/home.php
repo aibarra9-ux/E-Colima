@@ -1,14 +1,21 @@
 <?php
 session_start();
 
-// 1. Mantenemos las cabeceras de caché (son vitales para que el botón "Atrás" no mienta)
+// 1. Cabeceras de caché
 header("Cache-Control: no-cache, no-store, must-revalidate"); 
 header("Pragma: no-cache"); 
 header("Expires: 0"); 
 
-// 2. Quitamos la redirección forzosa. 
+// 2. Verificamos si hay sesión activa
 $sesion_activa = isset($_SESSION['usuario']);
 
+// 3. Definimos la ruta del perfil con seguridad
+// Si no hay sesión, mandamos al login. Si hay, verificamos el rango.
+if ($sesion_activa) {
+    $ruta_perfil = ($_SESSION['rol_id'] == 1) ? '../Perfil/dashboard_perfil.php' : '../Perfil/perfil.php';
+} else {
+    $ruta_perfil = '../Login/login.php'; 
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,9 +109,10 @@ $sesion_activa = isset($_SESSION['usuario']);
             <div class="logo-box">
                 <img src="../../assets/Home/Logo_Oficial.png" alt="Logo" class="logo-img">
             </div>
-             <div class="perfil-box" onclick="window.location.href='../Perfil/dashboard_perfil.php'">
+             <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
                 <i class="fas fa-user"></i>
-                <span class="notif-dot"></span>
+                    <?php if ($sesion_activa): ?>
+                    <span class="notif-dot"></span> <?php endif; ?>
             </div>
         </div>
         
@@ -198,6 +206,18 @@ $sesion_activa = isset($_SESSION['usuario']);
                     <h3 class="card-titulo">Consejos</h3>
                     <p class="card-descripcion">Conoce educativos consejos para cuidar la vida terrestre</p>
                     <a class="card-boton" href="../Consejos/consejos.php">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-card">
+            <div class="card-image" style="background-image: url('../../assets/Ecosistemas/Ecosistemas categoria.png');">
+                <div class="card-overlay">
+                    <h3 class="card-titulo">Noticias</h3>
+                    <p class="card-descripcion">Conoce las mas recientes noticias acerca de la vida terrestre</p>
+                    <a class="card-boton" href="../Noticias/noticias.php">
                         Leer más <i class="fas fa-arrow-right"></i>
                     </a>                
                 </div>
