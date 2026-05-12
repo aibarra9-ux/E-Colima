@@ -17,10 +17,27 @@ if($resultado->num_rows > 0)
 
     if(password_verify($password, $usuario['password_hash']))
     {
-        // GUARDAMOS LOS DATOS CLAVE EN LA SESIÓN
-        $_SESSION['usuario_id'] = $usuario['id'];
+        // ✅ Guardar datos básicos
         $_SESSION['usuario'] = $usuario['username'];
-        $_SESSION['rol_id'] = $usuario['rol_id']; // <--- ESTO ES LO QUE NECESITAMOS
+        $_SESSION['usuario_id'] = $usuario['id'];
+
+        // ✅ NUEVO: Guardar el rol según el rol_id de la BD
+        switch ($usuario['rol_id']) {
+            case 1:
+                $_SESSION['rol'] = 'admin';
+                break;
+            case 2:
+                $_SESSION['rol'] = 'editor';
+                break;
+            case 3:
+                $_SESSION['rol'] = 'escritor';  // ← Este es el tuyo
+                break;
+            case 4:
+                $_SESSION['rol'] = 'usuario';
+                break;
+            default:
+                $_SESSION['rol'] = 'usuario';
+        }
 
         header("Location: ../Home/home.php?success=1");
         exit();
@@ -33,7 +50,7 @@ if($resultado->num_rows > 0)
 }
 else
 {
-   header("Location: login.php?error=usuario");
-   exit();
+    header("Location: login.php?error=usuario");
+    exit();
 }
 ?>

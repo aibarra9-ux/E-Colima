@@ -103,6 +103,7 @@ if ($sesion_activa) {
 
 </head>
 <body>
+
     <div class="top-bar">
         <!-- Izquierda: logo + perfil -->
         <div class="left-icons">
@@ -309,6 +310,55 @@ if ($sesion_activa) {
         }
     }, 1500); // ⏱ dura 2.5 segundos
     </script>
+
+    <?php if(isset($_SESSION['usuario']) && ($_SESSION['rol'] === 'escritor' || $_SESSION['rol'] === 'admin')): ?>
+    <div class="fab-container">
+        <button class="fab-btn" id="fabBtn" aria-label="Crear publicación">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="fab-menu" id="fabMenu">
+            <a href="../Publicar/publicar.php?categoria=flora" class="fab-item">
+                <i class="fas fa-leaf"></i>
+                <span>Flora</span>
+            </a>
+            <a href="../Publicar/publicar.php?categoria=fauna" class="fab-item">
+                <i class="fas fa-paw"></i>
+                <span>Fauna</span>
+            </a>
+            <a href="../Publicar/publicar.php?categoria=ecosistemas" class="fab-item">
+                <i class="fas fa-mountain"></i>
+                <span>Ecosistemas</span>
+            </a> 
+            <a href="../Publicar/publicar.php?categoria=noticias" class="fab-item">
+                <i class="fas fa-newspaper"></i>
+                <span>Noticias</span>
+            </a>            
+            <a href="../Publicar/publicar.php?categoria=consejos" class="fab-item">
+                <i class="fas fa-lightbulb"></i>
+                <span>Consejos</span>
+            </a>            
+                 
+        </div>
+    </div>
+
+    <script>
+        const fabBtn = document.getElementById('fabBtn');
+        const fabMenu = document.getElementById('fabMenu');
+
+        fabBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fabMenu.classList.toggle('active');
+            fabBtn.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!fabBtn.contains(e.target) && !fabMenu.contains(e.target)) {
+                fabMenu.classList.remove('active');
+                fabBtn.classList.remove('active');
+            }
+        });
+    </script>
+    <?php endif; ?>
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {

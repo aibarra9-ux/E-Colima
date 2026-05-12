@@ -1,3 +1,8 @@
+<?php
+session_start();
+include("../Login/conexion.php");
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
