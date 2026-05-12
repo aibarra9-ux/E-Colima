@@ -96,7 +96,6 @@ $sesion_activa = isset($_SESSION['usuario']);
 
 </head>
 <body>
-
     <div class="top-bar">
         <!-- Izquierda: logo + perfil -->
         <div class="left-icons">
@@ -184,7 +183,7 @@ $sesion_activa = isset($_SESSION['usuario']);
                 <div class="card-overlay">
                     <h3 class="card-titulo">Ecosistemas</h3>
                     <p class="card-descripcion">Conoce los fascinantes ecosistemas terrestres del estado de Colima</p>
-                    <a class="card-boton" href="../Ecosistemas/ecosistemas.php">
+                    <a class="card-boton" href="../Fauna/Fauna.php">
                         Leer más <i class="fas fa-arrow-right"></i>
                     </a>                
                 </div>
