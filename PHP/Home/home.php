@@ -162,8 +162,9 @@ $sesion_activa = isset($_SESSION['usuario']);
                 <div class="card-overlay">
                     <h3 class="card-titulo">Flora</h3>
                     <p class="card-descripcion">Descubre la increíble variedad de plantas y vegetación que hacen único a Colima</p>
-                    <button class="card-boton">Leer más <i class="fas fa-arrow-right"></i></button>
-                </div>
+                    <a class="card-boton" href="../flora/flora.php">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                    </div>
             </div>
         </div>
         <!-- Aquí puedes agregar más tarjetas (Fauna, Hongos, etc.) en el futuro -->
@@ -185,6 +186,18 @@ $sesion_activa = isset($_SESSION['usuario']);
                     <h3 class="card-titulo">Ecosistemas</h3>
                     <p class="card-descripcion">Conoce los fascinantes ecosistemas terrestres del estado de Colima</p>
                     <a class="card-boton" href="../Ecosistemas/ecosistemas.php">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-card">
+            <div class="card-image" style="background-image: url('../../assets/Ecosistemas/Ecosistemas categoria.png');">
+                <div class="card-overlay">
+                    <h3 class="card-titulo">Consejos</h3>
+                    <p class="card-descripcion">Conoce educativos consejos para cuidar la vida terrestre</p>
+                    <a class="card-boton" href="../Consejos/consejos.php">
                         Leer más <i class="fas fa-arrow-right"></i>
                     </a>                
                 </div>
