@@ -169,12 +169,13 @@ $sesion_activa = isset($_SESSION['usuario']);
         <!-- Aquí puedes agregar más tarjetas (Fauna, Hongos, etc.) en el futuro -->
         <!-- Tarjeta Fauna -->
         <div class="categoria-card">
-            <div class="card-image" style="background-image: url('../../assets/Home/AVIARIO-3.webp');">
+            <div class="card-image" style="background-image: url('../../assets/Fauna/Fauna categoria.webp');">
                 <div class="card-overlay">
                     <h3 class="card-titulo">Fauna</h3>
                     <p class="card-descripcion">Conoce las fascinantes especies animales que habitan en los diversos ecosistemas de Colima</p>
-                    <button class="card-boton">Leer más <i class="fas fa-arrow-right"></i></button>
-                </div>
+                    <a class="card-boton" href="../Fauna/Fauna.php">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                    </div>
             </div>
         </div>
 
@@ -183,7 +184,7 @@ $sesion_activa = isset($_SESSION['usuario']);
                 <div class="card-overlay">
                     <h3 class="card-titulo">Ecosistemas</h3>
                     <p class="card-descripcion">Conoce los fascinantes ecosistemas terrestres del estado de Colima</p>
-                    <a class="card-boton" href="../Fauna/Fauna.php">
+                    <a class="card-boton" href="../Ecosistemas/ecosistemas.php">
                         Leer más <i class="fas fa-arrow-right"></i>
                     </a>                
                 </div>

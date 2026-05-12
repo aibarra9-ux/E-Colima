@@ -5,7 +5,7 @@
     <!-- ===================== CONFIGURACIÓN ===================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fauna</title>
+    <title>Ecosistemas</title>
 
     <!-- ===================== TIPOGRAFÍA ===================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
     <!-- ===================== ESTILOS ===================== -->
-    <link rel="stylesheet" href="../../CSS/Fauna/styles.css">
+    <link rel="stylesheet" href="../../CSS/Ecosistemas/styles.css">
 </head>
 
 <body>
@@ -56,18 +56,23 @@
     <!-- ========================================================= -->
 
     <div class="seccion-hero">
-        <h1 class="titulo-hero">FAUNA</h1>
-        <p class="texto-hero">Una categoria centrada en mostrar la diversa fauna del estado de Colima</p>
+        <h1 class="titulo-hero">ECOSISTEMAS</h1>
+        <p class="texto-hero">Una categoria centrada en mostrar los diversos ecosistemas del estado de Colima</p>
 
         <!-- -------- BOTONES DE FILTRO -------- -->
         <div class="barra-botones">
 
             <button class="boton-filtro">Todos</button>
-            <button class="boton-filtro">Mamiferos</button>
-            <button class="boton-filtro">Aves</button>
-            <button class="boton-filtro">Reptiles</button>
-            <button class="boton-filtro">Anfibios</button>
-            <button class="boton-filtro">Invertebrados</button>
+            <button class="boton-filtro">Colima</button>
+            <button class="boton-filtro">Villa de Alvarez</button>
+            <button class="boton-filtro">Manzanillo</button>
+            <button class="boton-filtro">Tecoman</button>
+            <button class="boton-filtro">Armeria</button>
+            <button class="boton-filtro">Comala</button>
+            <button class="boton-filtro">Coquimatlan</button>
+            <button class="boton-filtro">Cuauhtemoc</button>
+            <button class="boton-filtro">Ixtlahuacan</button>
+            <button class="boton-filtro">Minatitlan</button>
 
 
         </div>
@@ -91,11 +96,11 @@
     <!-- ========================================================= -->
 
     <button class="btn-scroll-top" id="btnScrollTop" aria-label="Volver arriba">
-        <img src="../../assets/Fauna/iconoBtnTopScroll.png" alt="Volver arriba">
+        <img src="../../assets/Ecosistemas/iconoBtnTopScroll.png" alt="Volver arriba">
     </button>
 
     <!-- ===================== SCRIPT ===================== -->
-    <script src="../../JavaScript/Fauna/script.js"></script>
+    <script src="../../JavaScript/Ecosistemas/script.js"></script>
 
 </body>
 </html>
