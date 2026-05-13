@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../Login/conexion.php");
+include("../Perfil/conexion.php");
 
 // Obtener publicaciones de Fauna (categoria_id = 2) aprobadas
 $sql = "SELECT p.id, p.titulo, p.contenido, p.fecha_creacion, u.username AS autor

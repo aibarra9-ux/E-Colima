@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../Login/conexion.php");
+include("../Perfil/conexion.php");
 ?>
 
 <!DOCTYPE html>
