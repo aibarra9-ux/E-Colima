@@ -410,5 +410,32 @@ window.addEventListener('pageshow', function(event) {
 });
 </script>
 
+<script>
+(function() {
+    const cards = document.querySelectorAll('.categoria-card');
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(60px)';
+        card.style.transition = 'opacity 1.4s ease, transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    });
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(function(card) {
+        observer.observe(card);
+    });
+})();
+</script>
+
 </body>
 </html>
