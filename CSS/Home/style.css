@@ -61,8 +61,8 @@ body {
     align-items: center;
     gap: 20px;
 }
-
 .logo-box {
+    position: relative;
     height: 50px;
 }
 
@@ -72,6 +72,36 @@ body {
     object-fit: contain;
 }
 
+/* Tooltip del logo */
+.logo-box::after {
+    content: "Vida de ecosistemas terrestres:\a explora la biodiversidad de Colima";
+    white-space: pre;
+    position: absolute;
+    top: 100%;
+    left: 200%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    background: rgba(10, 20, 10, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(143, 193, 160, 0.3);
+    color: #c8e6c9;
+    padding: 8px 14px;
+    border-radius: 15px;
+    font-family: 'League Spartan', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 1.5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 9999;
+}
+
+.logo-box:hover::after {
+    opacity: 1;
+}
 /* Perfil */
 .btn-perfil {
   display: flex;
