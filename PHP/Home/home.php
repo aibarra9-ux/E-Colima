@@ -105,11 +105,12 @@ if ($sesion_activa) {
             <div class="logo-box">
                 <img src="../../assets/Home/Logo_Oficial.png" alt="Logo" class="logo-img">
             </div>
-             <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
+            <?php if ($sesion_activa): ?>
+            <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
                 <i class="fas fa-user"></i>
-                    <?php if ($sesion_activa): ?>
-                    <span class="notif-dot"></span> <?php endif; ?>
+                <span class="notif-dot"></span>
             </div>
+            <?php endif; ?>
         </div>
         
         <!-- Derecha: buscador + idioma + login -->
