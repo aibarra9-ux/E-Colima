@@ -2,7 +2,7 @@
 session_start();
 
 // Control de acceso para Editores
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'editor') {
+if (!isset($_SESSION['usuario']) || ($_SESSION['rol'] !== 'editor' && $_SESSION['rol'] !== 'admin')) {
     header("Location: ../Home/home.php");
     exit();
 }
