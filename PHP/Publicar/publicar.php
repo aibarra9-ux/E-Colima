@@ -218,7 +218,8 @@ $limite_palabras = $limites[$categoria] ?? 500;
         /* Upload imagen */
         .upload-imagen {
             width: 100%;
-            height: 180px;
+            height: 340px;
+            max-height: 350px;    
             border: 2px dashed rgba(0,0,0,0.1);
             border-radius: 16px;
             display: flex;
@@ -316,7 +317,7 @@ $limite_palabras = $limites[$categoria] ?? 500;
 
         .preview-imagen {
             width: 100%;
-            height: 220px;
+            height: 300px;
             background: #f5f5f0;
             display: flex;
             align-items: center;
@@ -384,6 +385,78 @@ $limite_palabras = $limites[$categoria] ?? 500;
             border: 1px solid #ffcdd2;
             color: #c62828;
         }
+
+    /* Recortador de imagen */
+    .recortador-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .recortador-overlay.activo {
+        display: flex;
+    }
+
+    .recortador-container {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        max-height: 70vh;
+        overflow: hidden;
+        cursor: move;
+    }
+
+    .recortador-container img {
+        width: 100%;
+        display: block;
+    }
+
+    .mascara-recorte {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 35%;
+        height: 420px;
+        box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
+        border: 2px dashed #7ebd91;
+        pointer-events: none;
+    }
+
+    .botones-recorte {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-recorte {
+        padding: 12px 28px;
+        border-radius: 50px;
+        border: none;
+        font-family: 'League Spartan', sans-serif;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .btn-confirmar-recorte {
+        background: #7ebd91;
+        color: #1a2a1a;
+    }
+
+    .btn-cancelar-recorte {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
     </style>
 </head>
 <body>
@@ -471,81 +544,163 @@ $limite_palabras = $limites[$categoria] ?? 500;
         </div>
     </div>
 
+    <!-- Recortador -->
+    <div class="recortador-overlay" id="recortadorOverlay">
+        <div class="recortador-container" id="recortadorContainer">
+            <img id="imagenRecortar" src="" alt="Recortar">
+            <div class="mascara-recorte" id="mascaraRecorte"></div>
+        </div>
+        <div class="botones-recorte">
+            <button class="btn-recorte btn-cancelar-recorte" onclick="cancelarRecorte()">Cancelar</button>
+            <button class="btn-recorte btn-confirmar-recorte" onclick="confirmarRecorte()">Recortar</button>
+        </div>
+    </div>
     <canvas id="canvasRecorte" style="display:none;"></canvas>
 
     <script>
-        const limitePalabras = <?php echo $limite_palabras; ?>;
-        let imagenDataURL = null;
+    const limitePalabras = <?php echo $limite_palabras; ?>;
+    let imagenDataURL = null;
+    let imagenOriginal = null;
 
-        function cargarImagen(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    // ========== SUBIR IMAGEN ==========
+    function cargarImagen(event) {
+        const file = event.target.files[0];
+        if (!file) return;
             
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.getElementById('canvasRecorte');
-                    const ctx = canvas.getContext('2d');
-                    
-                    const targetWidth = Math.min(img.width, img.height * 0.75);
-                    const targetHeight = targetWidth * 4/3;
-                    const sx = (img.width - targetWidth) / 2;
-                    const sy = Math.max(0, (img.height - targetHeight) / 2);
-                    
-                    canvas.width = 900;
-                    canvas.height = 1200;
-                    ctx.drawImage(img, sx, sy, targetWidth, targetHeight, 0, 0, 900, 1200);
-                    
-                    imagenDataURL = canvas.toDataURL('image/jpeg', 0.9);
-                    document.getElementById('imagenRecortadaData').value = imagenDataURL;
-                    document.getElementById('previewImagenUpload').src = imagenDataURL;
-                    document.getElementById('previewImagenUpload').style.display = 'block';
-                    document.getElementById('uploadPlaceholder').style.display = 'none';
-                    
-                    actualizarPreview();
-                };
-                img.src = e.target.result;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                imagenOriginal = img;
+                abrirRecortador(e.target.result);
             };
-            reader.readAsDataURL(file);
-        }
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
 
-        function contarPalabras() {
-            const texto = document.getElementById('contenido').value.trim();
-            const palabras = texto ? texto.split(/\s+/).length : 0;
-            const contador = document.getElementById('contadorPalabras');
-            contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
-            contador.className = 'contador-palabras ';
-            if (palabras > limitePalabras) {
-                contador.className += 'error';
-                document.getElementById('btnPublicar').disabled = true;
-            } else if (palabras > limitePalabras * 0.8) {
-                contador.className += 'warning';
-                document.getElementById('btnPublicar').disabled = false;
-            } else {
-                contador.className += 'ok';
-                document.getElementById('btnPublicar').disabled = false;
-            }
-        }
+    // ========== RECORTADOR ==========
+    let escalaRecorte = 1;
+    let offsetX = 0, offsetY = 0;
+    let arrastrando = false, inicioX, inicioY, inicioOffX, inicioOffY;
 
-        function actualizarPreview() {
-            const titulo = document.getElementById('titulo').value || 'Título de la publicación';
-            const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
-            const previewTitulo = document.getElementById('previewTitulo');
-            const previewDescripcion = document.getElementById('previewDescripcion');
-            const previewImagen = document.getElementById('previewImagen');
+    function abrirRecortador(src) {
+        document.getElementById('imagenRecortar').src = src;
+        document.getElementById('recortadorOverlay').classList.add('activo');
+        escalaRecorte = 1;
+        offsetX = 0;
+        offsetY = 0;
+        actualizarTransform();
+    }
+
+    function actualizarTransform() {
+        const img = document.getElementById('imagenRecortar');
+        img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${escalaRecorte})`;
+        img.style.transformOrigin = 'center center';
+    }
+
+    function cancelarRecorte() {
+        document.getElementById('recortadorOverlay').classList.remove('activo');
+        document.getElementById('inputImagen').value = '';
+        imagenOriginal = null;
+    }
+
+    function confirmarRecorte() {
+        const img = document.getElementById('imagenRecortar');
+        const mascara = document.getElementById('mascaraRecorte');
+        const container = document.getElementById('recortadorContainer');
             
-            previewTitulo.textContent = titulo;
-            previewDescripcion.textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
-            previewTitulo.className = 'preview-titulo' + (document.getElementById('titulo').value ? '' : ' vacio');
-            previewDescripcion.className = 'preview-descripcion' + (document.getElementById('contenido').value ? '' : ' vacio');
+        const imgRect = img.getBoundingClientRect();
+        const maskRect = mascara.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
             
-            if (imagenDataURL) {
-                previewImagen.innerHTML = '<img src="' + imagenDataURL + '" alt="Preview">';
-            } else {
-                previewImagen.innerHTML = '<span>Sin imagen</span>';
-            }
+        const escalaX = imagenOriginal.width / imgRect.width;
+        const escalaY = imagenOriginal.height / imgRect.height;
+            
+        const sx = (maskRect.left - imgRect.left) * escalaX;
+        const sy = (maskRect.top - imgRect.top) * escalaY;
+        const sw = maskRect.width * escalaX;
+        const sh = maskRect.height * escalaY;
+            
+        const canvas = document.getElementById('canvasRecorte');
+        canvas.width = 900;
+        canvas.height = 1200;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imagenOriginal, sx, sy, sw, sh, 0, 0, 900, 1200);
+            
+        imagenDataURL = canvas.toDataURL('image/jpeg', 0.9);
+        document.getElementById('imagenRecortadaData').value = imagenDataURL;
+        document.getElementById('previewImagenUpload').src = imagenDataURL;
+        document.getElementById('previewImagenUpload').style.display = 'block';
+        document.getElementById('uploadPlaceholder').style.display = 'none';
+            
+        document.getElementById('recortadorOverlay').classList.remove('activo');
+        actualizarPreview();
+    }
+
+    // Eventos de arrastre
+    document.getElementById('recortadorContainer').addEventListener('mousedown', function(e) {
+        arrastrando = true;
+        inicioX = e.clientX;
+        inicioY = e.clientY;
+        inicioOffX = offsetX;
+        inicioOffY = offsetY;
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!arrastrando) return;
+        offsetX = inicioOffX + (e.clientX - inicioX);
+        offsetY = inicioOffY + (e.clientY - inicioY);
+        actualizarTransform();
+    });
+
+    document.addEventListener('mouseup', function() {
+        arrastrando = false;
+    });
+
+    // Zoom con rueda
+    document.getElementById('recortadorContainer').addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY < 0) escalaRecorte = Math.min(3, escalaRecorte + 0.05);
+        else escalaRecorte = Math.max(0.3, escalaRecorte - 0.05);
+        actualizarTransform();
+    });
+
+    // ========== CONTADOR ==========
+    function contarPalabras() {
+        const texto = document.getElementById('contenido').value.trim();
+        const palabras = texto ? texto.split(/\s+/).length : 0;
+        const contador = document.getElementById('contadorPalabras');
+        contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
+        contador.className = 'contador-palabras ';
+        if (palabras > limitePalabras) {
+            contador.className += 'error';
+            document.getElementById('btnPublicar').disabled = true;
+        } else if (palabras > limitePalabras * 0.8) {
+            contador.className += 'warning';
+            document.getElementById('btnPublicar').disabled = false;
+        } else {
+            contador.className += 'ok';
+            document.getElementById('btnPublicar').disabled = false;
         }
+    }
+
+    // ========== PREVIEW ==========
+    function actualizarPreview() {
+        const titulo = document.getElementById('titulo').value || 'Título de la publicación';
+        const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
+        document.getElementById('previewTitulo').textContent = titulo;
+        document.getElementById('previewDescripcion').textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
+        document.getElementById('previewTitulo').className = 'preview-titulo' + (document.getElementById('titulo').value ? '' : ' vacio');
+        document.getElementById('previewDescripcion').className = 'preview-descripcion' + (document.getElementById('contenido').value ? '' : ' vacio');
+        if (imagenDataURL) {
+            document.getElementById('previewImagen').innerHTML = '<img src="' + imagenDataURL + '" alt="Preview">';
+        } else {
+            document.getElementById('previewImagen').innerHTML = '<span>Sin imagen</span>';
+        }
+    }
+
     </script>
 </body>
 </html>
