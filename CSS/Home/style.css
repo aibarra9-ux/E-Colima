@@ -14,22 +14,14 @@ body {
 
 .top-bar {
     position: fixed;
-    top: 10px;
-    left: 20px;        /* ← directo, no margin */
-    right: 20px;       /* ← directo, no margin */
-    margin: 0;         /* ← quita el margin */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    margin: 0;
     z-index: 1000;
-    padding: 10px 20px;
-
-    background: rgba(74, 56, 56, 0.178);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 15px;
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Espacio elegante para que se vea el fondo del volcán en medio de ambas barras */
 }
 
 .top-bar > * {
@@ -840,4 +832,71 @@ body {
         padding: 8px 16px;
         font-size: 0.85rem;
     }
+}
+/* ================================================= */
+/* BARRA SUPERIOR - ESTILO INDEPENDIENTE NATGEO      */
+/* ================================================= */
+
+/* La barra de arriba se queda con su cristal e imágenes intactos */
+.topbar-main-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(74, 56, 56, 0.178);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    position: relative;
+}
+
+/* La barra de abajo: Completamente limpia y transparente */
+.topbar-categorias {
+    width: 100%;
+    display: flex;
+    /* Distribuye los elementos para que abarquen exactamente el mismo ancho de la barra de arriba */
+    justify-content: space-between; 
+    align-items: center;
+    padding: 10px 40px; /* Un poco de margen en las esquinas para alinear con los iconos superiores */
+    background: transparent !important; /* Cero fondos raros */
+}
+
+/* Enlaces del menú estilo Premium */
+.topbar-categorias .topbar-link {
+    color: #000000 !important; /* Letras negras sólidas como el botón de iniciar sesión */
+    text-decoration: none !important;
+    font-family: 'League Spartan', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 700 !important; /* Peso fuerte para que tenga presencia */
+    text-transform: uppercase !important;
+    letter-spacing: 3px !important; /* Espaciado elegante de revista */
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease !important;
+}
+
+/* Hover sutil en el texto */
+.topbar-categorias .topbar-link:hover {
+    color: #111111 !important;
+}
+
+/* Línea inferior NatGeo - Gruesa, visible y expandible desde el centro */
+.topbar-categorias .topbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 4px; /* Grosor idéntico al de National Geographic para que se note */
+    background-color: #204e02; 
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Animación expansiva */
+.topbar-categorias .topbar-link:hover::after {
+    width: 100%;
+    left: 0;
 }
