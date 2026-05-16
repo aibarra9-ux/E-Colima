@@ -12,7 +12,14 @@ $sesion_activa = isset($_SESSION['usuario']);
 // 3. Definimos la ruta del perfil con seguridad
 // Si no hay sesión, mandamos al login. Si hay, verificamos el rango.
 if ($sesion_activa) {
-    $ruta_perfil = ($_SESSION['rol_id'] == 1) ? '../Perfil/dashboard_perfil.php' : '../Perfil/perfil.php';
+    // Convertimos a entero (int) para asegurar que la comparación sea numérica
+    $rol = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0; 
+    
+    if ($rol === 1) {
+        $ruta_perfil = '../Perfil/dashboard_perfil.php';
+    } else {
+        $ruta_perfil = '../Perfil/perfil.php';
+    }
 } else {
     $ruta_perfil = '../Login/login.php'; 
 }
