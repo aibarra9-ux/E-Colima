@@ -6,7 +6,6 @@ $sesion_activa = isset($_SESSION['usuario']);
 
 // 3. Definimos la ruta del perfil con seguridad
 if ($sesion_activa) {
-<<<<<<< HEAD
     // Convertimos a entero (int) para asegurar que la comparación sea numérica
     $rol = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0; 
     
@@ -110,6 +109,7 @@ if ($sesion_activa) {
 <body>
 
     <div class="top-bar">
+<<<<<<< HEAD
         <!-- Izquierda: logo + perfil -->
         <div class="left-icons">
             <div class="logo-box">
@@ -119,27 +119,44 @@ if ($sesion_activa) {
             <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
                 <i class="fas fa-user"></i>
                 <span class="notif-dot"></span>
+=======
+        <div class="topbar-main-row">
+            <div class="left-icons">
+                <div class="logo-box">
+                    <img src="../../assets/Home/Logo_Oficial.png" alt="Logo" class="logo-img">
+                </div>
+                <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
+                    <i class="fas fa-user"></i>
+                    <?php if ($sesion_activa): ?>
+                        <span class="notif-dot"></span> 
+                    <?php endif; ?>
+                </div>
+            </div>
+            
+            <div class="right-buttons">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="lang-box">ES / EN</div>
+                <?php if(isset($_SESSION['usuario'])): ?>
+                    <a href="#" class="login-box" onclick="mostrarModal(event)">Cerrar sesión</a>
+                <?php else: ?>
+                    <a href="../Login/login.php" class="login-box">Iniciar sesión</a>
+                <?php endif; ?>        
+>>>>>>> editor
             </div>
             <?php endif; ?>
         </div>
-        
-        <!-- Derecha: buscador + idioma + login -->
-        <div class="right-buttons">
-            <div class="search-box">
-                <input type="text" placeholder="Buscar...">
-                <i class="fas fa-search"></i>
-            </div>
-            <div class="lang-box">ES / EN</div>
-            <?php if(isset($_SESSION['usuario'])): ?>
 
-                <a href="#" class="login-box" onclick="mostrarModal(event)">Cerrar sesión</a>
-
-            <?php else: ?>
-
-                <a href="../Login/login.php" class="login-box">Iniciar sesión</a>
-
-            <?php endif; ?>        
-        </div>
+        <nav class="topbar-categorias">
+            <a href="../Editor/administrar_solicitudes.php" class="topbar-link">Solicitudes</a>
+            <a href="../flora/flora.php" class="topbar-link">Flora</a>
+            <a href="../Fauna/Fauna.php" class="topbar-link">Fauna</a>
+            <a href="../Ecosistemas/ecosistemas.php" class="topbar-link">Ecosistemas</a>
+            <a href="../Consejos/consejos.php" class="topbar-link">Consejos</a>
+            <a href="../Noticias/noticias.php" class="topbar-link">Noticias</a>
+        </nav>
     </div>
 
     <?php if(isset($_SESSION['mensaje'])): ?>
