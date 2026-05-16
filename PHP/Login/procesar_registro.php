@@ -1,45 +1,44 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
-include("../Perfil/conexion.php");
+include "../Perfil/conexion.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$username = $_POST["username"];
+$password = $_POST["password"];
 
-    $nombre = $_POST['username'];
-    $correo = $_POST['correo'];
-    $password = $_POST['password'];
-    $confirmar = $_POST['confirmar'];
+$stmt = $conn->prepare("SELECT id, username, password_hash, rol_id FROM usuarios WHERE username = ? AND activo = 1");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
-    if ($password != $confirmar) {
-        $_SESSION['error_registro'] = "password";
-        header("Location: registro.php");
-        exit();
-    }
+if($resultado->num_rows > 0)
+{
+    $usuario = $resultado->fetch_assoc();
 
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    if(password_verify($password, $usuario['password_hash']))
+    {
+        $_SESSION['usuario'] = $usuario['username'];
+        $_SESSION['usuario_id'] = $usuario['id'];
 
-    $sql = "INSERT INTO usuarios (rol_id, username, email, password_hash, activo)
-    VALUES (4, '$nombre', '$correo', '$passwordHash', 4)";
+        switch ($usuario['rol_id']) {
+            case 1: $_SESSION['rol'] = 'admin'; break;
+            case 2: $_SESSION['rol'] = 'editor'; break;
+            case 3: $_SESSION['rol'] = 'escritor'; break;
+            case 4: $_SESSION['rol'] = 'usuario'; break;
+            default: $_SESSION['rol'] = 'usuario';
+        }
 
-    try {
-        $conn->query($sql);
-        $_SESSION['usuario'] = $nombre;
         header("Location: ../Home/home.php?success=1");
         exit();
-
-    } catch (mysqli_sql_exception $e) {
-        if ($e->getCode() == 1062) {
-            $_SESSION['error_registro'] = "duplicado";
-        } else {
-            echo "Error real: " . $e->getMessage(); // 👈 DEBUG
-            exit();
-        }
-        header("Location: registro.php");
+    }
+    else
+    {
+        header("Location: login.php?error=password");
         exit();
     }
-
-    $conn->close();
+}
+else
+{
+    header("Location: login.php?error=usuario");
+    exit();
 }
 ?>
