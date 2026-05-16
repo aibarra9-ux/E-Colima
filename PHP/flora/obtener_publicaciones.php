@@ -3,7 +3,7 @@ session_start();
 include(__DIR__ . "/../Perfil/conexion.php");
 
 // Obtener la categoría de la URL
-$categoria_id = $_GET['categoria_id'] ?? 2;
+$categoria_id = $_GET['categoria_id'] ?? 1;
 
 $sql = "SELECT p.id, p.titulo, p.contenido, p.imagen, p.fecha_creacion, u.username AS autor
         FROM publicaciones p

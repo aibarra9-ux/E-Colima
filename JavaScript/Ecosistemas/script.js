@@ -1,119 +1,61 @@
 /* ========================================================= */
-/* ======================= DATOS ============================ */
-/* ========================================================= */
-
-const publicaciones = [
-
-{
-titulo:"Bosque tropical",
-descripcion:"Ejemplo de publicación.",
-imagen:"https://picsum.photos/600/900?1"
-},
-
-{
-titulo:"Plantas silvestres",
-descripcion:"Descripción breve.",
-imagen:"https://picsum.photos/600/900?2"
-},
-
-{
-titulo:"Vegetación",
-descripcion:"Otra publicación.",
-imagen:"https://picsum.photos/600/900?3"
-},
-
-{
-titulo:"Bosque tropical",
-descripcion:"Ejemplo de publicación.",
-imagen:"https://picsum.photos/600/900?4"
-},
-
-{
-titulo:"Plantas silvestres",
-descripcion:"Descripción breve.",
-imagen:"https://picsum.photos/600/900?5"
-},
-
-{
-titulo:"Vegetación",
-descripcion:"Otra publicación.",
-imagen:"https://picsum.photos/600/900?6"
-},
-
-{
-titulo:"Bosque tropical",
-descripcion:"Ejemplo de publicación.",
-imagen:"https://picsum.photos/600/900?7"
-},
-
-{
-titulo:"Plantas silvestres",
-descripcion:"Descripción breve.",
-imagen:"https://picsum.photos/600/900?8"
-},
-
-{
-titulo:"Vegetación",
-descripcion:"Otra publicación.",
-imagen:"https://picsum.photos/600/900?9"
-},
-
-{
-titulo:"Vegetación",
-descripcion:"Otra publicación.",
-imagen:"https://picsum.photos/600/900?10"
-},
-
-];
-
-
-/* ========================================================= */
-/* ================= CREAR TARJETAS ========================= */
+/* =============== CARGAR DATOS DESDE BD ==================== */
 /* ========================================================= */
 
 const contenedor = document.getElementById("contenedorPublicaciones");
 
-publicaciones.forEach((post,i)=>{
+// Cargar publicaciones desde la base de datos
+fetch('obtener_publicaciones.php?categoria_id=3')
+    .then(response => response.json())
+    .then(publicaciones => {
+        if (publicaciones.length === 0) {
+            contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">No hay publicaciones aún en Ecosistemas.</p>';
+            return;
+        }
 
-// Tarjeta destacada para el primer post
-    if (i === 0) {
-        const tarjetaGrande = document.createElement("div");
-        tarjetaGrande.classList.add("tarjeta-grande");
+        publicaciones.forEach((post, i) => {
+            if (i === 0) {
+                const tarjetaGrande = document.createElement("div");
+                tarjetaGrande.classList.add("tarjeta-grande");
 
-        tarjetaGrande.innerHTML = `
-            <img class="imagen-grande" src="${post.imagen}" alt="${post.titulo}">
-            <div class="info-grande">
-                <h2 class="titulo-grande">${post.titulo}</h2>
-                <p class="descripcion-grande">${post.descripcion}</p>
-                <button class="boton-ver-mas">Ver más</button>
-            </div>
-        `;
+                tarjetaGrande.innerHTML = `
+                    <img class="imagen-grande" src="${post.imagen}" alt="${post.titulo}">
+                    <div class="info-grande">
+                        <h2 class="titulo-grande">${post.titulo}</h2>
+                        <p class="descripcion-grande">${post.descripcion}</p>
+                        <button class="boton-ver-mas">Ver más</button>
+                    </div>
+                `;
 
-        contenedor.appendChild(tarjetaGrande);
+                contenedor.appendChild(tarjetaGrande);
 
-        setTimeout(() => {
-            tarjetaGrande.classList.add("mostrar");
-        }, 100);
+                setTimeout(() => {
+                    tarjetaGrande.classList.add("mostrar");
+                }, 100);
 
-        return; // salta al siguiente, no crea tarjeta normal
-    }
+                return;
+            }
 
-// Tarjetas normales
-const tarjeta = document.createElement("div");
-    tarjeta.classList.add("tarjeta-publicacion");
+            const tarjeta = document.createElement("div");
+            tarjeta.classList.add("tarjeta-publicacion");
 
-    tarjeta.innerHTML = `
-        <img class="imagen-publicacion" src="${post.imagen}">
-        <h3 class="titulo-publicacion">${post.titulo}</h3>
-        <p class="descripcion-publicacion">${post.descripcion}</p>
-    `;
+            tarjeta.innerHTML = `
+                <img class="imagen-publicacion" src="${post.imagen}">
+                <h3 class="titulo-publicacion">${post.titulo}</h3>
+                <p class="descripcion-publicacion">${post.descripcion}</p>
+            `;
 
-    contenedor.appendChild(tarjeta);
+            contenedor.appendChild(tarjeta);
 
-    setTimeout(() => {
-        tarjeta.classList.add("mostrar");
-    }, 200 * i);
-
+            setTimeout(() => {
+                tarjeta.classList.add("mostrar");
+            }, 200 * i);
+        });
+    })
+    .catch(error => {
+        console.error('Error al cargar:', error);
+        contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">Error al cargar las publicaciones.</p>';
+    });
 
 /* ========================================================= */
 /* ================= BOTON SCROLL TOP ====================== */
@@ -122,9 +64,9 @@ const tarjeta = document.createElement("div");
 const btnScrollTop = document.getElementById("btnScrollTop");
 const seccionHero = document.querySelector(".seccion-hero");
 
-const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
             btnScrollTop.classList.remove("visible");
         } else {
             btnScrollTop.classList.add("visible");
@@ -134,7 +76,6 @@ const observer = new IntersectionObserver((entries)=>{
 
 observer.observe(seccionHero);
 
-btnScrollTop.addEventListener("click",()=>{
-    window.scrollTo({top:0,behavior:"smooth"});
-});
+btnScrollTop.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
 });
