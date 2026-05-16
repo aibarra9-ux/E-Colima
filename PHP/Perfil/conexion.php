@@ -1,4 +1,3 @@
-
 <?php
 
 //if (!isset($_SESSION['rol_id']) || $_SESSION['rol_id'] != 1) {
@@ -24,4 +23,3 @@ if ($conn->connect_error) {
 
 // Establecer el conjunto de caracteres a UTF-8 para evitar problemas con acentos
 $conn->set_charset("utf8");
-?>

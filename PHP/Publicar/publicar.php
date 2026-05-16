@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario']) || ($_SESSION['rol'] !== 'escritor' && $_SESSION['rol'] !== 'admin')) {
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'escritor') {
     header("Location: ../Home/home.php");
     exit();
 }
@@ -41,260 +41,666 @@ $limite_palabras = $limites[$categoria] ?? 500;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicar en <?php echo $categoria_nombre; ?> - ECOLIMA</title>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Publicar en <?php echo $categoria_nombre; ?> — ECOLIMA</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
+        :root {
+            --verde-oscuro: #1a2a1a;
+            --verde-medio: #2d5a3d;
+            --verde-claro: #7ebd91;
+            --crema: #f5f2eb;
+            --blanco: #ffffff;
+            --gris-texto: #5a5a5a;
+            --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --sombra-media: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #0a1a0f 0%, #1a2f1a 50%, #0f1f0f 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--crema);
             min-height: 100vh;
-            color: white;
-            padding: 30px 20px;
+            color: var(--verde-oscuro);
+            padding: 40px 20px;
         }
-        .contenedor { max-width: 900px; margin: 0 auto; }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
         .header-publicar {
-            display: flex; align-items: center; gap: 15px;
-            margin-bottom: 35px; flex-wrap: wrap;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
         }
+
         .btn-volver {
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-            color: white; padding: 10px 18px; border-radius: 50px;
-            text-decoration: none; font-family: 'League Spartan', sans-serif;
-            font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blanco);
+            border: 1px solid rgba(0,0,0,0.08);
+            color: var(--verde-oscuro);
+            padding: 12px 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra-suave);
         }
-        .btn-volver:hover { background: rgba(255,255,255,0.15); transform: translateX(-3px); }
-        .titulo-pagina { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: #a8d5b5; }
+
+        .btn-volver:hover {
+            transform: translateX(-4px);
+            box-shadow: var(--sombra-media);
+            border-color: var(--verde-claro);
+        }
+
+        .titulo-pagina {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--verde-oscuro);
+            letter-spacing: -0.5px;
+        }
+
         .badge-categoria {
-            background: #4a7c5c; color: white; padding: 7px 18px; border-radius: 50px;
-            font-family: 'League Spartan', sans-serif; font-size: 0.8rem; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--verde-oscuro);
+            color: var(--blanco);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        .layout-publicar { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        @media (max-width: 768px) { .layout-publicar { grid-template-columns: 1fr; } }
-        
+
+        /* Layout */
+        .layout-publicar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .layout-publicar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tarjeta formulario */
         .form-card {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; padding: 30px; backdrop-filter: blur(10px); height: fit-content;
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid rgba(0,0,0,0.04);
         }
-        .form-group { margin-bottom: 20px; }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
         .form-group label {
-            display: block; font-family: 'League Spartan', sans-serif; font-size: 0.8rem;
-            font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-            color: #a8d5b5; margin-bottom: 8px;
+            display: block;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gris-texto);
+            margin-bottom: 10px;
         }
-        .form-group input[type="text"], .form-group textarea {
-            width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
-            color: white; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.95rem;
-            transition: all 0.3s ease; outline: none;
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: #fafaf7;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            color: var(--verde-oscuro);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            line-height: 1.6;
         }
-        .form-group textarea { min-height: 250px; resize: vertical; }
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #7ebd91; background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 20px rgba(126,189,145,0.15);
+
+        .form-group textarea {
+            min-height: 280px;
+            resize: vertical;
         }
-        
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--verde-claro);
+            background: var(--blanco);
+            box-shadow: 0 0 0 4px rgba(126, 189, 145, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #c0c0c0;
+        }
+
+        /* Contador */
         .contador-palabras {
-            text-align: right; font-family: 'League Spartan', sans-serif;
-            font-size: 0.8rem; font-weight: 600; margin-top: 5px;
+            text-align: right;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 8px;
             transition: color 0.3s ease;
         }
-        .contador-palabras.ok { color: #7ebd91; }
-        .contador-palabras.warning { color: #d4a853; }
-        .contador-palabras.error { color: #d4786e; }
-        
+
+        .contador-palabras.ok { color: var(--verde-claro); }
+        .contador-palabras.warning { color: #c9a44b; }
+        .contador-palabras.error { color: #c96b6b; }
+
+        /* Upload imagen */
         .upload-imagen {
-            width: 100%; height: 200px; border: 2px dashed rgba(255,255,255,0.2);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s ease; background: rgba(255,255,255,0.02);
+            width: 100%;
+            height: 340px;
+            max-height: 350px;    
+            border: 2px dashed rgba(0,0,0,0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafaf7;
             overflow: hidden;
         }
-        .upload-imagen:hover { border-color: #7ebd91; background: rgba(255,255,255,0.05); }
-        .upload-imagen img { width: 100%; height: 100%; object-fit: contain; }
-        .upload-placeholder { text-align: center; color: rgba(255,255,255,0.4); font-family: 'League Spartan', sans-serif; font-size: 0.85rem; }
-        .upload-placeholder i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
-        
+
+        .upload-imagen:hover {
+            border-color: var(--verde-claro);
+            background: #f5f9f6;
+        }
+
+        .upload-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            color: #b0b0b0;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .upload-placeholder i {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        /* Botón publicar */
         .btn-publicar {
-            width: 100%; padding: 15px; background: linear-gradient(135deg, #3d6b4f, #5a9470);
-            border: none; border-radius: 12px; color: white;
-            font-family: 'League Spartan', sans-serif; font-size: 1rem; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+            width: 100%;
+            padding: 16px;
+            background: var(--verde-oscuro);
+            border: none;
+            border-radius: 14px;
+            color: var(--blanco);
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .btn-publicar:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(90,148,112,0.4); }
-        .btn-publicar:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-        
+
+        .btn-publicar:hover {
+            background: var(--verde-medio);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45, 90, 61, 0.3);
+        }
+
+        .btn-publicar:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Vista previa */
         .preview-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px; padding: 25px; position: sticky; top: 30px;
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid rgba(0,0,0,0.04);
+            position: sticky;
+            top: 30px;
         }
+
         .preview-titulo-seccion {
-            font-family: 'League Spartan', sans-serif; font-size: 0.75rem; font-weight: 700;
-            letter-spacing: 3px; text-transform: uppercase; color: #7ebd91;
-            margin-bottom: 20px; text-align: center;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 25px;
+            text-align: center;
         }
-        .preview-tarjeta { background: rgba(0,0,0,0.3); border-radius: 15px; overflow: hidden; }
+
+        .preview-tarjeta {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
         .preview-imagen {
-            width: 100%; height: 250px; background: rgba(255,255,255,0.05);
-            display: flex; align-items: center; justify-content: center;
-            color: rgba(255,255,255,0.2); font-size: 0.8rem; overflow: hidden;
+            width: 100%;
+            height: 300px;
+            background: #f5f5f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 0.8rem;
+            overflow: hidden;
         }
-        .preview-imagen img { width: 100%; height: 100%; object-fit: cover; }
-        .preview-contenido { padding: 20px; }
-        .preview-titulo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; min-height: 24px; }
-        .preview-titulo.vacio { color: rgba(255,255,255,0.2); font-style: italic; }
-        .preview-descripcion { font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.7); min-height: 50px; }
-        .preview-descripcion.vacio { color: rgba(255,255,255,0.2); font-style: italic; }
-        
-        .mensaje { padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; font-weight: 600; font-size: 0.9rem; }
-        .mensaje-exito { background: rgba(46,125,50,0.25); border: 1px solid rgba(76,175,80,0.4); color: #81c784; }
-        .mensaje-error { background: rgba(198,40,40,0.25); border: 1px solid rgba(244,67,54,0.4); color: #ef9a9a; }
+
+        .preview-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-contenido {
+            padding: 24px;
+        }
+
+        .preview-titulo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--verde-oscuro);
+            min-height: 24px;
+        }
+
+        .preview-titulo.vacio {
+            color: #ccc;
+            font-style: italic;
+        }
+
+        .preview-descripcion {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #888;
+            min-height: 50px;
+        }
+
+        .preview-descripcion.vacio {
+            color: #ddd;
+            font-style: italic;
+        }
+
+        /* Mensajes */
+        .mensaje {
+            padding: 16px 22px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            font-family: 'League Spartan', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .mensaje-exito {
+            background: #eaf7ec;
+            border: 1px solid #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .mensaje-error {
+            background: #fdecea;
+            border: 1px solid #ffcdd2;
+            color: #c62828;
+        }
+
+    /* Recortador de imagen */
+    .recortador-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .recortador-overlay.activo {
+        display: flex;
+    }
+
+    .recortador-container {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        max-height: 70vh;
+        overflow: hidden;
+        cursor: move;
+    }
+
+    .recortador-container img {
+        width: 100%;
+        display: block;
+    }
+
+    .mascara-recorte {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 35%;
+        height: 420px;
+        box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
+        border: 2px dashed #7ebd91;
+        pointer-events: none;
+    }
+
+    .botones-recorte {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn-recorte {
+        padding: 12px 28px;
+        border-radius: 50px;
+        border: none;
+        font-family: 'League Spartan', sans-serif;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .btn-confirmar-recorte {
+        background: #7ebd91;
+        color: #1a2a1a;
+    }
+
+    .btn-cancelar-recorte {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
     </style>
 </head>
 <body>
     <div class="contenedor">
+        <!-- Header -->
         <div class="header-publicar">
-            <a href="../Home/home.php" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</a>
+            <a href="../Home/home.php" class="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
             <h1 class="titulo-pagina">Crear publicación</h1>
-            <span class="badge-categoria"><i class="fas fa-<?php echo $icono; ?>"></i> <?php echo $categoria_nombre; ?></span>
+            <span class="badge-categoria">
+                <i class="fas fa-<?php echo $icono; ?>"></i>
+                <?php echo $categoria_nombre; ?>
+            </span>
         </div>
 
+        <!-- Mensajes -->
         <?php if (isset($_GET['success'])): ?>
-            <div class="mensaje mensaje-exito"><i class="fas fa-check-circle"></i> ¡Publicación creada! Pendiente de revisión.</div>
+            <div class="mensaje mensaje-exito">
+                <i class="fas fa-check-circle"></i> ¡Publicación creada! Pendiente de revisión.
+            </div>
         <?php endif; ?>
         <?php if (isset($_GET['error'])): ?>
-            <div class="mensaje mensaje-error"><i class="fas fa-exclamation-circle"></i> Error al publicar.</div>
+            <div class="mensaje mensaje-error">
+                <i class="fas fa-exclamation-circle"></i> Error al publicar. Intenta de nuevo.
+            </div>
         <?php endif; ?>
 
+        <!-- Layout -->
         <div class="layout-publicar">
+            
+            <!-- Formulario -->
             <div class="form-card">
                 <form action="procesar_publicacion.php" method="POST" enctype="multipart/form-data" id="formPublicar">
                     <input type="hidden" name="categoria" value="<?php echo $categoria; ?>">
                     <input type="hidden" name="imagen_recortada" id="imagenRecortadaData">
                     
+                    <!-- Imagen -->
                     <div class="form-group">
                         <label>Imagen de portada</label>
                         <div class="upload-imagen" id="uploadContainer" onclick="document.getElementById('inputImagen').click()">
                             <img id="previewImagenUpload" src="" style="display:none;">
                             <div class="upload-placeholder" id="uploadPlaceholder">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Subir imagen</span>
-                                <small style="display:block;margin-top:5px;opacity:0.6;">Se recortará a formato vertical</small>
+                                <i class="fas fa-image"></i>
+                                Subir imagen
                             </div>
                         </div>
                         <input type="file" id="inputImagen" accept="image/*" style="display:none;" onchange="cargarImagen(event)">
                     </div>
 
+                    <!-- Título -->
                     <div class="form-group">
                         <label for="titulo">Título</label>
-                        <input type="text" id="titulo" name="titulo" placeholder="Escribe un título..." required oninput="actualizarPreview()">
+                        <input type="text" id="titulo" name="titulo" placeholder="Escribe un título claro y atractivo..." required oninput="actualizarPreview()">
                     </div>
 
+                    <!-- Contenido -->
                     <div class="form-group">
                         <label for="contenido">Contenido</label>
-                        <textarea id="contenido" name="contenido" placeholder="Describe lo que quieras compartir..." required oninput="actualizarPreview(); contarPalabras()"></textarea>
+                        <textarea id="contenido" name="contenido" placeholder="Comparte información valiosa sobre <?php echo $categoria_nombre; ?>..." required oninput="actualizarPreview(); contarPalabras()"></textarea>
                         <div class="contador-palabras ok" id="contadorPalabras">0 / <?php echo $limite_palabras; ?> palabras</div>
                     </div>
 
+                    <!-- Botón -->
                     <button type="submit" class="btn-publicar" id="btnPublicar">
-                        <i class="fas fa-paper-plane"></i> Publicar en <?php echo $categoria_nombre; ?>
+                        <i class="fas fa-paper-plane"></i> Publicar
                     </button>
                 </form>
             </div>
 
+            <!-- Vista previa -->
             <div class="preview-card">
-                <div class="preview-titulo-seccion"><i class="fas fa-eye"></i> Vista previa</div>
+                <div class="preview-titulo-seccion">Vista previa</div>
                 <div class="preview-tarjeta">
-                    <div class="preview-imagen" id="previewImagen"><span>Sin imagen</span></div>
+                    <div class="preview-imagen" id="previewImagen">
+                        <span>Sin imagen</span>
+                    </div>
                     <div class="preview-contenido">
                         <div class="preview-titulo vacio" id="previewTitulo">Título de la publicación</div>
                         <div class="preview-descripcion vacio" id="previewDescripcion">El contenido aparecerá aquí...</div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
+    <!-- Recortador -->
+    <div class="recortador-overlay" id="recortadorOverlay">
+        <div class="recortador-container" id="recortadorContainer">
+            <img id="imagenRecortar" src="" alt="Recortar">
+            <div class="mascara-recorte" id="mascaraRecorte"></div>
+        </div>
+        <div class="botones-recorte">
+            <button class="btn-recorte btn-cancelar-recorte" onclick="cancelarRecorte()">Cancelar</button>
+            <button class="btn-recorte btn-confirmar-recorte" onclick="confirmarRecorte()">Recortar</button>
+        </div>
+    </div>
     <canvas id="canvasRecorte" style="display:none;"></canvas>
 
     <script>
-        const limitePalabras = <?php echo $limite_palabras; ?>;
-        let imagenDataURL = null;
+    const limitePalabras = <?php echo $limite_palabras; ?>;
+    let imagenDataURL = null;
+    let imagenOriginal = null;
 
-        function cargarImagen(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    // ========== SUBIR IMAGEN ==========
+    function cargarImagen(event) {
+        const file = event.target.files[0];
+        if (!file) return;
             
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    // Recortar a formato vertical (3:4)
-                    const canvas = document.getElementById('canvasRecorte');
-                    const ctx = canvas.getContext('2d');
-                    
-                    const targetWidth = Math.min(img.width, img.height * 0.75);
-                    const targetHeight = targetWidth * 4/3;
-                    const sx = (img.width - targetWidth) / 2;
-                    const sy = Math.max(0, (img.height - targetHeight) / 2);
-                    
-                    canvas.width = 900;
-                    canvas.height = 1200;
-                    ctx.drawImage(img, sx, sy, targetWidth, targetHeight, 0, 0, 900, 1200);
-                    
-                    imagenDataURL = canvas.toDataURL('image/jpeg', 0.9);
-                    document.getElementById('imagenRecortadaData').value = imagenDataURL;
-                    document.getElementById('previewImagenUpload').src = imagenDataURL;
-                    document.getElementById('previewImagenUpload').style.display = 'block';
-                    document.getElementById('uploadPlaceholder').style.display = 'none';
-                    
-                    actualizarPreview();
-                };
-                img.src = e.target.result;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                imagenOriginal = img;
+                abrirRecortador(e.target.result);
             };
-            reader.readAsDataURL(file);
-        }
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
 
-        function contarPalabras() {
-            const texto = document.getElementById('contenido').value.trim();
-            const palabras = texto ? texto.split(/\s+/).length : 0;
-            const contador = document.getElementById('contadorPalabras');
-            contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
-            contador.className = 'contador-palabras ';
-            if (palabras > limitePalabras) {
-                contador.className += 'error';
-                document.getElementById('btnPublicar').disabled = true;
-            } else if (palabras > limitePalabras * 0.8) {
-                contador.className += 'warning';
-                document.getElementById('btnPublicar').disabled = false;
-            } else {
-                contador.className += 'ok';
-                document.getElementById('btnPublicar').disabled = false;
-            }
-        }
+    // ========== RECORTADOR ==========
+    let escalaRecorte = 1;
+    let offsetX = 0, offsetY = 0;
+    let arrastrando = false, inicioX, inicioY, inicioOffX, inicioOffY;
 
-        function actualizarPreview() {
-            const titulo = document.getElementById('titulo').value || 'Título de la publicación';
-            const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
-            const previewTitulo = document.getElementById('previewTitulo');
-            const previewDescripcion = document.getElementById('previewDescripcion');
-            const previewImagen = document.getElementById('previewImagen');
+    function abrirRecortador(src) {
+        document.getElementById('imagenRecortar').src = src;
+        document.getElementById('recortadorOverlay').classList.add('activo');
+        escalaRecorte = 1;
+        offsetX = 0;
+        offsetY = 0;
+        actualizarTransform();
+    }
+
+    function actualizarTransform() {
+        const img = document.getElementById('imagenRecortar');
+        img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${escalaRecorte})`;
+        img.style.transformOrigin = 'center center';
+    }
+
+    function cancelarRecorte() {
+        document.getElementById('recortadorOverlay').classList.remove('activo');
+        document.getElementById('inputImagen').value = '';
+        imagenOriginal = null;
+    }
+
+    function confirmarRecorte() {
+        const img = document.getElementById('imagenRecortar');
+        const mascara = document.getElementById('mascaraRecorte');
+        const container = document.getElementById('recortadorContainer');
             
-            previewTitulo.textContent = titulo;
-            previewDescripcion.textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
-            previewTitulo.className = 'preview-titulo' + (document.getElementById('titulo').value ? '' : ' vacio');
-            previewDescripcion.className = 'preview-descripcion' + (document.getElementById('contenido').value ? '' : ' vacio');
+        const imgRect = img.getBoundingClientRect();
+        const maskRect = mascara.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
             
-            if (imagenDataURL) {
-                previewImagen.innerHTML = '<img src="' + imagenDataURL + '" alt="Preview">';
-            } else {
-                previewImagen.innerHTML = '<span>Sin imagen</span>';
-            }
+        const escalaX = imagenOriginal.width / imgRect.width;
+        const escalaY = imagenOriginal.height / imgRect.height;
+            
+        const sx = (maskRect.left - imgRect.left) * escalaX;
+        const sy = (maskRect.top - imgRect.top) * escalaY;
+        const sw = maskRect.width * escalaX;
+        const sh = maskRect.height * escalaY;
+            
+        const canvas = document.getElementById('canvasRecorte');
+        canvas.width = 900;
+        canvas.height = 1200;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imagenOriginal, sx, sy, sw, sh, 0, 0, 900, 1200);
+            
+        imagenDataURL = canvas.toDataURL('image/jpeg', 0.9);
+        document.getElementById('imagenRecortadaData').value = imagenDataURL;
+        document.getElementById('previewImagenUpload').src = imagenDataURL;
+        document.getElementById('previewImagenUpload').style.display = 'block';
+        document.getElementById('uploadPlaceholder').style.display = 'none';
+            
+        document.getElementById('recortadorOverlay').classList.remove('activo');
+        actualizarPreview();
+    }
+
+    // Eventos de arrastre
+    document.getElementById('recortadorContainer').addEventListener('mousedown', function(e) {
+        arrastrando = true;
+        inicioX = e.clientX;
+        inicioY = e.clientY;
+        inicioOffX = offsetX;
+        inicioOffY = offsetY;
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!arrastrando) return;
+        offsetX = inicioOffX + (e.clientX - inicioX);
+        offsetY = inicioOffY + (e.clientY - inicioY);
+        actualizarTransform();
+    });
+
+    document.addEventListener('mouseup', function() {
+        arrastrando = false;
+    });
+
+    // Zoom con rueda
+    document.getElementById('recortadorContainer').addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY < 0) escalaRecorte = Math.min(3, escalaRecorte + 0.05);
+        else escalaRecorte = Math.max(0.3, escalaRecorte - 0.05);
+        actualizarTransform();
+    });
+
+    // ========== CONTADOR ==========
+    function contarPalabras() {
+        const texto = document.getElementById('contenido').value.trim();
+        const palabras = texto ? texto.split(/\s+/).length : 0;
+        const contador = document.getElementById('contadorPalabras');
+        contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
+        contador.className = 'contador-palabras ';
+        if (palabras > limitePalabras) {
+            contador.className += 'error';
+            document.getElementById('btnPublicar').disabled = true;
+        } else if (palabras > limitePalabras * 0.8) {
+            contador.className += 'warning';
+            document.getElementById('btnPublicar').disabled = false;
+        } else {
+            contador.className += 'ok';
+            document.getElementById('btnPublicar').disabled = false;
         }
+    }
+
+    // ========== PREVIEW ==========
+    function actualizarPreview() {
+        const titulo = document.getElementById('titulo').value || 'Título de la publicación';
+        const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
+        document.getElementById('previewTitulo').textContent = titulo;
+        document.getElementById('previewDescripcion').textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
+        document.getElementById('previewTitulo').className = 'preview-titulo' + (document.getElementById('titulo').value ? '' : ' vacio');
+        document.getElementById('previewDescripcion').className = 'preview-descripcion' + (document.getElementById('contenido').value ? '' : ' vacio');
+        if (imagenDataURL) {
+            document.getElementById('previewImagen').innerHTML = '<img src="' + imagenDataURL + '" alt="Preview">';
+        } else {
+            document.getElementById('previewImagen').innerHTML = '<span>Sin imagen</span>';
+        }
+    }
+
     </script>
 </body>
 </html>

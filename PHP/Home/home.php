@@ -1,17 +1,12 @@
 <?php
 session_start();
 
-// 1. Cabeceras de caché
-header("Cache-Control: no-cache, no-store, must-revalidate"); 
-header("Pragma: no-cache"); 
-header("Expires: 0"); 
-
 // 2. Verificamos si hay sesión activa
 $sesion_activa = isset($_SESSION['usuario']);
 
 // 3. Definimos la ruta del perfil con seguridad
-// Si no hay sesión, mandamos al login. Si hay, verificamos el rango.
 if ($sesion_activa) {
+<<<<<<< HEAD
     // Convertimos a entero (int) para asegurar que la comparación sea numérica
     $rol = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0; 
     
@@ -21,6 +16,9 @@ if ($sesion_activa) {
         $ruta_perfil = '../Perfil/perfil.php';
     }
 } else {
+=======
+    $ruta_perfil = (isset($_SESSION['usuario_id']) && $_SESSION['usuario_id'] == 4) ? '../Perfil/dashboard_perfil.php' : '../Perfil/perfil.php';} else {
+>>>>>>> escritor
     $ruta_perfil = '../Login/login.php'; 
 }
 ?>
@@ -117,11 +115,12 @@ if ($sesion_activa) {
             <div class="logo-box">
                 <img src="../../assets/Home/Logo_Oficial.png" alt="Logo" class="logo-img">
             </div>
-             <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
+            <?php if ($sesion_activa): ?>
+            <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
                 <i class="fas fa-user"></i>
-                    <?php if ($sesion_activa): ?>
-                    <span class="notif-dot"></span> <?php endif; ?>
+                <span class="notif-dot"></span>
             </div>
+            <?php endif; ?>
         </div>
         
         <!-- Derecha: buscador + idioma + login -->
@@ -419,6 +418,33 @@ window.addEventListener('pageshow', function(event) {
         window.location.reload();
     }
 });
+</script>
+
+<script>
+(function() {
+    const cards = document.querySelectorAll('.categoria-card');
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(60px)';
+        card.style.transition = 'opacity 1.4s ease, transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    });
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    cards.forEach(function(card) {
+        observer.observe(card);
+    });
+})();
 </script>
 
 </body>

@@ -1,16 +1,14 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
-include("../Perfil/conexion.php");
+include "../Perfil/conexion.php";
 
+// Validamos que la petición venga exclusivamente por POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nombre = $_POST['username'];
-    $correo = $_POST['correo'];
-    $password = $_POST['password'];
-    $confirmar = $_POST['confirmar'];
+    $nombre = $_POST['username'] ?? '';
+    $correo = $_POST['correo'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $confirmar = $_POST['confirmar'] ?? '';
     
     // 1. OBTENEMOS EL CÓDIGO QUE ESCRIBIÓ EL USUARIO
     $codigo_ingresado = $_POST['codigo_ingresado'] ?? '';
@@ -23,8 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // 3. VALIDACIÓN DEL CÓDIGO OTP
-    // Comparamos el código que está en la Sesión (creado en verificar.php) 
-    // con el que el usuario escribió en el formulario.
     if (!isset($_SESSION['codigo_verificacion']) || $codigo_ingresado != $_SESSION['codigo_verificacion']) {
         $_SESSION['error_registro'] = "codigo_incorrecto";
         header("Location: registro.php");
@@ -45,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             unset($_SESSION['correo_verificado']);
             
             $_SESSION['usuario'] = $nombre;
+            $_SESSION['rol_id'] = 4; // Clave para que Home.php no tire error al registrarse
             
             header("Location: ../Home/home.php?success=1");
             exit();
@@ -61,6 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $conn->close();
+} else {
+    // Si intentan entrar al archivo escribiendo la URL directamente
+    header("Location: registro.php");
+    exit();
 }
 ?>

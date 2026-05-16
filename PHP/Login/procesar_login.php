@@ -20,23 +20,17 @@ if($resultado->num_rows > 0)
         // ✅ Guardar datos básicos
         $_SESSION['usuario'] = $usuario['username'];
         $_SESSION['usuario_id'] = $usuario['id'];
+        
+        // 🔥 ESTA ES LA LÍNEA QUE FALTA:
+        $_SESSION['rol_id'] = $usuario['rol_id']; 
 
-        // ✅ NUEVO: Guardar el rol según el rol_id de la BD
+        // Mantén tu switch si lo usas para otras cosas (como el nombre del rol)
         switch ($usuario['rol_id']) {
-            case 1:
-                $_SESSION['rol'] = 'admin';
-                break;
-            case 2:
-                $_SESSION['rol'] = 'editor';
-                break;
-            case 3:
-                $_SESSION['rol'] = 'escritor';  // ← Este es el tuyo
-                break;
-            case 4:
-                $_SESSION['rol'] = 'usuario';
-                break;
-            default:
-                $_SESSION['rol'] = 'usuario';
+            case 1: $_SESSION['rol'] = 'admin'; break;
+            case 2: $_SESSION['rol'] = 'editor'; break;
+            case 3: $_SESSION['rol'] = 'escritor'; break;
+            case 4: $_SESSION['rol'] = 'usuario'; break;
+            default: $_SESSION['rol'] = 'usuario';
         }
 
         header("Location: ../Home/home.php?success=1");
@@ -54,3 +48,4 @@ else
     exit();
 }
 ?>
+

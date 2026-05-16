@@ -8,15 +8,15 @@ unset($_SESSION['error_registro']);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro</title>
+    <title>Registro - ECOLIMA</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="contenedor">
 
-    <!-- IZQUIERDA -->
     <div class="login-section">
 
         <a href="../Home/home.php" class="back-home">← Volver</a>
@@ -24,7 +24,6 @@ unset($_SESSION['error_registro']);
         <div class="card">
             <h3>Crea tu cuenta</h3>
 
-            <!-- ERROR PHP -->
             <?php if($error_registro): ?>
                 <div class="login-error mostrar-error" id="errorPHP">
                     <span>⚠</span>
@@ -34,6 +33,8 @@ unset($_SESSION['error_registro']);
                                 echo "El usuario o correo ya existe";
                             } elseif($error_registro == "password"){
                                 echo "Las contraseñas no coinciden";
+                            } elseif($error_registro == "codigo_incorrecto"){
+                                echo "El código de verificación es inválido";
                             } else {
                                 echo "Error al registrar, intenta de nuevo";
                             }
@@ -42,15 +43,12 @@ unset($_SESSION['error_registro']);
                 </div>
             <?php endif; ?>
 
-            <!-- ERROR JS -->
             <div class="login-error" id="errorJS">
                 <span>⚠</span>
                 <span>Las contraseñas no coinciden</span>
             </div>
 
-            <!-- FORMULARIO -->
-            <form action="procesar_registro.php" method="POST" id="registroForm">
-
+<form action="procesar_registro.php" method="POST" id="registroForm" onkeydown="return event.key != 'Enter';">
                 <div class="input-group">
                     <input type="text" name="username"
                         minlength="4" maxlength="20"
@@ -60,14 +58,12 @@ unset($_SESSION['error_registro']);
                 </div>
 
                 <div class="input-group">
-                    <input type="email" name="correo"
+                    <input type="email" name="correo" id="correoRegistro"
                         placeholder="Correo electrónico" required>
                 </div>
 
-                <!-- FUERZA CONTRASEÑA -->
                 <div id="strengthMessage"></div>
 
-                <!-- PASSWORD -->
                 <div class="input-group password">
                     <input type="password" name="password" id="password"
                         minlength="8" maxlength="32"
@@ -79,7 +75,6 @@ unset($_SESSION['error_registro']);
                     </span>
                 </div>
 
-                <!-- CONFIRMAR -->
                 <div class="input-group password">
                     <input type="password" name="confirmar" id="confirmar"
                         minlength="8" maxlength="32"
@@ -91,7 +86,20 @@ unset($_SESSION['error_registro']);
                     </span>
                 </div>
 
-                <button type="submit" class="btn-login">Crear cuenta</button>
+                <div id="seccionCodigo" style="display: none; margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.1); pt-3">
+                    <p style="color: #a8d5b5; font-size: 0.85rem; margin: 15px 0 10px 0; font-family: 'Segoe UI', sans-serif;">
+                        Te hemos enviado un código a tu correo:
+                    </p>
+                    <div class="input-group">
+                        <input type="text" id="codigoVerificacion" name="codigo_ingresado" 
+                               placeholder="Código de 6 dígitos" maxlength="6" 
+                               style="text-align: center; letter-spacing: 3px; font-weight: bold;">
+                    </div>
+                </div>
+
+                <button type="button" id="btnAccion" class="btn-login">Enviar código de verificación</button>
+
+                <button type="submit" id="btnSubmitReal" style="display:none;"></button>
 
                 <p class="register">
                     ¿Ya tienes una cuenta?
@@ -102,7 +110,6 @@ unset($_SESSION['error_registro']);
         </div>
     </div>
 
-    <!-- DERECHA -->
     <div class="image-section">
         <img src="../../assets/Login/Imagen Onza.png" class="jaguar" alt="Jaguar">
     </div>

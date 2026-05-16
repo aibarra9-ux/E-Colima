@@ -5,7 +5,7 @@
 const contenedor = document.getElementById("contenedorPublicaciones");
 
 // Cargar publicaciones desde la base de datos
-fetch('obtener_publicaciones.php')
+fetch('obtener_publicaciones.php?categoria_id=2')
     .then(response => response.json())
     .then(publicaciones => {
         if (publicaciones.length === 0) {
