@@ -1,0 +1,29 @@
+{
+    "navbar": {
+        "buscar": "Search...",
+        "login": "Sign In",
+        "logout": "Log Out"
+    },
+    "inicio": {
+        "eslogan": "Colima is a living museum of biodiversity, where each species and landscape tell a story; explore, learn and discover how to conserve these natural treasures with complete and reliable information."
+    },
+    "categorias": {
+        "titulo_seccion": "Step into the web of life.",
+        "flora_titulo": "Flora",
+        "flora_desc": "Discover the incredible variety of plants and vegetation that make Colima unique.",
+        "fauna_titulo": "Fauna",
+        "fauna_desc": "Meet the fascinating animal species that inhabit Colima's diverse ecosystems.",
+        "leer_mas": "Read more"
+    },
+    "noticias": {
+        "titulo": "News from Colima's ecosystems",
+        "contenido": "News: ..."
+    },
+    "footer": {
+        "creditos": "CREDITS",
+        "ciudad": "Manzanillo, Colima.",
+        "fecha": "March 2026",
+        "universidad": "UNIVERSITY OF COLIMA",
+        "facultad": "Faculty of Electromechanical Engineering"
+    }
+}
