@@ -3,20 +3,23 @@ header('Content-Type: application/json');
 session_start();
 require_once "conexion.php";
 
+// 🛡️ Filtro de seguridad: Solo administradores
 if (!isset($_SESSION['usuario_id']) || $_SESSION['rol_id'] != 1) {
     echo json_encode([]);
     exit;
 }
 
-// Añadimos s.fecha_creacion a la consulta
-$sql = "SELECT s.id, s.motivo, s.rol_solicitado, s.fecha_creacion, u.username, 
-                CASE 
-                 WHEN s.rol_solicitado = 1 THEN 'Administrador'
-                 WHEN s.rol_solicitado = 2 THEN 'Usuario Estándar'
-                 ELSE 'Otro' 
-                END as rol_nombre
+// 🔍 CONSULTA OPTIMIZADA: Quitamos el CASE estático y usamos un JOIN real con la tabla roles
+$sql = "SELECT 
+            s.id, 
+            s.motivo, 
+            s.rol_solicitado, 
+            s.fecha_creacion, 
+            u.username, 
+            r.nombre AS rol_nombre  -- 🌟 Trae directamente el nombre de tu tabla de roles
         FROM solicitudes_rol s
         INNER JOIN usuarios u ON s.usuario_id = u.id
+        INNER JOIN roles r ON s.rol_solicitado = r.id  -- 🌟 Vincula el ID solicitado con su rol real
         WHERE s.estado = 'pendiente'
         ORDER BY s.fecha_creacion ASC";
 
@@ -30,3 +33,5 @@ if ($resultado && $resultado->num_rows > 0) {
 }
 
 echo json_encode($solicitudes);
+$conn->close();
+?>

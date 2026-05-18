@@ -9,8 +9,8 @@ if (!isset($_SESSION['usuario']) || ($_SESSION['rol'] !== 'editor' && $_SESSION[
 
 include("../Perfil/conexion.php");
 
-// Consulta limpia sin columnas inexistentes (como p.imagen)
-$sql = "SELECT p.id, p.titulo, p.contenido, p.fecha_creacion, c.slug AS categoria, u.username AS autor 
+// 🌟 Modificado: Agregamos 'p.imagen' a la consulta SQL
+$sql = "SELECT p.id, p.titulo, p.contenido, p.imagen, p.fecha_creacion, c.slug AS categoria, u.username AS autor 
         FROM publicaciones p
         JOIN categorias c ON p.categoria_id = c.id
         JOIN usuarios u ON p.autor_id = u.id 
@@ -25,6 +25,17 @@ if ($result && $result->num_rows > 0) {
         $solicitudes[] = $row;
     }
 }
+
+$modo_oscuro = 0;
+// 🌟 CORREGIDO: Removimos la variable inexistente '$sesion_activa'
+if (isset($_SESSION['usuario_id'])) {
+    $id_user = (int)$_SESSION['usuario_id'];
+    $query_theme = "SELECT modo_oscuro FROM usuarios WHERE id = $id_user";
+    $result_theme = $conn->query($query_theme);
+    if ($result_theme && $row_theme = $result_theme->fetch_assoc()) {
+        $modo_oscuro = (int)$row_theme['modo_oscuro'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -33,8 +44,11 @@ if ($result && $result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Solicitudes - ECOLIMA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../CSS/Editor/solicitudes.css">
-</head>
+        <?php if ($modo_oscuro === 1): ?>
+        <link rel="stylesheet" href="../../CSS/Editor/solicitudes_oscuro.css">
+    <?php else: ?>
+        <link rel="stylesheet" href="../../CSS/Editor/solicitudes.css">
+    <?php endif; ?></head>
 <body>
 
     <div class="panel-container">
@@ -97,7 +111,7 @@ if ($result && $result->num_rows > 0) {
                                     <div class="acciones-container">
                                         
                                         <div class="tooltip-wrapper">
-                                            <button class="btn-accion btn-ver" onclick="abrirModalVer('<?php echo addslashes(htmlspecialchars($solicitud['titulo'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['contenido'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['autor'])); ?>')">
+                                            <button class="btn-accion btn-ver" onclick="abrirModalVer('<?php echo addslashes(htmlspecialchars($solicitud['titulo'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['contenido'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['autor'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['imagen'])); ?>')">
                                                 <i class="fa-solid fa-eye"></i>
                                             </button>
                                             <span class="tooltip-text">Previsualizar</span>
@@ -141,7 +155,11 @@ if ($result && $result->num_rows > 0) {
                 <button type="button" class="modal-close-btn" onclick="cerrarModalVer()">[Cerrar: X]</button>
             </div>
 
-            <div id="modalVerContenido" style="max-height: 400px; overflow-y: auto; color: #e2e8f0; line-height: 1.7; font-size: 15px; padding-right: 10px;"></div>
+            <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
+                <div id="modalVerContenedorImagen" style="margin-bottom: 20px; text-align: center;"></div>
+                
+                <div id="modalVerContenido" style="color: #e2e8f0; line-height: 1.7; font-size: 15px;"></div>
+            </div>
         </div>
     </div>
 
@@ -165,10 +183,22 @@ if ($result && $result->num_rows > 0) {
     </div>
 
     <script>
-    function abrirModalVer(titulo, contenido, autor) {
+    // 🌟 Modificado: Ahora la función recibe el parámetro 'imagen'
+    function abrirModalVer(titulo, contenido, autor, imagen) {
         document.getElementById('modalVerTitulo').innerText = titulo;
         document.getElementById('modalVerContenido').innerHTML = contenido.replace(/\n/g, '<br>');
         document.getElementById('modalVerAutor').innerText = "Escrito por: @" + autor;
+        
+        // 🌟 Lógica dinámica para la imagen:
+        const contenedorImg = document.getElementById('modalVerContenedorImagen');
+        if (imagen && imagen.trim() !== '') {
+            // Reutilizamos la misma ruta que usas en el front: ../../assets/Publicaciones/nombre_archivo
+            contenedorImg.innerHTML = `<img src="../../assets/Publicaciones/${imagen}" alt="Previsualización" style="max-width: 100%; max-height: 280px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); shadow: 0 4px 12px rgba(0,0,0,0.5);">`;
+        } else {
+            // Si por alguna razón se envió sin imagen, no muestra un recuadro roto
+            contenedorImg.innerHTML = '';
+        }
+
         document.getElementById('modalVer').classList.add('active');
     }
 
@@ -191,11 +221,9 @@ if ($result && $result->num_rows > 0) {
         if (event.target == modalVer) cerrarModalVer();
         if (event.target == modalRechazar) cerrarModalRechazar();
     }
-    // Detectar si el usuario regresó usando la flecha de atrás del navegador
+
     window.addEventListener('pageshow', function(event) {
-        // Si la página fue cargada desde la memoria caché del historial (persisted)
         if (event.persisted || (typeof window.performance != 'undefined' && window.performance.navigation.type === 2)) {
-            // Forzar una recarga limpia desde el servidor para actualizar la base de datos
             window.location.reload();
         }
     });

@@ -9,6 +9,7 @@ session_start();
     <title>Login</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <!-- 🔥 Detecta error -->
@@ -80,8 +81,7 @@ session_start();
                         Recordar usuario
                     </label>
 
-                    <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
-                </div>
+                    <a href="javascript:void(0);" id="forgotPassword" class="forgot">¿Olvidaste tu contraseña?</a>                </div>
 
                 <button type="submit" class="btn-login">Entrar</button>
 

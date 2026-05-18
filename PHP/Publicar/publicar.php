@@ -1,7 +1,24 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'escritor') {
+$modo_oscuro = 0;
+
+// 1. Verificamos si hay una sesión activa de usuario
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../Login/login.php");
+    exit();
+}
+
+// 2. Capturamos las variables de rol (tanto en texto como en ID numérico si existen)
+$rol_texto = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
+$rol_id = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0;
+
+// 3. DEFINICIÓN DE PERMISOS:
+$es_admin = ($rol_texto === 'admin' || $rol_id === 1);
+$es_escritor = ($rol_texto === 'escritor' || $rol_id === 3);
+
+// 4. CONTROL DE ACCESO
+if (!$es_admin && !$es_escritor) {
     header("Location: ../Home/home.php");
     exit();
 }
@@ -34,6 +51,17 @@ $limites = [
     'consejos' => 200
 ];
 $limite_palabras = $limites[$categoria] ?? 500;
+
+// 🌟 CORREGIDO: Eliminamos '$sesion_activa' ya que validamos la sesión en el paso 1
+if (isset($_SESSION['usuario_id'])) {
+    require_once "../../PHP/Perfil/conexion.php"; // Asegúrate de que esta ruta a tu archivo de conexión sea la correcta
+    $id_user = (int)$_SESSION['usuario_id'];
+    $query_theme = "SELECT modo_oscuro FROM usuarios WHERE id = $id_user";
+    $result_theme = $conn->query($query_theme);
+    if ($result_theme && $row_theme = $result_theme->fetch_assoc()) {
+        $modo_oscuro = (int)$row_theme['modo_oscuro'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,421 +75,15 @@ $limite_palabras = $limites[$categoria] ?? 500;
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
-    <style>
-        :root {
-            --verde-oscuro: #1a2a1a;
-            --verde-medio: #2d5a3d;
-            --verde-claro: #7ebd91;
-            --crema: #f5f2eb;
-            --blanco: #ffffff;
-            --gris-texto: #5a5a5a;
-            --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.06);
-            --sombra-media: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
+    <?php if ($modo_oscuro === 1): ?>
+        <link rel="stylesheet" href="../../CSS/Publicar/estilo_oscuro.css">
+    <?php else: ?>
+        <link rel="stylesheet" href="../../CSS/Publicar/estilo.css">
+    <?php endif; ?>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--crema);
-            min-height: 100vh;
-            color: var(--verde-oscuro);
-            padding: 40px 20px;
-        }
-
-        .contenedor {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header-publicar {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-        }
-
-        .btn-volver {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--blanco);
-            border: 1px solid rgba(0,0,0,0.08);
-            color: var(--verde-oscuro);
-            padding: 12px 22px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: var(--sombra-suave);
-        }
-
-        .btn-volver:hover {
-            transform: translateX(-4px);
-            box-shadow: var(--sombra-media);
-            border-color: var(--verde-claro);
-        }
-
-        .titulo-pagina {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: var(--verde-oscuro);
-            letter-spacing: -0.5px;
-        }
-
-        .badge-categoria {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--verde-oscuro);
-            color: var(--blanco);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* Layout */
-        .layout-publicar {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 35px;
-            align-items: start;
-        }
-
-        @media (max-width: 768px) {
-            .layout-publicar {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Tarjeta formulario */
-        .form-card {
-            background: var(--blanco);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--sombra-suave);
-            border: 1px solid rgba(0,0,0,0.04);
-        }
-
-        .form-group {
-            margin-bottom: 28px;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gris-texto);
-            margin-bottom: 10px;
-        }
-
-        .form-group input[type="text"],
-        .form-group textarea {
-            width: 100%;
-            padding: 14px 18px;
-            background: #fafaf7;
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 12px;
-            color: var(--verde-oscuro);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            outline: none;
-            line-height: 1.6;
-        }
-
-        .form-group textarea {
-            min-height: 280px;
-            resize: vertical;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--verde-claro);
-            background: var(--blanco);
-            box-shadow: 0 0 0 4px rgba(126, 189, 145, 0.1);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #c0c0c0;
-        }
-
-        /* Contador */
-        .contador-palabras {
-            text-align: right;
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-top: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .contador-palabras.ok { color: var(--verde-claro); }
-        .contador-palabras.warning { color: #c9a44b; }
-        .contador-palabras.error { color: #c96b6b; }
-
-        /* Upload imagen */
-        .upload-imagen {
-            width: 100%;
-            height: 340px;
-            max-height: 350px;    
-            border: 2px dashed rgba(0,0,0,0.1);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #fafaf7;
-            overflow: hidden;
-        }
-
-        .upload-imagen:hover {
-            border-color: var(--verde-claro);
-            background: #f5f9f6;
-        }
-
-        .upload-imagen img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .upload-placeholder {
-            text-align: center;
-            color: #b0b0b0;
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-
-        .upload-placeholder i {
-            font-size: 2.2rem;
-            display: block;
-            margin-bottom: 10px;
-            color: #ccc;
-        }
-
-        /* Botón publicar */
-        .btn-publicar {
-            width: 100%;
-            padding: 16px;
-            background: var(--verde-oscuro);
-            border: none;
-            border-radius: 14px;
-            color: var(--blanco);
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-publicar:hover {
-            background: var(--verde-medio);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(45, 90, 61, 0.3);
-        }
-
-        .btn-publicar:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Vista previa */
-        .preview-card {
-            background: var(--blanco);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: var(--sombra-suave);
-            border: 1px solid rgba(0,0,0,0.04);
-            position: sticky;
-            top: 30px;
-        }
-
-        .preview-titulo-seccion {
-            font-family: 'League Spartan', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #aaa;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .preview-tarjeta {
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .preview-imagen {
-            width: 100%;
-            height: 300px;
-            background: #f5f5f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ccc;
-            font-size: 0.8rem;
-            overflow: hidden;
-        }
-
-        .preview-imagen img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preview-contenido {
-            padding: 24px;
-        }
-
-        .preview-titulo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--verde-oscuro);
-            min-height: 24px;
-        }
-
-        .preview-titulo.vacio {
-            color: #ccc;
-            font-style: italic;
-        }
-
-        .preview-descripcion {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            color: #888;
-            min-height: 50px;
-        }
-
-        .preview-descripcion.vacio {
-            color: #ddd;
-            font-style: italic;
-        }
-
-        /* Mensajes */
-        .mensaje {
-            padding: 16px 22px;
-            border-radius: 14px;
-            margin-bottom: 25px;
-            font-family: 'League Spartan', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        .mensaje-exito {
-            background: #eaf7ec;
-            border: 1px solid #c8e6c9;
-            color: #2e7d32;
-        }
-
-        .mensaje-error {
-            background: #fdecea;
-            border: 1px solid #ffcdd2;
-            color: #c62828;
-        }
-
-    /* Recortador de imagen */
-    .recortador-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.9);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-
-    .recortador-overlay.activo {
-        display: flex;
-    }
-
-    .recortador-container {
-        position: relative;
-        width: 90%;
-        max-width: 800px;
-        max-height: 70vh;
-        overflow: hidden;
-        cursor: move;
-    }
-
-    .recortador-container img {
-        width: 100%;
-        display: block;
-    }
-
-    .mascara-recorte {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 35%;
-        height: 420px;
-        box-shadow: 0 0 0 9999px rgba(0,0,0,0.7);
-        border: 2px dashed #7ebd91;
-        pointer-events: none;
-    }
-
-    .botones-recorte {
-        display: flex;
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .btn-recorte {
-        padding: 12px 28px;
-        border-radius: 50px;
-        border: none;
-        font-family: 'League Spartan', sans-serif;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        cursor: pointer;
-        font-size: 0.85rem;
-    }
-
-    .btn-confirmar-recorte {
-        background: #7ebd91;
-        color: #1a2a1a;
-    }
-
-    .btn-cancelar-recorte {
-        background: rgba(255,255,255,0.1);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    </style>
 </head>
 <body>
     <div class="contenedor">
-        <!-- Header -->
         <div class="header-publicar">
             <a href="../Home/home.php" class="btn-volver">
                 <i class="fas fa-arrow-left"></i> Volver
@@ -473,7 +95,6 @@ $limite_palabras = $limites[$categoria] ?? 500;
             </span>
         </div>
 
-        <!-- Mensajes -->
         <?php if (isset($_GET['success'])): ?>
             <div class="mensaje mensaje-exito">
                 <i class="fas fa-check-circle"></i> ¡Publicación creada! Pendiente de revisión.
@@ -485,16 +106,13 @@ $limite_palabras = $limites[$categoria] ?? 500;
             </div>
         <?php endif; ?>
 
-        <!-- Layout -->
         <div class="layout-publicar">
             
-            <!-- Formulario -->
             <div class="form-card">
                 <form action="procesar_publicacion.php" method="POST" enctype="multipart/form-data" id="formPublicar">
                     <input type="hidden" name="categoria" value="<?php echo $categoria; ?>">
                     <input type="hidden" name="imagen_recortada" id="imagenRecortadaData">
                     
-                    <!-- Imagen -->
                     <div class="form-group">
                         <label>Imagen de portada</label>
                         <div class="upload-imagen" id="uploadContainer" onclick="document.getElementById('inputImagen').click()">
@@ -507,27 +125,30 @@ $limite_palabras = $limites[$categoria] ?? 500;
                         <input type="file" id="inputImagen" accept="image/*" style="display:none;" onchange="cargarImagen(event)">
                     </div>
 
-                    <!-- Título -->
                     <div class="form-group">
                         <label for="titulo">Título</label>
                         <input type="text" id="titulo" name="titulo" placeholder="Escribe un título claro y atractivo..." required oninput="actualizarPreview()">
                     </div>
 
-                    <!-- Contenido -->
+                    <div class="form-group">
+                        <label for="selectSubcategoria">Subcategoría</label>
+                        <select id="selectSubcategoria" name="subcategoria_id" required>
+                            <option value="">Cargando subcategorías...</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="contenido">Contenido</label>
                         <textarea id="contenido" name="contenido" placeholder="Comparte información valiosa sobre <?php echo $categoria_nombre; ?>..." required oninput="actualizarPreview(); contarPalabras()"></textarea>
                         <div class="contador-palabras ok" id="contadorPalabras">0 / <?php echo $limite_palabras; ?> palabras</div>
                     </div>
 
-                    <!-- Botón -->
                     <button type="submit" class="btn-publicar" id="btnPublicar">
                         <i class="fas fa-paper-plane"></i> Publicar
                     </button>
                 </form>
             </div>
 
-            <!-- Vista previa -->
             <div class="preview-card">
                 <div class="preview-titulo-seccion">Vista previa</div>
                 <div class="preview-tarjeta">
@@ -544,7 +165,6 @@ $limite_palabras = $limites[$categoria] ?? 500;
         </div>
     </div>
 
-    <!-- Recortador -->
     <div class="recortador-overlay" id="recortadorOverlay">
         <div class="recortador-container" id="recortadorContainer">
             <img id="imagenRecortar" src="" alt="Recortar">
@@ -561,6 +181,46 @@ $limite_palabras = $limites[$categoria] ?? 500;
     const limitePalabras = <?php echo $limite_palabras; ?>;
     let imagenDataURL = null;
     let imagenOriginal = null;
+
+    // 🌟 NUEVO: Lógica automática para cargar Subcategorías según la URL actual
+    document.addEventListener("DOMContentLoaded", function() {
+        const categoriasIds = {
+            'flora': 1,
+            'fauna': 2,
+            'ecosistemas': 3,
+            'noticias': 4,
+            'consejos': 5
+        };
+
+        const categoriaActual = "<?php echo $categoria; ?>"; 
+        const idReal = categoriasIds[categoriaActual] || 2; // Fauna por defecto si no coincide
+
+        cargarSubcategorias(idReal);
+    });
+
+    function cargarSubcategorias(categoriaId) {
+        const selectSub = document.getElementById("selectSubcategoria");
+        if (!selectSub) return;
+
+        fetch(`get_subcategorias.php?categoria_id=${categoriaId}`)
+            .then(response => response.json())
+            .then(data => {
+                selectSub.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+                
+                if (data.length === 0) {
+                    selectSub.innerHTML = '<option value="">General (Sin subcategorías)</option>';
+                    return;
+                }
+
+                data.forEach(sub => {
+                    selectSub.innerHTML += `<option value="${sub.id}">${sub.nombre}</option>`;
+                });
+            })
+            .catch(error => {
+                console.error("Error al cargar subcategorías:", error);
+                selectSub.innerHTML = '<option value="">Error al cargar opciones</option>';
+            });
+    }
 
     // ========== SUBIR IMAGEN ==========
     function cargarImagen(event) {
@@ -700,7 +360,6 @@ $limite_palabras = $limites[$categoria] ?? 500;
             document.getElementById('previewImagen').innerHTML = '<span>Sin imagen</span>';
         }
     }
-
     </script>
 </body>
 </html>

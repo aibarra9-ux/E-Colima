@@ -173,8 +173,7 @@ async function eliminarUsuario(userId, nombre) {
                 Swal.fire('Eliminado', 'El usuario ha sido borrado.', 'success');
                 cargarUsuarios();
             } else {
-                Swal.fire('Error', 'Hubo un problema al eliminar.', 'error');
-            }
+                    Swal.fire('No se pudo eliminar', data.error || 'Hubo un problema al eliminar.', 'error');            }
         } catch (error) {
             Swal.fire('Error', 'Error de red o servidor.', 'error');
         }
@@ -207,12 +206,13 @@ document.addEventListener('input', e => {
     }
 });
 
+// Asegúrate de que las últimas líneas de tu usuarios.js queden únicamente así:
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Referencias con IDs actualizados del nuevo Dashboard
     const btnEdit = document.querySelector('.btn-edit-main');
-    const modal = document.getElementById('configDrawer'); // Cambiado a configDrawer
-    const overlay = document.getElementById('configOverlay'); // Añadido el fondo oscuro
-    const form = document.getElementById('formEditarPerfil');
+    const modal = document.getElementById('configDrawer'); 
+    const overlay = document.getElementById('configOverlay'); 
 
     // Funciones seguras para cerrar
     const cerrar = () => {
@@ -236,29 +236,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCancel) btnCancel.onclick = cerrar;
     if (overlay) overlay.onclick = cerrar;
 
-    // 4. Enviar datos (AJAX)
-    if (form) {
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch('actualizar_perfil.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-                if (result.status === 'success') {
-                    Swal.fire('¡Éxito!', 'Cambios guardados correctamente', 'success')
-                        .then(() => location.reload());
-                } else {
-                    Swal.fire('Error', result.message, 'error');
-                }
-            } catch (error) {
-                console.error("Error en el envío:", error);
-                // Si llegamos aquí es porque falló el fetch (404 o error de red)
-            }
-        };
-    }
+    // 🌟 ¡EL BLOQUE "form.onsubmit" QUE ESTABA AQUÍ ABAJO HA SIDO ELIMINADO!
 });

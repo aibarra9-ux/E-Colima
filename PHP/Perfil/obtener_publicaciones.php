@@ -1,41 +1,52 @@
 <?php
-// 1. Cabecera para que el navegador sepa que enviamos JSON
-header('Content-Type: application/json');
-
-// 2. Iniciar sesión y conexión
+header('Content-Type: application/json; charset=utf-8');
 session_start();
 require_once "conexion.php";
 
-// 3. Verificación de seguridad (Solo admin puede ver esto)
-if (!isset($_SESSION['usuario_id']) || $_SESSION['rol_id'] != 1) {
-    echo json_encode(["status" => "error", "message" => "No autorizado"]);
-    exit;
-}
+// Obtenemos el ID del usuario en sesión (si no ha iniciado sesión, será 0)
+$usuario_actual_id = $_SESSION['usuario_id'] ?? 0;
 
-// 4. La Consulta SQL (Ajustada a tu imagen de la BD)
-// Filtramos para que NO aparezcan las que tienen fecha_eliminacion
-$sql = "SELECT p.id, p.titulo, p.fecha_publicacion, u.username as autor 
+// Consulta SQL avanzada: Cuenta los likes totales de cada post 
+// Y evalúa si el usuario en sesión ya le dio like (si da un número mayor a 0, dio_like será true)
+$sql = "SELECT p.id, p.titulo, p.imagen, p.fecha_creacion, u.username as autor,
+               COUNT(l.id) as total_likes,
+               SUM(CASE WHEN l.usuario_id = ? THEN 1 ELSE 0 END) as dio_like
         FROM publicaciones p
         INNER JOIN usuarios u ON p.autor_id = u.id
+        LEFT JOIN likes l ON p.id = l.publicacion_id
         WHERE p.estado = 'publicado' 
         AND p.fecha_eliminacion IS NULL
-        ORDER BY p.fecha_publicacion DESC";
+        GROUP BY p.id
+        ORDER BY p.fecha_creacion DESC";
 
-$resultado = $conn->query($sql);
-$publicaciones = []; // Siempre inicializamos como array vacío
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $usuario_actual_id);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
-// 5. Procesar resultados
+$publicaciones = []; 
+
 if ($resultado && $resultado->num_rows > 0) {
     while($row = $resultado->fetch_assoc()) {
-        // Formateamos la fecha para que se vea bonita: "04 May, 2026"
-        if ($row['fecha_publicacion']) {
-            $row['fecha'] = date("d M, Y", strtotime($row['fecha_publicacion']));
+        
+        if (!empty($row['fecha_creacion'])) {
+            $fechaFormateada = date("d M, Y", strtotime($row['fecha_creacion']));
         } else {
-            $row['fecha'] = "Sin fecha";
+            $fechaFormateada = "Sin fecha";
         }
-        $publicaciones[] = $row;
+        
+        $publicaciones[] = [
+            'id' => $row['id'],
+            'titulo' => $row['titulo'],
+            'autor' => $row['autor'],
+            'fecha' => $fechaFormateada,
+            'imagen' => !empty($row['imagen']) ? $row['imagen'] : '',
+            'likes' => (int)$row['total_likes'],
+            'le_gusta' => $row['dio_like'] > 0 ? true : false // Envía un booleano al JS
+        ];
     }
 }
 
-// 6. El Eco final: Siempre enviamos el arreglo (vacío o lleno)
 echo json_encode($publicaciones);
+exit();
+?>

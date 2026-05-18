@@ -3,11 +3,15 @@ require_once "verificar_sesion.php";
 require_once "conexion.php";
 
 $id_admin = $_SESSION['usuario_id'];
-$query = "SELECT username, foto_perfil, banner_perfil FROM usuarios WHERE id = $id_admin";
+// 🔍 Optimizado: Recuperamos también el campo 'email' y 'modo_oscuro' para mapear el formulario de forma correcta
+$query = "SELECT username, email, foto_perfil, banner_perfil, modo_oscuro FROM usuarios WHERE id = $id_admin";
 $res = $conn->query($query);
 $datos_admin = $res->fetch_assoc();
+$nombre = $datos_admin['username'];
+$correo = $datos_admin['email'];
 $foto = $datos_admin['foto_perfil'] ?? 'default_avatar.png';
-$banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
+$banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg';
+$modo_oscuro = $datos_admin['modo_oscuro'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +21,7 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECOLIMA – Solicitudes de Rol</title>
     <link rel="stylesheet" href="../../CSS/Perfil/dashboard.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link class="config-style" rel="stylesheet" href=""> <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Estilos específicos para la gestión de solicitudes */
@@ -60,37 +64,40 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
             background: var(--green-pale);
             color: var(--green-dark);
         }
-       .action-buttons {
-    display: flex;
-    gap: 10px;
-}
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
 
-.btn-approve, .btn-reject {
-    border: none;
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
-}
+        .btn-approve, .btn-reject {
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
 
-.btn-approve { background: #dcfce7; color: #166534; }
-.btn-reject { background: #fee2e2; color: #991b1b; }
+        .btn-approve { background: #dcfce7; color: #166534; }
+        .btn-reject { background: #fee2e2; color: #991b1b; }
 
-.btn-approve:hover { background: #166534; color: white; }
-.btn-reject:hover { background: #991b1b; color: white; }
+        .btn-approve:hover { background: #166534; color: white; }
+        .btn-reject:hover { background: #991b1b; color: white; }
     </style>
 </head>
 <body>
 
 <nav class="sidebar">
-  <div style="height: 70px;">
-    <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+  <div style="height: 70px; display: flex; align-items: center;">
+    <a href="../Home/home.php" style="display: flex; align-items: center; text-decoration: none; gap: 10px;">
+      <img src="../../assets/Perfil/Logo.png" style="width: 50px; height: 50px; margin-left: 13px;"/>
+      <span style="font-family: sans-serif; font-weight: 700; font-size: 22px; color: #1a3a2a; letter-spacing: 2px;">ECOLIMA</span>
+    </a>
   </div>
 
-    <div class="sidebar-nav">
+  <div class="sidebar-nav">
     <a href="dashboard_perfil.php" class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       Mi Perfil
@@ -123,19 +130,18 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
       Cerrar sesión
     </button>
   </div>
-  </div>
 </nav>
 
 <main class="main">
     <div class="profile-card">
         <div class="profile-hero" style="height: 110px;">
-      <img class="cover" src="../../assets/Fotos_banner/<?php echo $banner; ?>" id="imgBanner">
+            <img class="cover" src="../../assets/Fotos_banner/<?php echo $banner; ?>" id="imgBanner">
             <div class="profile-avatar-wrap" style="bottom: -35px;">
                 <img class="profile-avatar" style="width: 70px; height: 70px;" src="../../assets/Fotos_perfil/<?php echo $foto; ?>">
             </div>
         </div>
         <div class="profile-info" style="padding-top: 45px;">
-            <div class="profile-name"><?php echo strtoupper($datos_admin['username']); ?></div>
+            <div class="profile-name"><?php echo strtoupper($nombre); ?></div>
             <div class="profile-role">Moderador de Credenciales</div>
         </div>
     </div>
@@ -149,7 +155,7 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
 
             <div class="search-box" style="display: flex; align-items: center; background: var(--white); border: 2px solid var(--green-pale); border-radius: 12px; padding: 5px 15px; width: 280px;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--green-mid);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="searchSolicitud" placeholder="Buscar usuario..." style="border: none; outline: none; padding: 8px; width: 100%; font-family: 'Nunito'; font-size: 0.85rem;">
+                <input type="text" id="searchSolicitud" placeholder="Buscar usuario..." style="border: none; outline: none; padding: 8px; width: 100%; font-family: 'Nunito'; font-size: 0.85rem; background: transparent; color: inherit;">
             </div>
         </div>
 
@@ -167,7 +173,7 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
                             </tr>
                         </thead>
                         <tbody id="lista-solicitudes">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -175,9 +181,138 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
     </div>
 </main>
 
+<div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
+<aside class="config-drawer" id="configDrawer">
+  <div class="drawer-header">
+    <h2>⚙️ Editar Perfil</h2>
+    <button class="drawer-close" onclick="closeConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body">
+    <form id="formEditarPerfil">
+        <div class="config-group">
+            <label>Nombre de Usuario</label>
+            <input class="config-input" type="text" name="username" id="cfgName" value="<?php echo htmlspecialchars($nombre); ?>" required />
+        </div>
+        <div class="config-group">
+            <label>Correo Electrónico</label>
+            <input class="config-input" type="email" name="email" id="cfgEmail" value="<?php echo htmlspecialchars($correo); ?>" required />
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+        <div class="config-group">
+            <label>Apariencia del Sistema</label>
+            <div class="theme-switch-wrapper" style="margin-top: 8px;">
+                <label class="switch" for="switchModoOscuro" style="display: flex; align-items: center; width: 100%; height: 45px; background: rgba(0,0,0,0.05); border-radius: 12px; position: relative; cursor: pointer;">
+                    <input type="checkbox" id="switchModoOscuro" style="display:none;" <?php echo ($modo_oscuro == 1) ? 'checked' : ''; ?>>
+                    <div class="slider" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 12px; transition: 0.4s; display: flex; align-items: center; padding: 0 12px; overflow: hidden;">
+                        
+                        <div class="clouds" style="position: absolute; right: 15px; top: 0; bottom: 0; width: 50px; transition: 0.4s;">
+                            <svg class="cloud" id="cloud-1" viewBox="0 0 24 24" fill="#ffffff" style="position:absolute; opacity:0.8;"><path d="M19.36 10.04A6 6 0 0 0 8 11a4 4 0 1 0-.6 7.87H19.4a4.38 4.38 0 0 0 .15-8.83z"/></svg>
+                            <svg class="cloud" id="cloud-2" viewBox="0 0 24 24" fill="#ffffff" style="position:absolute; opacity:0.5;"><path d="M19.36 10.04A6 6 0 0 0 8 11a4 4 0 1 0-.6 7.87H19.4a4.38 4.38 0 0 0 .15-8.83z"/></svg>
+                        </div>
+
+                        <div class="stars" style="position: absolute; left: 15px; top: 0; bottom: 0; width: 50px; transition: 0.4s; opacity: 0; transform: translateY(-20px);">
+                            <svg class="star" viewBox="0 0 24 24" fill="#ffffd0" style="position:absolute; width:10px;"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
+                            <svg class="star" viewBox="0 0 24 24" fill="#ffffff" style="position:absolute; width:6px; left:25px; top:25px;"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
+                        </div>
+
+                        <div class="astro-icon" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; z-index: 2; transition: 0.4s; border-radius: 50%;">
+                            <svg class="sun-svg" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" style="width:20px; height:20px; transition: 0.4s;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.22" x2="5.64" y2="17.78"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                            <svg class="moon-svg" viewBox="0 0 24 24" fill="none" stroke="#f1f5f9" stroke-width="2.2" style="width:18px; height:18px; transition: 0.4s; display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                        </div>
+                        
+                        <span class="lbl-modo" style="margin-left: 10px; font-family:'Nunito', sans-serif; font-size:0.88rem; font-weight:700; color: var(--green-dark); z-index:2; transition:0.4s;">Modo Claro</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+        <div class="config-group">
+            <label style="color: #b91c1c; font-weight: 700;">Contraseña Actual</label>
+            <input class="config-input" type="password" name="password_actual" id="cfgPassActual" placeholder="Requerida para confirmar cambios" />
+        </div>
+        <div class="config-group">
+            <label>Contraseña Nueva</label>
+            <input class="config-input" type="password" name="password_nueva" id="cfgPass" minlength="8" maxlength="32" placeholder="Dejar vacío para no cambiar" />
+        </div>
+        
+        <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 10px;">
+            ID de Administrador: #<?php echo $id_admin; ?>
+        </p>
+
+        <button type="submit" class="btn-save" style="width: 100%; margin-top: 20px;">Guardar Cambios</button>
+    </form>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    const switchModoOscuro = document.getElementById('switchModoOscuro');
+    const configStyleLink = document.querySelector('.config-style');
+    const labelModo = document.querySelector('.lbl-modo');
+    const sunSvg = document.querySelector('.sun-svg');
+    const moonSvg = document.querySelector('.moon-svg');
+    const starsDiv = document.querySelector('.stars');
+    const cloudsDiv = document.querySelector('.clouds');
+
+    function aplicarModoOscuro(enforceDark) {
+        if (enforceDark) {
+            document.body.classList.add('dark-mode');
+            configStyleLink.setAttribute('href', '../../CSS/Perfil/Perfil_oscuro.css');
+            labelModo.textContent = "Modo Oscuro";
+            labelModo.style.color = "#f8fafc";
+            sunSvg.style.display = "none";
+            moonSvg.style.display = "block";
+            if(starsDiv) { starsDiv.style.opacity = "1"; starsDiv.style.transform = "translateY(0)"; }
+            if(cloudsDiv) cloudsDiv.style.opacity = "0";
+            switchModoOscuro.checked = true;
+        } else {
+            document.body.classList.remove('dark-mode');
+            configStyleLink.setAttribute('href', '');
+            labelModo.textContent = "Modo Claro";
+            labelModo.style.color = "";
+            sunSvg.style.display = "block";
+            moonSvg.style.display = "none";
+            if(starsDiv) { starsDiv.style.opacity = "0"; starsDiv.style.transform = "translateY(-20px)"; }
+            if(cloudsDiv) cloudsDiv.style.opacity = "1";
+            switchModoOscuro.checked = false;
+        }
+    }
+
+    // 💥 Ejecución inmediata antes de renderizar la UI completa
+    const preferedTheme = localStorage.getItem('theme');
+    const phpTheme = <?php echo $modo_oscuro; ?>;
+    if (preferedTheme === 'dark' || (preferedTheme === null && phpTheme === 1)) {
+        aplicarModoOscuro(true);
+    } else {
+        aplicarModoOscuro(false);
+    }
+
+    // Evento de cambio manual por el Administrador
+    switchModoOscuro.addEventListener('change', async function() {
+        const hitoDark = this.checked;
+        aplicarModoOscuro(hitoDark);
+        localStorage.setItem('theme', hitoDark ? 'dark' : 'light');
+
+        // Sincronizar estado en caliente con el servidor
+        const syncForm = new FormData();
+        syncForm.append('toggle_dark_mode', '1');
+        syncForm.append('modo_oscuro', hitoDark ? '1' : '0');
+        try {
+            await fetch('../Perfil/actualizar_configuracion.php', { method: 'POST', body: syncForm });
+        } catch(e) { console.error("Error sincronizando tema: ", e); }
+    });
+</script>
+
 <script src="../../JavaScript/Dashboard/solicitudes.js"></script>
 <script>
-    // Adaptación de funciones de UI
+    // Funciones de control de UI de los drawers
     function openConfig() {
         document.getElementById('configOverlay').classList.add('open');
         document.getElementById('configDrawer').classList.add('open');
@@ -202,7 +337,106 @@ $banner = $datos_admin['banner_perfil'] ?? 'default_banner.jpg'
         })
     }
 
-   
+    // 🌟 CONTROL DE ENVIÓ INTELIGENTE: Intercepción con Modal de Verificación de Email
+    document.getElementById('formEditarPerfil').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Detiene la recarga nativa
+
+        const name = document.getElementById('cfgName').value.trim();
+        const email = document.getElementById('cfgEmail').value.trim();
+        const passActual = document.getElementById('cfgPassActual').value;
+        const passNueva = document.getElementById('cfgPass').value;
+        
+        const emailOriginal = "<?php echo $correo; ?>";
+
+        if (!name || !email) {
+            Swal.fire('Campos obligatorios', 'El nombre y correo no pueden estar vacíos.', 'warning');
+            return;
+        }
+
+        if (passNueva.length > 0) {
+            if (passActual.length === 0) {
+                Swal.fire('Seguridad', 'Debes escribir tu contraseña actual para poder asignar una nueva.', 'warning');
+                return;
+            }
+            if (passNueva.length < 8 || passNueva.length > 32) {
+                Swal.fire('Contraseña inválida', 'La nueva contraseña debe tener entre 8 y 32 caracteres.', 'warning');
+                return;
+            }
+        }
+
+        const formData = new FormData(this);
+
+        try {
+            Swal.fire({
+                title: 'Procesando...',
+                text: 'Espere un momento, por favor.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            let response = await fetch('../Perfil/actualizar_configuracion.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            let data = await response.json();
+
+            if (data.status === 'need_verification') {
+                
+                const { value: codigoIngresado } = await Swal.fire({
+                    title: 'Confirma tu nuevo correo',
+                    text: data.message,
+                    input: 'text',
+                    inputPlaceholder: '000000',
+                    allowOutsideClick: false,
+                    confirmButtonColor: '#2d6a4f',
+                    confirmButtonText: 'Verificar y Guardar',
+                    cancelButtonText: 'Cancelar',
+                    showCancelButton: true,
+                    inputAttributes: { 
+                        maxlength: 6, 
+                        style: 'text-align: center; letter-spacing: 5px; font-weight: bold; font-size: 24px;' 
+                    },
+                    inputValidator: (value) => {
+                        if (!value || value.length !== 6 || isNaN(value)) {
+                            return 'Debes introducir el código numérico de 6 dígitos.';
+                        }
+                    }
+                });
+
+                if (!codigoIngresado) {
+                    Swal.close();
+                    return;
+                }
+
+                formData.append('codigo_verificacion', codigoIngresado);
+
+                Swal.fire({
+                    title: 'Verificando código...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                response = await fetch('../Perfil/actualizar_configuracion.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                data = await response.json();
+            }
+
+            if (data.status === 'success') {
+                Swal.fire('¡Actualizado!', data.message, 'success').then(() => {
+                    location.reload(); 
+                });
+            } else {
+                Swal.fire('Error', data.message, 'error');
+            }
+            
+        } catch (error) {
+            console.error('Error al actualizar la configuración:', error);
+            Swal.fire('Error', 'No se pudo procesar la solicitud con el servidor.', 'error');
+        }
+    });
 </script>
 </body>
 </html>

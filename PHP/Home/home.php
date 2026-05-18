@@ -4,6 +4,18 @@ session_start();
 // 2. Verificamos si hay sesión activa
 $sesion_activa = isset($_SESSION['usuario']);
 
+// --- NUEVA LÓGICA DE CONFIGURACIÓN DE APARIENCIA EN BASE DE DATOS ---
+$modo_oscuro = 0;
+if ($sesion_activa && isset($_SESSION['usuario_id'])) {
+    require_once "../../PHP/Perfil/conexion.php"; // Asegúrate de que esta ruta a tu archivo de conexión sea la correcta
+    $id_user = (int)$_SESSION['usuario_id'];
+    $query_theme = "SELECT modo_oscuro FROM usuarios WHERE id = $id_user";
+    $result_theme = $conn->query($query_theme);
+    if ($result_theme && $row_theme = $result_theme->fetch_assoc()) {
+        $modo_oscuro = (int)$row_theme['modo_oscuro'];
+    }
+}
+
 // 3. Definimos la ruta del perfil con seguridad
 if ($sesion_activa) {
     // Convertimos a entero (int) para asegurar que la comparación sea numérica
@@ -26,9 +38,13 @@ if ($sesion_activa) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-COLIMA</title>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../CSS/Home/style.css">
+    
+    <?php if ($modo_oscuro === 1): ?>
+        <link rel="stylesheet" href="../../CSS/Home/style_oscuro.css">
+    <?php else: ?>
+        <link rel="stylesheet" href="../../CSS/Home/style.css">
+    <?php endif; ?>
 
-    <!--- ICONOS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -98,7 +114,7 @@ if ($sesion_activa) {
     transition: 0.3s;
 }
 
-.btn-confirmar:hover { background: #1e3d1a; transform: scale(1.05); }
+.btn-confirmar:hover { background: #2d5a27; transform: scale(1.05); }
 .btn-cancelar:hover { background: rgba(144, 238, 144, 0.5); }
 </style>
 
@@ -119,12 +135,13 @@ if ($sesion_activa) {
                 </div>
         </div>
         
-        <!-- Derecha: buscador + idioma + login -->
         <div class="right-buttons">
-            <div class="search-box">
-                <input type="text" placeholder="Buscar...">
-                <i class="fas fa-search"></i>
-            </div>
+            <form action="buscar.php" method="GET" class="search-box">
+                <input type="text" name="q" placeholder="Buscar publicaciones..." required>
+                <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
             <div class="lang-box">ES / EN</div>
             <?php if(isset($_SESSION['usuario'])): ?>
 
@@ -175,11 +192,9 @@ if ($sesion_activa) {
         Colima es un museo vivo de biodiversidad, donde cada especie y cada paisaje cuentan una historia; explora, aprende y descubre cómo conservar estos tesoros naturales con información completa y confiable.
     </div>
 
-    <!-- CATEGORÍAS - SECCIÓN FLORA -->
-<section class="categorias">
+    <section class="categorias">
     <h2 class="categorias-titulo">Adéntrate en la red de la vida.</h2>
     <div class="categorias-grid">
-        <!-- Tarjeta Flora -->
         <div class="categoria-card">
             <div class="card-image" style="background-image: url('../../assets/Home/ipomoea2.jpg');">
                 <div class="card-overlay">
@@ -190,8 +205,6 @@ if ($sesion_activa) {
                     </a>                    </div>
             </div>
         </div>
-        <!-- Aquí puedes agregar más tarjetas (Fauna, Hongos, etc.) en el futuro -->
-        <!-- Tarjeta Fauna -->
         <div class="categoria-card">
             <div class="card-image" style="background-image: url('../../assets/Fauna/Fauna categoria.webp');">
                 <div class="card-overlay">
@@ -216,7 +229,7 @@ if ($sesion_activa) {
         </div>
 
         <div class="categoria-card">
-            <div class="card-image" style="background-image: url('../../assets/Ecosistemas/Ecosistemas categoria.png');">
+            <div class="card-image" style="background-image: url('../../assets/Consejos/Ecosistemas categoria.jpg');">
                 <div class="card-overlay">
                     <h3 class="card-titulo">Consejos</h3>
                     <p class="card-descripcion">Conoce educativos consejos para cuidar la vida terrestre</p>
@@ -228,7 +241,7 @@ if ($sesion_activa) {
         </div>
 
         <div class="categoria-card">
-            <div class="card-image" style="background-image: url('../../assets/Ecosistemas/Ecosistemas categoria.png');">
+            <div class="card-image" style="background-image: url('../../assets/Noticias/Ecosistemas categoria.jpg');">
                 <div class="card-overlay">
                     <h3 class="card-titulo">Noticias</h3>
                     <p class="card-descripcion">Conoce las mas recientes noticias acerca de la vida terrestre</p>
@@ -238,17 +251,21 @@ if ($sesion_activa) {
                 </div>
             </div>
         </div>
+
+         <div class="categoria-card">
+            <div class="card-image" style="background-image: url('../../assets/Noticias/por defecto.jpg');">
+                <div class="card-overlay">
+                    <h3 class="card-titulo">PROXIMAMENTE...</h3>
+                    <a class="card-boton" href="#">
+                        Leer más <i class="fas fa-arrow-right"></i>
+                    </a>                
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-    <section class="noticias">
-        <h2>Noiticas de los ecosistemas de Colima</h2>
-        <p>
-            Noticia:
-            Noticia:
-            Noticia:
-        </p>
-    </section>
+    
 
     <script>
     setTimeout(() => {
@@ -259,8 +276,7 @@ if ($sesion_activa) {
     }, 3000); // 3 segundos
     </script>
 
-   <!-- ===== FOOTER CRÉDITOS ===== -->
-    <footer class="footer-nuevo">
+   <footer class="footer-nuevo">
         <div class="footer-container">
             
             <div class="footer-column branding">

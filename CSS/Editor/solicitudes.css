@@ -11,10 +11,10 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: #e2e8f0;
+    color: #1a2a1a;
     
     /* Configuración corregida para evitar repeticiones y cortes de tono */
-    background: linear-gradient(rgba(10, 26, 15, 0.25), rgba(5, 15, 10, 0.45)), 
+    background: linear-gradient(rgba(216, 206, 206, 0.10), rgba(201, 198, 191, 0.6)), 
                 url('../../assets/Editor/fondo_editor.jpg'); /* Pon el nombre exacto de tu archivo */
     
     background-size: cover;          /* Obliga a la imagen a cubrir todo el espacio */
@@ -42,7 +42,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    border-bottom: 1px solid #21262d;
+    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 25px;
     margin-bottom: 30px;
 }
@@ -51,14 +51,14 @@ body {
     font-family: 'League Spartan', sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #1a2a1a;
     letter-spacing: 1px;
     margin-top: 10px;
     margin-bottom: 5px;
 }
 
 .header-left p {
-    color: #8b949e;
+    color: #5a5a5a;
     font-size: 14px;
 }
 
@@ -66,7 +66,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #8b949e;
+    color: #5a5a5a;
     text-decoration: none;
     font-size: 13px;
     font-weight: 600;
@@ -76,25 +76,25 @@ body {
 }
 
 .btn-regresar:hover {
-    color: #9bedb7; /* Toque verde Ecolima al regresar */
+    color: #2d5a3d; /* Toque verde Ecolima al regresar */
 }
 
 /* Contador de solicitudes */
 .counter-badge {
-    background: #161b22;
-    border: 1px solid #30363d;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 12px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .counter-badge .number {
     font-size: 28px;
     font-weight: 800;
-    color: #9bedb7; /* Color firma para las pendientes */
+    color: #2d5a3d; /* Color firma para las pendientes */
     line-height: 1;
 }
 
@@ -102,30 +102,30 @@ body {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #8b949e;
+    color: #5a5a5a;
     margin-top: 4px;
 }
 
 /* --- TABLA PREMIUM STYLE --- */
 .table-responsive {
-    background: #161b22; /* Fondo de la caja contenedor */
-    border: 1px solid #30363d;
+    background: #ffffff; /* Fondo de la caja contenedor */
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 .solicitudes-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background: transparent; /* Permite ver el contenedor esmerilado a través de ella */
+    background: transparent; /* Permite ver el contenedor a través de ella */
 }
 
 .solicitudes-table th {
-    background: rgba(8, 40, 20, 0.35); /* Verde esmeralda profundo con opacidad */
-    border-bottom: 2px solid rgba(126, 189, 145, 0.2);
-    color: #a8d5b5; /* Tono verde claro pastel para que resalte */
+    background: rgba(45, 90, 61, 0.08); /* Verde esmeralda claro con opacidad */
+    border-bottom: 2px solid rgba(45, 90, 61, 0.15);
+    color: #2d5a3d; /* Tono verde medio para que resalte */
     font-weight: 600;
     letter-spacing: 0.5px;
     padding: 16px 20px;
@@ -134,9 +134,9 @@ body {
 
 .solicitudes-table td {
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Línea divisoria finísima */
-    color: #f1f5f9;
-    background: rgba(255, 255, 255, 0.02); /* Un toque casi imperceptible para distinguir filas */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Línea divisoria finísima */
+    color: #1a2a1a;
+    background: rgba(0, 0, 0, 0.01); /* Un toque casi imperceptible para distinguir filas */
 }
 
 .solicitudes-table tr:last-child td {
@@ -144,19 +144,19 @@ body {
 }
 
 .solicitudes-table tr:hover td {
-    background-color: #1f242c; /* Destacado sutil al pasar el mouse por la fila */
+    background-color: #f5f2eb; /* Destacado sutil al pasar el mouse por la fila */
 }
 
 .solicitudes-container {
-    background: rgba(15, 32, 23, 0.45); /* Base verde muy oscura pero translúcida */
+    background: rgba(255, 255, 255, 0.8); /* Base blanca pero translúcida */
     backdrop-filter: blur(12px);         /* Difumina el asset de fondo de forma elegante */
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(126, 189, 145, 0.15); /* Borde sutil brillante */
+    border: 1px solid rgba(45, 90, 61, 0.15); /* Borde sutil brillante */
     border-radius: 16px;
     padding: 30px;
     margin: 40px auto;
     max-width: 1100px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* Celdas específicas */
@@ -165,11 +165,11 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    color: #ffffff;
+    color: #1a2a1a;
 }
 
 .user-cell i {
-    color: #8b949e;
+    color: #5a5a5a;
     font-size: 18px;
 }
 
@@ -182,7 +182,7 @@ body {
 }
 
 .date-cell {
-    color: #8b949e;
+    color: #5a5a5a;
     font-size: 14px;
 }
 
@@ -198,14 +198,14 @@ body {
 }
 
 .badge-categoria.fauna {
-    background: rgba(56, 139, 253, 0.15);
-    color: #58a6ff;
+    background: rgba(56, 139, 253, 0.1);
+    color: #1a5bbf;
     border: 1px solid rgba(56, 139, 253, 0.3);
 }
 
 .badge-categoria.flora {
-    background: rgba(46, 160, 67, 0.15);
-    color: #57ab5a;
+    background: rgba(46, 160, 67, 0.1);
+    color: #2e6b3a;
     border: 1px solid rgba(46, 160, 67, 0.3);
 }
 
@@ -217,9 +217,9 @@ body {
 }
 
 .btn-accion {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #94a3b8; /* Gris azulado minimalista */
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #5a5a5a; /* Gris minimalista */
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
@@ -231,50 +231,50 @@ body {
 }
 
 .btn-ver:hover {
-    color: #63b3ed; /* Azul suave */
-    background: rgba(99, 179, 237, 0.15);
-    border-color: rgba(99, 179, 237, 0.3);
-    box-shadow: 0 0 12px rgba(99, 179, 237, 0.2);
+    color: #3b82f6; /* Azul suave */
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
 }
 
 .btn-accion:hover {
-    background: rgba(126, 189, 145, 0.25);
-    border-color: rgba(126, 189, 145, 0.4);
-    box-shadow: 0 0 10px rgba(126, 189, 145, 0.2);
+    background: rgba(45, 90, 61, 0.1);
+    border-color: rgba(45, 90, 61, 0.3);
+    box-shadow: 0 0 10px rgba(45, 90, 61, 0.1);
 }
 
 /* Efectos Hover individuales */
 .btn-view:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-color: #8b949e;
+    background: rgba(0, 0, 0, 0.05);
+    color: #1a2a1a;
+    border-color: #cbd5e1;
     transform: translateY(-2px);
 }
 
 .btn-aprobar:hover {
-    color: #4ade80; /* Verde esmeralda */
-    background: rgba(154, 252, 190, 0.15);
-    border-color: rgba(79, 170, 112, 0.3);
-    box-shadow: 0 0 12px rgba(74, 222, 128, 0.2);
+    color: #2e7d32; /* Verde esmeralda */
+    background: rgba(46, 125, 50, 0.08);
+    border-color: rgba(46, 125, 50, 0.25);
+    box-shadow: 0 0 12px rgba(46, 125, 50, 0.12);
 }
 
 .btn-rechazar:hover {
-    color: #f87171; /* Rojo coral */
-    background: rgba(248, 113, 113, 0.15);
-    border-color: rgba(248, 113, 113, 0.3);
-    box-shadow: 0 0 12px rgba(248, 113, 113, 0.2);
+    color: #c62828; /* Rojo coral */
+    background: rgba(198, 40, 40, 0.08);
+    border-color: rgba(198, 40, 40, 0.25);
+    box-shadow: 0 0 12px rgba(198, 40, 40, 0.12);
 }
 
 /* Estado Vacío */
 .empty-state {
     text-align: center;
     padding: 60px !important;
-    color: #8b949e;
+    color: #5a5a5a;
 }
 
 .empty-state i {
     font-size: 40px;
-    color: #3e464f;
+    color: #cbd5e1;
     margin-bottom: 15px;
 }
 
@@ -292,10 +292,10 @@ body {
 .tooltip-text {
     visibility: hidden;
     width: max-content;
-    background: rgba(10, 25, 15, 0.95); /* Combinado con la paleta de ECOLIMA */
+    background: rgba(245, 242, 235, 0.98); /* Combinado con la paleta de ECOLIMA claro */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    color: #a8d5b5; /* Verde pastel sutil */
+    color: #2d5a3d; /* Verde medio sutil */
     text-align: center;
     border-radius: 6px;
     padding: 6px 12px;
@@ -308,8 +308,8 @@ body {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.5px;
-    border: 1px solid rgba(126, 189, 145, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(45, 90, 61, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: opacity 0.2s ease, transform 0.2s ease;
     pointer-events: none; /* Evita que estorbe al pasar el mouse */
 }
@@ -321,7 +321,7 @@ body {
 }
 
 /* ==========================================================
-   ESTILOS BASE ESTRUCTURA MODALES (CAPA DE FONDO OSCURA)
+   ESTILOS BASE ESTRUCTURA MODALES (CAPA DE FONDO CLARA)
    ========================================================== */
 .modal-overlay {
     position: fixed;
@@ -329,7 +329,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     display: flex;
@@ -347,14 +347,14 @@ body {
 }
 
 .modal-content {
-    background: rgba(15, 32, 23, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(126, 189, 145, 0.25);
+    border: 1px solid rgba(45, 90, 61, 0.25);
     border-radius: 14px;
     padding: 25px;
     width: 90%;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     position: relative;
     transform: translateY(-20px);
     transition: transform 0.3s ease;
@@ -376,26 +376,26 @@ body {
 }
 
 .btn-cancelar {
-    background: rgba(255, 255, 255, 0.08);
-    color: #94a3b8;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05);
+    color: #5a5a5a;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .btn-cancelar:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
+    background: rgba(0, 0, 0, 0.1);
+    color: #1a2a1a;
 }
 
 .btn-enviar {
-    background: rgba(248, 113, 113, 0.2);
-    color: #f87171;
-    border: 1px solid rgba(248, 113, 113, 0.4);
+    background: rgba(198, 40, 40, 0.1);
+    color: #c62828;
+    border: 1px solid rgba(198, 40, 40, 0.3);
 }
 
 .btn-enviar:hover {
-    background: rgba(248, 113, 113, 0.35);
-    color: #fff;
-    box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+    background: rgba(198, 40, 40, 0.2);
+    color: #b71c1c;
+    box-shadow: 0 0 10px rgba(198, 40, 40, 0.15);
 }
 
 /* ==========================================================
@@ -411,13 +411,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(126, 189, 145, 0.15);
+    border-bottom: 1px solid rgba(45, 90, 61, 0.15);
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
 
 #modalVerTitulo {
-    color: #a8d5b5; /* Verde pastel Ecolima */
+    color: #2d5a3d; /* Verde medio Ecolima */
     margin: 0;
     font-size: 1.45rem;
     font-weight: 600;
@@ -425,34 +425,34 @@ body {
 
 /* Botón de cierre interactivo real */
 .modal-close {
-    color: #f1f5f9;
+    color: #1a2a1a;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.03);
     padding: 6px 14px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
     user-select: none;
 }
 
 .modal-close:hover {
-    color: #f87171; /* Destaca en rojo coral al hover */
-    background: rgba(248, 113, 113, 0.1);
-    border-color: rgba(248, 113, 113, 0.2);
+    color: #c62828; /* Destaca en rojo coral al hover */
+    background: rgba(198, 40, 40, 0.08);
+    border-color: rgba(198, 40, 40, 0.2);
 }
 
 /* Botón de cierre interactivo corregido */
 .modal-close-btn {
-    background: rgba(255, 255, 255, 0.05);
-    color: #f1f5f9;
+    background: rgba(0, 0, 0, 0.03);
+    color: #1a2a1a;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     padding: 6px 14px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
     user-select: none;
     font-family: inherit;
@@ -461,9 +461,9 @@ body {
 }
 
 .modal-close-btn:hover {
-    color: #f87171;
-    background: rgba(248, 113, 113, 0.1);
-    border-color: rgba(248, 113, 113, 0.2);
+    color: #c62828;
+    background: rgba(198, 40, 40, 0.08);
+    border-color: rgba(198, 40, 40, 0.2);
 }
 
 /* Estructura asimétrica (Grid de dos columnas) */
@@ -476,7 +476,7 @@ body {
 
 /* Bloque Izquierdo: Texto del artículo */
 #modalVerContenido {
-    color: #e2e8f0;
+    color: #1a2a1a;
     line-height: 1.7;
     font-size: 15px;
     white-space: pre-wrap;
@@ -491,9 +491,9 @@ body {
     flex-direction: column;
     gap: 20px;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.03);
     border-radius: 10px;
-    border: 1px solid rgba(126, 189, 145, 0.08);
+    border: 1px solid rgba(45, 90, 61, 0.08);
 }
 
 /* Bloque Metadata del Autor */
@@ -504,13 +504,13 @@ body {
 }
 
 .author-meta .label {
-    color: #94a3b8;
+    color: #5a5a5a;
     font-size: 13px;
     font-weight: 500;
 }
 
 .author-meta .value {
-    color: #ffffff;
+    color: #1a2a1a;
     font-size: 14px;
     font-weight: 600;
 }
@@ -520,10 +520,10 @@ body {
     display: flex;
     justify-content: space-around; /* Reparte los iconos simétricamente */
     align-items: center;
-    color: #94a3b8;
+    color: #5a5a5a;
     font-size: 13px;
     padding-bottom: 15px;
-    border-bottom: 1px solid rgba(126, 189, 145, 0.1);
+    border-bottom: 1px solid rgba(45, 90, 61, 0.1);
 }
 
 .meta-icon {
@@ -550,16 +550,16 @@ body {
 }
 
 .avatar {
-    color: #3e464f;
+    color: #cbd5e1;
     font-size: 28px;
     border-radius: 50%;
-    border: 2px solid rgba(15, 32, 23, 0.9); /* Oculta los cortes */
+    border: 2px solid rgba(255, 255, 255, 0.9); /* Oculta los cortes */
     margin-left: -12px; /* Provoca el efecto apilado de la imagen */
     position: relative;
 }
 
 .meta-avatares .count {
-    color: #a8d5b5;
+    color: #2d5a3d;
     font-size: 12px;
     font-weight: 600;
 }
@@ -569,6 +569,6 @@ body {
     width: 5px;
 }
 #modalVerContenido::-webkit-scrollbar-thumb {
-    background: rgba(126, 189, 145, 0.25);
+    background: rgba(45, 90, 61, 0.2);
     border-radius: 10px;
 }

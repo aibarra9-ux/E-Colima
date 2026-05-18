@@ -17,15 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData(form);
 
             try {
-                // CORRECCIÓN DE RUTA: Ajusta esta ruta a donde realmente esté tu PHP
-                // Si el PHP está en la misma carpeta que el dashboard, déjalo así.
-                // Si está en una carpeta superior usa: ../actualizar_perfil.php
                 const response = await fetch('actualizar_perfil.php', {
                     method: 'POST',
                     body: formData
                 });
 
-                // Si el servidor responde 404 o 500, esto atrapará el error antes del .json()
                 if (!response.ok) throw new Error('Archivo no encontrado en el servidor');
 
                 const result = await response.json();
@@ -48,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error("Error detallado:", error);
-                Swal.fire('Error de conexión', 'No se pudo contactar con el archivo actualizar_perfil.php. Revisa la ruta en el JS.', 'error');
+                Swal.fire('Error de conexión', 'No se pudo contactar con el archivo actualizar_perfil.php.', 'error');
             }
         };
     }
@@ -64,19 +60,23 @@ document.getElementById('inputFoto').addEventListener('change', function(e) {
         return;
     }
 
+    // 🌟 ARREGLO 1: Capturamos el ID del atributo HTML para que el PHP no lo reciba vacío
+    const usuarioId = e.target.getAttribute('data-usuario-id');
+
     const formData = new FormData();
     formData.append('foto', archivo);
+    formData.append('usuario_id_alterno', usuarioId); // <- Pasamos el ID al servidor
 
     Swal.fire({ title: 'Subiendo...', didOpen: () => { Swal.showLoading(); } });
 
-    fetch('subir_foto.php', { // <--- VERIFICA QUE ESTE ARCHIVO ESTÉ EN LA MISMA CARPETA
+    fetch('subir_foto.php', { 
         method: 'POST',
         body: formData
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
-            location.reload();
+            location.reload(); // Reestablecido tu refresco original
         } else {
             Swal.fire('Error', data.message, 'error');
         }
@@ -89,19 +89,24 @@ document.getElementById('inputBanner').addEventListener('change', function(e) {
     const archivo = e.target.files[0];
     if (!archivo) return;
 
+    // 🌟 ARREGLO 2: Capturamos el ID del atributo HTML igual que en la foto
+    const usuarioId = e.target.getAttribute('data-usuario-id');
+
     const formData = new FormData();
-    formData.append('banner', archivo);
+    // 🌟 ARREGLO 3: Cambiado de 'banner' a 'banner_perfil' para que tu PHP lo reconozca
+    formData.append('banner_perfil', archivo); 
+    formData.append('usuario_id_alterno', usuarioId); // <- Pasamos el ID al servidor
 
     Swal.fire({ title: 'Actualizando portada...', didOpen: () => { Swal.showLoading(); } });
 
-    fetch('subir_banner.php', { // <--- VERIFICA QUE ESTE ARCHIVO ESTÉ EN LA MISMA CARPETA
+    fetch('subir_banner.php', { 
         method: 'POST',
         body: formData
     })
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
-            location.reload(); 
+            location.reload(); // Reestablecido tu refresco original
         } else {
             Swal.fire('Error', data.message, 'error');
         }

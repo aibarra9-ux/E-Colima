@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Nota: rol_id 4 es usuario normal, activo 4 (según tu lógica previa)
     $sql = "INSERT INTO usuarios (rol_id, username, email, password_hash, activo)
-            VALUES (4, '$nombre', '$correo', '$passwordHash', 4)";
+            VALUES (4, '$nombre', '$correo', '$passwordHash', 1)";
 
     try {
         if ($conn->query($sql)) {

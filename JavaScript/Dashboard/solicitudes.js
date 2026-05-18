@@ -17,8 +17,9 @@ async function cargarSolicitudes() {
         solicitudes.forEach(sol => {
     const tr = document.createElement('tr');
     // Aseguramos que la clase del badge dependa del ID del rol (ajusta si Admin no es 1)
-    const claseRol = sol.rol_solicitado == 1 ? 'badge-admin' : 'badge-user';
-    
+    let claseRol = 'badge-user';
+    if (sol.rol_solicitado == 2) claseRol = 'badge-escritor';
+    if (sol.rol_solicitado == 3) claseRol = 'badge-editor';    
     // Extraemos solo la fecha (YYYY-MM-DD) del campo fecha_creacion
     const fechaLimpia = sol.fecha_creacion ? sol.fecha_creacion.split(' ')[0] : '---';
 
