@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-05-2026 a las 16:54:20
+-- Tiempo de generación: 19-05-2026 a las 08:07:30
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -59,6 +59,16 @@ CREATE TABLE `comentarios` (
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `comentarios`
+--
+
+INSERT INTO `comentarios` (`id`, `publicacion_id`, `usuario_id`, `contenido`, `aprobado`, `fecha_creacion`) VALUES
+(1, 13, 5, 'hola', 1, '2026-05-18 23:54:51'),
+(2, 13, 5, 'buenas noches', 1, '2026-05-19 04:54:23'),
+(3, 13, 5, 'tas hermosa baby', 1, '2026-05-19 04:54:43'),
+(4, 15, 5, 'good', 1, '2026-05-19 05:12:11');
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +119,7 @@ CREATE TABLE `publicaciones` (
   `titulo` varchar(255) NOT NULL,
   `contenido` longtext NOT NULL,
   `imagen` varchar(255) DEFAULT NULL,
+  `tipo_media` enum('imagen','video') NOT NULL DEFAULT 'imagen',
   `estado` enum('borrador','pendiente','publicado','rechazado') NOT NULL DEFAULT 'borrador',
   `motivo_rechazo` text DEFAULT NULL,
   `estado_interno` varchar(50) DEFAULT NULL,
@@ -123,17 +134,22 @@ CREATE TABLE `publicaciones` (
 -- Volcado de datos para la tabla `publicaciones`
 --
 
-INSERT INTO `publicaciones` (`id`, `autor_id`, `categoria_id`, `subcategoria_id`, `titulo`, `contenido`, `imagen`, `estado`, `motivo_rechazo`, `estado_interno`, `observaciones_editor`, `fecha_creacion`, `fecha_publicacion`, `visitas`, `fecha_eliminacion`) VALUES
-(2, 5, 2, 13, 'putos', 'jajajaja', '1778971358_6a08f2dec77af.jpg', 'rechazado', 'por cabron', 'borrador', NULL, '2026-05-16 22:42:38', NULL, 0, NULL),
-(6, 5, 1, 10, 'Avatares', 'Lo mas bacano', '1778981810_6a091bb21b8d1.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 01:36:50', NULL, 0, NULL),
-(7, 5, 5, 36, 'consejo', 'te aconsejo el suicidio', '1778982816_6a091fa0a39e4.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 01:53:36', NULL, 0, NULL),
-(8, 5, 5, 36, 'Consejo 2', 'te aconsejon el no suicidio', '1778982837_6a091fb5693f6.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 01:53:57', NULL, 0, NULL),
-(9, 24, 5, 36, 'JOSH', 'Y los billetes??', '1779035958_6a09ef36ad9e2.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 16:39:18', NULL, 0, NULL),
-(10, 24, 1, 10, 'Hola', 'HOLA SOY BUENO', '1779036064_6a09efa04733f.jpg', 'rechazado', 'NAH BRO NO ERES BUENO', 'borrador', NULL, '2026-05-17 16:41:04', NULL, 0, NULL),
-(11, 5, 4, 32, 'HOLA', 'Buenas nocjhes', '1779043789_6a0a0dcd6d9cc.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 18:49:49', NULL, 0, NULL),
-(12, 5, 5, 37, 'j jhxa', 'ajha hja', '1779043858_6a0a0e12c521e.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 18:50:58', NULL, 0, NULL),
-(13, 5, 1, 9, 'holaaaa', 'hysacb hjcbhsac', '1779044644_6a0a112412863.jpg', 'publicado', NULL, NULL, NULL, '2026-05-17 19:04:04', NULL, 0, NULL),
-(14, 24, 4, 32, 'RE ZERO', 'el anime mas bacano', '1779044813_6a0a11cda3860.jpg', 'rechazado', 'no', 'borrador', NULL, '2026-05-17 19:06:53', NULL, 0, NULL);
+INSERT INTO `publicaciones` (`id`, `autor_id`, `categoria_id`, `subcategoria_id`, `titulo`, `contenido`, `imagen`, `tipo_media`, `estado`, `motivo_rechazo`, `estado_interno`, `observaciones_editor`, `fecha_creacion`, `fecha_publicacion`, `visitas`, `fecha_eliminacion`) VALUES
+(2, 5, 2, 13, 'putos', 'jajajaja', '1778971358_6a08f2dec77af.jpg', 'imagen', 'rechazado', 'por cabron', 'borrador', NULL, '2026-05-16 22:42:38', NULL, 0, NULL),
+(6, 5, 1, 10, 'Avatares', 'Lo mas bacano', '1778981810_6a091bb21b8d1.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 01:36:50', NULL, 0, NULL),
+(7, 5, 5, 36, 'consejo', 'te aconsejo el suicidio', '1778982816_6a091fa0a39e4.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 01:53:36', NULL, 0, NULL),
+(8, 5, 5, 36, 'Consejo 2', 'te aconsejon el no suicidio', '1778982837_6a091fb5693f6.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 01:53:57', NULL, 0, NULL),
+(9, 24, 5, 36, 'JOSH', 'Y los billetes??', '1779035958_6a09ef36ad9e2.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 16:39:18', NULL, 0, NULL),
+(10, 24, 1, 10, 'Hola', 'HOLA SOY BUENO', '1779036064_6a09efa04733f.jpg', 'imagen', 'rechazado', 'NAH BRO NO ERES BUENO', 'borrador', NULL, '2026-05-17 16:41:04', NULL, 0, NULL),
+(11, 5, 4, 32, 'HOLA', 'Buenas nocjhes', '1779043789_6a0a0dcd6d9cc.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 18:49:49', NULL, 0, NULL),
+(12, 5, 5, 37, 'j jhxa', 'ajha hja', '1779043858_6a0a0e12c521e.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 18:50:58', NULL, 0, NULL),
+(13, 5, 1, 9, 'holaaaa', 'hysacb hjcbhsac', '1779044644_6a0a112412863.jpg', 'imagen', 'publicado', NULL, NULL, NULL, '2026-05-17 19:04:04', NULL, 0, NULL),
+(14, 24, 4, 32, 'RE ZERO', 'el anime mas bacano', '1779044813_6a0a11cda3860.jpg', 'imagen', 'rechazado', 'no', 'borrador', NULL, '2026-05-17 19:06:53', NULL, 0, NULL),
+(15, 5, 5, 36, 'Probando video', 'solo probando poner un video', '1779166918_6a0beec6036da.mp4', 'video', 'publicado', NULL, NULL, NULL, '2026-05-19 05:01:58', NULL, 0, NULL),
+(16, 5, 1, 7, 'preuba 1', 'prueba 1', '1779167974_6a0bf2e623f23.mp4', 'video', 'publicado', NULL, NULL, NULL, '2026-05-19 05:19:34', NULL, 0, NULL),
+(17, 5, 2, 16, 'Prueba 2', 'prueba 2', '1779169208_6a0bf7b80b93f.mp4', 'video', 'publicado', NULL, NULL, NULL, '2026-05-19 05:40:08', NULL, 0, NULL),
+(18, 5, 3, 18, 'prueba 3', 'kjaa', '1779169252_6a0bf7e40b09c.mp4', 'video', 'publicado', NULL, NULL, NULL, '2026-05-19 05:40:52', NULL, 0, NULL),
+(19, 5, 4, 33, 'prueba 4', 'aaa', '1779169302_6a0bf816b02b6.mp4', 'video', 'publicado', NULL, NULL, NULL, '2026-05-19 05:41:42', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -291,7 +307,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `rol_id`, `username`, `email`, `biografia`, `foto_perfil`, `banner_perfil`, `password_hash`, `fecha_registro`, `activo`, `fecha_eliminacion`, `modo_oscuro`) VALUES
-(5, 1, 'aibarra67', 'aibarra9@ucol.mx', NULL, 'perfil_5_1778957962.jpg', 'banner_5_1778957974.png', '$2y$10$reZGJ4wfPVqwYuq0ExtSe.TY0/3GhgYMBPmyju2upsnjDLE3VQ.yS', '2026-03-26 01:03:06', 1, NULL, 0),
+(5, 1, 'aibarra67', 'aibarra9@ucol.mx', NULL, 'perfil_5_1778957962.jpg', 'banner_5_1778957974.png', '$2y$10$reZGJ4wfPVqwYuq0ExtSe.TY0/3GhgYMBPmyju2upsnjDLE3VQ.yS', '2026-03-26 01:03:06', 1, NULL, 1),
 (7, 1, 'Diego', 'anastacio@gmail.com', NULL, 'default_avatar.png', 'default_banner.jpg', '$2y$10$lLGqVlANRCQjLkTROS1dn.8vZM8K3k5/IuoedYIY8NN6Qqk0kOm9G', '2026-03-27 15:12:07', 1, NULL, 0),
 (12, 1, 'navarro', 'navatro@gmail.com', NULL, 'default_avatar.png', 'default_banner.jpg', '$2y$10$mLlssIQfshHJODLKde2Bs.rOC/IeMJO9tH3GlLSVxHmFkogLKcxKG', '2026-05-10 22:15:50', 4, NULL, 0),
 (13, 1, 'prueba', 'prueba@gmail.com', NULL, 'default_avatar.png', 'default_banner.jpg', '$2y$10$LQJ.mGL8d9IqBgLA2v6o.uWU3W1Z6iswOUlgJApSjFZp7X5ecOV3K', '2026-05-10 22:22:20', 4, NULL, 0),
@@ -401,7 +417,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `etiquetas`
@@ -413,13 +429,13 @@ ALTER TABLE `etiquetas`
 -- AUTO_INCREMENT de la tabla `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `publicaciones`
 --
 ALTER TABLE `publicaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `recursos_multimedia`

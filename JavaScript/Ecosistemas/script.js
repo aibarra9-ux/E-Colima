@@ -7,25 +7,30 @@ const inputBuscador = document.getElementById("inputBuscador");
 
 // Variables globales de estado para el filtrado dinámico combinado
 let subcategoriaActivaId = null; 
-const categoriaId = "3"; // ID único asignado a ecosisteams en tu BD
+const categoriaId = "3"; // ID único asignado a Ecosistemas en tu BD
 
-// Función centralizada para estructurar la URL e inyectar las publicaciones
+// Función centralizada para estructurar la petición e inyectar las tarjetas
 function cargarPublicaciones() {
-    // 1. Construimos la ruta base apuntando a la categoría general de Fauna
+    // 1. Construimos la ruta base apuntando de forma fija a la categoría general de Ecosistemas
     let url = `obtener_publicaciones.php?categoria_id=${categoriaId}`;
     
-    // 2. Si el usuario activó una subcategoría mediante los botones, mutamos el parámetro
+    // 2. Si el usuario interactuó con una subcategoría, mutamos el parámetro destino
     if (subcategoriaActivaId) {
         url = `obtener_publicaciones.php?subcategoria_id=${subcategoriaActivaId}`;
     }
     
-    // 3. Si el input contiene caracteres, concatenamos el filtro de búsqueda textual
+    // 3. Si el input de búsqueda contiene texto, concatenamos el parámetro de limpieza SQL
     if (inputBuscador && inputBuscador.value.trim() !== "") {
         url += `&search=${encodeURIComponent(inputBuscador.value.trim())}`;
     }
 
     fetch(url)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+        })
         .then(publicaciones => {
             // Limpiamos la grilla por completo antes de inyectar las nuevas tarjetas
             contenedor.innerHTML = "";
@@ -34,26 +39,39 @@ function cargarPublicaciones() {
                 contenedor.innerHTML = `
                     <div class="sin-publicaciones" style="grid-column: 1 / -1; text-align: center; padding: 50px; color: white;">
                         <i class="fas fa-search-minus" style="font-size: 3rem; margin-bottom: 15px; color: rgba(255,255,255,0.4);"></i>
-                        <p style="font-family: 'Outfit', sans-serif; font-size: 1.2rem;">No se encontraron ecosistemas que coincidan con la búsqueda.</p>
+                        <p style="font-family: 'Outfit', sans-serif; font-size: 1.2rem;">No se encontraron ecosistemas o publicaciones que coincidan con la búsqueda.</p>
                     </div>
                 `;
                 return;
             }
 
             publicaciones.forEach((post, i) => {
-                // La primera publicación se renderiza como la tarjeta grande destacada (Ej. El jaguar)
+                // Generamos la etiqueta multimedia dinámicamente según el backend (video o imagen)
+                let elementoMultimedia = "";
+                if (post.tipo_media === 'video') {
+                    elementoMultimedia = `<video class="imagen-publicacion" src="${post.imagen}" autoplay muted loop playsinline style="object-fit: cover; width: 100%; height: 100%;"></video>`;
+                } else {
+                    elementoMultimedia = `<img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">`;
+                }
+
+                // La primera publicación se renderiza como la tarjeta grande destacada
                 if (i === 0) {
                     const tarjetaGrande = document.createElement("div");
                     tarjetaGrande.classList.add("tarjeta-grande");
 
+                    // Reutilizamos el elemento multimedia adaptando la clase CSS para el bloque grande
+                    let elementoMultimediaGrande = elementoMultimedia
+                        .replace('class="imagen-publicacion"', 'class="imagen-grande"')
+                        .replace('class="imagen-publicacion"', 'class="imagen-grande"'); // Doble sustitución preventiva
+
                     tarjetaGrande.innerHTML = `
-                        <img class="imagen-grande" src="${post.imagen}" alt="${post.titulo}">
+                        ${elementoMultimediaGrande}
                         <div class="info-grande">
-                            <h2 class="titulo-grande">${post.titulo}</h2>
+                            <h2 class="titulo-grande" style="cursor: pointer;" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${post.titulo}</h2>
                             <p class="descripcion-grande">${post.descripcion}</p>
                             
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; width: 100%;">
-                                <button class="boton-ver-mas">Ver más</button>
+                                <button class="boton-ver-mas" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">Ver más</button>
                                 
                                 <div class="likes-container" style="display: flex; align-items: center; gap: 8px;">
                                     <button onclick="interactuarLike(${post.id}, this)" 
@@ -79,9 +97,12 @@ function cargarPublicaciones() {
                 // Las siguientes publicaciones se renderizan en las tarjetas comunes de la grilla
                 const tarjeta = document.createElement("div");
                 tarjeta.classList.add("tarjeta-publicacion");
+                
+                tarjeta.style.cursor = "pointer";
+                tarjeta.setAttribute("onclick", `if(!event.target.closest('.likes-container')) window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'`);
 
                 tarjeta.innerHTML = `
-                    <img class="imagen-publicacion" src="${post.imagen}">
+                    ${elementoMultimedia}
                     <h3 class="titulo-publicacion">${post.titulo}</h3>
                     <p class="descripcion-publicacion">${post.descripcion}</p>
                     
@@ -104,13 +125,13 @@ function cargarPublicaciones() {
         })
         .catch(error => {
             console.error('Error al cargar:', error);
-            contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">Error al cargar las publicaciones de Fauna.</p>';
+            contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">Error al cargar las publicaciones de Ecosistemas.</p>';
         });
 }
 
 // Inicialización de cargas e hilos de eventos en el DOM
 document.addEventListener("DOMContentLoaded", () => {
-    // Ejecución inicial por defecto para Fauna (ID 2)
+    // Ejecución inicial por defecto para Ecosistemas (Categoría ID 3)
     cargarPublicaciones();
 
     // Evento asíncrono para capturar la escritura del usuario en la barra superior
@@ -185,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonesFiltro = document.querySelectorAll(".boton-filtro");
 
     if (hero && botonesFiltro.length > 0) {
-        // Guardamos el fondo original por defecto (el del Jaguar/Fauna inicial)
+        // Guardamos el fondo original por defecto
         let fondoFijoActual = window.getComputedStyle(hero).backgroundImage;
 
         botonesFiltro.forEach(boton => {

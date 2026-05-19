@@ -381,7 +381,7 @@ box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 /* ========================================================= */
 
 .tarjeta-grande {
-    grid-column: 1 / -1; /* ocupa las 3 columnas */
+    grid-column: 1 / -1; /* Ocupa todo el ancho de la grilla */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -391,7 +391,32 @@ box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    
+    /* ========================================== */
+    /* NUEVOS AJUSTES DE CONTENCIÓN               */
+    /* ========================================== */
+    height: 450px;         /* Cambiamos a un alto fijo para que no colapse */
     max-height: 500px;
+    overflow: hidden;      /* Corta de raíz cualquier desborde del video */
+}
+
+/* ========================================================= */
+/* CONTROL ESTRICTO PARA EL VIDEO/IMAGEN DESTACADO           */
+/* ========================================================= */
+.tarjeta-grande .imagen-grande {
+    width: 50%;            /* El video/imagen ocupará exactamente la mitad izquierda */
+    height: 100%;          /* Ocupa todo el alto disponible (450px) */
+    object-fit: cover;     /* Mantiene la proporción perfecta sin deformarse */
+    border-radius: 18px;   /* Redondeado estético para que haga juego */
+    display: block;
+}
+
+/* Control opcional para el bloque de información */
+.tarjeta-grande .info-grande {
+    width: 50%;            /* La información ocupa la otra mitad derecha */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .tarjeta-grande.mostrar {
@@ -400,11 +425,10 @@ box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
 .imagen-grande {
-    width: 50%;
-    height: 420px;
+    width: 100%;
+    height: 420px; /* O el alto fijo que le hayas asignado a tu tarjeta destacada */
     object-fit: cover;
-    border-radius: 18px;
-    flex-shrink: 0;
+    display: block; /* Evita espacios vacíos extraños debajo del elemento */
 }
 
 .info-grande {
@@ -459,18 +483,35 @@ gap:45px;
 
 /* tarjeta */
 
-.tarjeta-publicacion{
+.tarjeta-publicacion {
+    background: #0f2a1b;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid #1a3b26;
+    transition: .35s;
+    opacity: 0;
+    transform: translateY(20px);
 
-background:#ffffff;
-padding:18px;
+    /* ========================================== */
+    /* NUEVOS AJUSTES PARA CONTROLAR EL VIDEO     */
+    /* ========================================== */
+    display: flex;
+    flex-direction: column;
+    height: 100%;          /* Fuerza a que todas las tarjetas midan lo mismo en la grilla */
+    min-height: 380px;     /* Dale una altura mínima para que mantengan buena proporción */
+    overflow: hidden;      /* Evita de forma estricta que el video se desborde */
+}
 
-border-radius:18px;
-border:1px solid #e0e8dc;
-
-transition:.35s;
-
-opacity:0;
-transform:translateY(20px);
+/* ========================================================= */
+/* CONTROL ESTRICTO PARA IMÁGENES Y VIDEOS DE LA GRILLA      */
+/* ========================================================= */
+.tarjeta-publicacion .imagen-publicacion {
+    width: 100%;
+    height: 200px;         /* Ajusta este valor (en píxeles) al alto que desees para tu multimedia */
+    object-fit: cover;     /* Hace que el video/imagen llene el recuadro sin deformarse */
+    border-radius: 10px;   /* Un ligero redondeado para que combine con la tarjeta */
+    margin-bottom: 12px;   /* Separa el video del título y la descripción */
+    display: block;
 }
 
 .tarjeta-publicacion.mostrar{
@@ -485,11 +526,11 @@ background:#f5f8f2;
 
 /* imagen */
 
-.imagen-publicacion{
-width:100%;
-height: 340px;
-object-fit:cover;
-border-radius:14px;
+.imagen-publicacion {
+    width: 100%;
+    height: 340px; /* El alto estándar que usen tus tarjetas comunes */
+    object-fit: cover;
+    display: block;
 }
 
 /* texto */

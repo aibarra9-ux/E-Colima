@@ -1,5 +1,4 @@
 <?php
-
 //if (!isset($_SESSION['rol_id']) || $_SESSION['rol_id'] != 1) {
     //http_response_code(403); // Prohibido
     //echo json_encode(["error" => "No tienes permiso para ver esta información"]);

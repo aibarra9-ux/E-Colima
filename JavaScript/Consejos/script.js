@@ -44,18 +44,33 @@ function cargarPublicaciones() {
                 return;
             }
 
-            publicaciones.forEach((post, i) => {
+           publicaciones.forEach((post, i) => {
+                
+                // 🌟 NUEVO: Lógica dinámica para renderizar la etiqueta multimedia correcta
+                let htmlMultimedia = "";
+                if (post.tipo_media === 'video') {
+                    // Si es video, usamos la etiqueta nativa con autoplay, muted, loop y object-fit para que no se deforme
+                    htmlMultimedia = `<video class="imagen-publicacion" src="${post.imagen}" autoplay muted loop playsinline style="object-fit: cover;"></video>`;
+                } else {
+                    // Si es imagen (o fallback), se queda con tu img clásica
+                    htmlMultimedia = `<img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">`;
+                }
+
                 // Tarjeta Grande Destacada
                 if (i === 0) {
                     const tarjetaGrande = document.createElement("div");
                     tarjetaGrande.classList.add("tarjeta-grande");
+                    
+                    // Ajustamos el multimedia de la tarjeta grande aplicando su respectiva clase CSS
+                    let htmlMultimediaGrande = htmlMultimedia.replace('class="imagen-publicacion"', 'class="imagen-grande"');
+
                     tarjetaGrande.innerHTML = `
-                        <img class="imagen-grande" src="${post.imagen}" alt="${post.titulo}">
+                        ${htmlMultimediaGrande}
                         <div class="info-grande">
-                            <h2 class="titulo-grande">${post.titulo}</h2>
+                            <h2 class="titulo-grande" style="cursor: pointer;" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${post.titulo}</h2>
                             <p class="descripcion-grande">${post.descripcion}</p>
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; width: 100%;">
-                                <button class="boton-ver-mas">Ver más</button>
+                                <button class="boton-ver-mas" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">Ver más</button>
                                 <div class="likes-container" style="display: flex; align-items: center; gap: 8px;">
                                     <button onclick="interactuarLike(${post.id}, this)" 
                                             style="background: none; border: none; cursor: pointer; font-size: 1.4rem; padding: 0; transition: transform 0.1s;">
@@ -75,8 +90,12 @@ function cargarPublicaciones() {
                 // Tarjetas Comunes de la Grilla
                 const tarjeta = document.createElement("div");
                 tarjeta.classList.add("tarjeta-publicacion");
+                tarjeta.style.cursor = "pointer"; 
+                
+                tarjeta.setAttribute("onclick", `if(!event.target.closest('.likes-container')) window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'`);
+                
                 tarjeta.innerHTML = `
-                    <img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">
+                    ${htmlMultimedia}
                     <h3 class="titulo-publicacion">${post.titulo}</h3>
                     <p class="descripcion-publicacion">${post.descripcion}</p>
                     <div class="likes-container" style="display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -102,7 +121,7 @@ function cargarPublicaciones() {
 document.addEventListener("DOMContentLoaded", () => {
     cargarPublicaciones();
 
-    // 🌟 NUEVO: Evento del buscador interno para buscar mientras escribe (Filtro en tiempo real)
+    // Evento del buscador interno para buscar mientras escribe (Filtro en tiempo real)
     if (inputBuscador) {
         inputBuscador.addEventListener("input", () => {
             cargarPublicaciones();
@@ -196,10 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     botonesFiltro.forEach(b => b.classList.remove("activo"));
                     boton.classList.add("activo");
 
-                    // Guardamos globalmente el estado de la subcategoría seleccionada
                     subcategoriaActivaId = subcategoriaId ? subcategoriaId : null;
-
-                    // Llamamos a la función constructora que ya incluye el texto del input
                     cargarPublicaciones();
                 });
             }

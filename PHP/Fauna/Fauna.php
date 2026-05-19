@@ -28,9 +28,7 @@ if (isset($_SESSION['usuario_id'])) {
         $modo_oscuro = (int)$row_theme['modo_oscuro'];
     }
 }
-?>
-
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -141,7 +139,6 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="barra-superior">
 
         <div class="iconos-izquierda" style="display: flex; align-items: center; gap: 15px;">
-
             <div class="caja-logo" onclick="window.location.href='../Home/home.php'" style="cursor: pointer;">
                 <img src="../../assets/Home/logomini.png" alt="Logo" class="imagen-logo">
             </div>
@@ -152,11 +149,9 @@ if (isset($_SESSION['usuario_id'])) {
                     <span class="notif-dot"></span> 
                 <?php endif; ?>
             </div>
-
         </div>
 
-        <div class="botones-derecha">
-
+        <div class="botones-derecha" style="display: flex; align-items: center; gap: 15px;">
             <div class="caja-buscador">
                 <input type="text" id="inputBuscador" data-categoria-id="2" placeholder="Buscar en fauna...">
                 <i class="fas fa-search"></i>
@@ -169,7 +164,6 @@ if (isset($_SESSION['usuario_id'])) {
             <?php else: ?>
                 <a href="../Login/login.php" class="caja-login">Iniciar sesión</a>
             <?php endif; ?>
-
         </div>
 
     </div>

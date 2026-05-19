@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-// 2. Capturamos las variables de rol (tanto en texto como en ID numérico si existen)
+// 2. Capturamos las variables de rol
 $rol_texto = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
 $rol_id = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0;
 
@@ -52,9 +52,8 @@ $limites = [
 ];
 $limite_palabras = $limites[$categoria] ?? 500;
 
-// 🌟 CORREGIDO: Eliminamos '$sesion_activa' ya que validamos la sesión en el paso 1
 if (isset($_SESSION['usuario_id'])) {
-    require_once "../../PHP/Perfil/conexion.php"; // Asegúrate de que esta ruta a tu archivo de conexión sea la correcta
+    require_once "../../PHP/Perfil/conexion.php"; 
     $id_user = (int)$_SESSION['usuario_id'];
     $query_theme = "SELECT modo_oscuro FROM usuarios WHERE id = $id_user";
     $result_theme = $conn->query($query_theme);
@@ -81,6 +80,44 @@ if (isset($_SESSION['usuario_id'])) {
         <link rel="stylesheet" href="../../CSS/Publicar/estilo.css">
     <?php endif; ?>
 
+    <style>
+        /* selectores de tipo multimedia */
+        .selector-media {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .btn-tipo-media {
+            flex: 1;
+            padding: 10px;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        body.dark-mode .btn-tipo-media {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .btn-tipo-media.activo {
+            background: #2d5a27;
+            color: white;
+            border-color: #2d5a27;
+        }
+        .preview-tarjeta video, .preview-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+        }
+    </style>
 </head>
 <body>
     <div class="contenedor">
@@ -111,18 +148,40 @@ if (isset($_SESSION['usuario_id'])) {
             <div class="form-card">
                 <form action="procesar_publicacion.php" method="POST" enctype="multipart/form-data" id="formPublicar">
                     <input type="hidden" name="categoria" value="<?php echo $categoria; ?>">
+                    <input type="hidden" name="tipo_media" id="tipoMediaInput" value="imagen">
                     <input type="hidden" name="imagen_recortada" id="imagenRecortadaData">
                     
                     <div class="form-group">
+                        <label>Tipo de portada</label>
+                        <div class="selector-media">
+                            <button type="button" class="btn-tipo-media activo" id="btnTipoImagen" onclick="cambiarTipoMedia('imagen')">
+                                <i class="fas fa-image"></i> Imagen
+                            </button>
+                            <button type="button" class="btn-tipo-media" id="btnTipoVideo" onclick="cambiarTipoMedia('video')">
+                                <i class="fas fa-video"></i> Video
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="grupoSubirImagen">
                         <label>Imagen de portada</label>
                         <div class="upload-imagen" id="uploadContainer" onclick="document.getElementById('inputImagen').click()">
                             <img id="previewImagenUpload" src="" style="display:none;">
                             <div class="upload-placeholder" id="uploadPlaceholder">
-                                <i class="fas fa-image"></i>
-                                Subir imagen
+                                <i class="fas fa-image"></i> Subir imagen
                             </div>
                         </div>
                         <input type="file" id="inputImagen" accept="image/*" style="display:none;" onchange="cargarImagen(event)">
+                    </div>
+
+                    <div class="form-group" id="grupoSubirVideo" style="display: none;">
+                        <label>Video de portada</label>
+                        <div class="upload-imagen" id="uploadVideoContainer" onclick="document.getElementById('inputVideo').click()">
+                            <div class="upload-placeholder" id="uploadVideoPlaceholder">
+                                <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo de Video (.mp4, .webm)
+                            </div>
+                        </div>
+                        <input type="file" id="inputVideo" name="archivo_video" accept="video/mp4,video/webm" style="display:none;" onchange="cargarVideo(event)">
                     </div>
 
                     <div class="form-group">
@@ -153,7 +212,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <div class="preview-titulo-seccion">Vista previa</div>
                 <div class="preview-tarjeta">
                     <div class="preview-imagen" id="previewImagen">
-                        <span>Sin imagen</span>
+                        <span>Sin portada</span>
                     </div>
                     <div class="preview-contenido">
                         <div class="preview-titulo vacio" id="previewTitulo">Título de la publicación</div>
@@ -180,53 +239,59 @@ if (isset($_SESSION['usuario_id'])) {
     <script>
     const limitePalabras = <?php echo $limite_palabras; ?>;
     let imagenDataURL = null;
+    let videoDataURL = null;
     let imagenOriginal = null;
+    let tipoMediaActual = 'imagen';
 
-    // 🌟 NUEVO: Lógica automática para cargar Subcategorías según la URL actual
     document.addEventListener("DOMContentLoaded", function() {
-        const categoriasIds = {
-            'flora': 1,
-            'fauna': 2,
-            'ecosistemas': 3,
-            'noticias': 4,
-            'consejos': 5
-        };
-
+        const categoriasIds = { 'flora': 1, 'fauna': 2, 'ecosistemas': 3, 'noticias': 4, 'consejos': 5 };
         const categoriaActual = "<?php echo $categoria; ?>"; 
-        const idReal = categoriasIds[categoriaActual] || 2; // Fauna por defecto si no coincide
-
+        const idReal = categoriasIds[categoriaActual] || 2;
         cargarSubcategorias(idReal);
     });
+
+    function cambiarTipoMedia(tipo) {
+        tipoMediaActual = tipo;
+        document.getElementById('tipoMediaInput').value = tipo;
+        
+        if(tipo === 'imagen') {
+            document.getElementById('btnTipoImagen').classList.add('activo');
+            document.getElementById('btnTipoVideo').classList.remove('activo');
+            document.getElementById('grupoSubirImagen').style.display = 'block';
+            document.getElementById('grupoSubirVideo').style.display = 'none';
+        } else {
+            document.getElementById('btnTipoImagen').classList.remove('activo');
+            document.getElementById('btnTipoVideo').classList.add('activo');
+            document.getElementById('grupoSubirImagen').style.display = 'none';
+            document.getElementById('grupoSubirVideo').style.display = 'block';
+        }
+        actualizarPreview();
+    }
 
     function cargarSubcategorias(categoriaId) {
         const selectSub = document.getElementById("selectSubcategoria");
         if (!selectSub) return;
-
         fetch(`get_subcategorias.php?categoria_id=${categoriaId}`)
             .then(response => response.json())
             .then(data => {
                 selectSub.innerHTML = '<option value="">Selecciona una subcategoría</option>';
-                
                 if (data.length === 0) {
                     selectSub.innerHTML = '<option value="">General (Sin subcategorías)</option>';
                     return;
                 }
-
                 data.forEach(sub => {
                     selectSub.innerHTML += `<option value="${sub.id}">${sub.nombre}</option>`;
                 });
             })
             .catch(error => {
-                console.error("Error al cargar subcategorías:", error);
                 selectSub.innerHTML = '<option value="">Error al cargar opciones</option>';
             });
     }
 
-    // ========== SUBIR IMAGEN ==========
+    // ========== MANEJO DE IMÁGENES ==========
     function cargarImagen(event) {
         const file = event.target.files[0];
         if (!file) return;
-            
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
@@ -239,24 +304,37 @@ if (isset($_SESSION['usuario_id'])) {
         reader.readAsDataURL(file);
     }
 
-    // ========== RECORTADOR ==========
-    let escalaRecorte = 1;
-    let offsetX = 0, offsetY = 0;
+    // ========== MANEJO DE VIDEOS ==========
+    function cargarVideo(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validar tamaño máximo (ejemplo 40MB)
+        if (file.size > 40 * 1024 * 1024) {
+            alert("El archivo de video es demasiado grande. Máximo 40MB.");
+            event.target.value = '';
+            return;
+        }
+
+        videoDataURL = URL.createObjectURL(file);
+        document.getElementById('uploadVideoPlaceholder').innerHTML = `<i class="fas fa-file-video"></i> Video seleccionado: <b>${file.name}</b>`;
+        actualizarPreview();
+    }
+
+    // ========== RECORTADOR (IGUAL) ==========
+    let escalaRecorte = 1; let offsetX = 0, offsetY = 0;
     let arrastrando = false, inicioX, inicioY, inicioOffX, inicioOffY;
 
     function abrirRecortador(src) {
         document.getElementById('imagenRecortar').src = src;
         document.getElementById('recortadorOverlay').classList.add('activo');
-        escalaRecorte = 1;
-        offsetX = 0;
-        offsetY = 0;
+        escalaRecorte = 1; offsetX = 0; offsetY = 0;
         actualizarTransform();
     }
 
     function actualizarTransform() {
         const img = document.getElementById('imagenRecortar');
         img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${escalaRecorte})`;
-        img.style.transformOrigin = 'center center';
     }
 
     function cancelarRecorte() {
@@ -269,57 +347,38 @@ if (isset($_SESSION['usuario_id'])) {
         const img = document.getElementById('imagenRecortar');
         const mascara = document.getElementById('mascaraRecorte');
         const container = document.getElementById('recortadorContainer');
-            
         const imgRect = img.getBoundingClientRect();
         const maskRect = mascara.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-            
         const escalaX = imagenOriginal.width / imgRect.width;
         const escalaY = imagenOriginal.height / imgRect.height;
-            
         const sx = (maskRect.left - imgRect.left) * escalaX;
         const sy = (maskRect.top - imgRect.top) * escalaY;
         const sw = maskRect.width * escalaX;
         const sh = maskRect.height * escalaY;
-            
         const canvas = document.getElementById('canvasRecorte');
-        canvas.width = 900;
-        canvas.height = 1200;
+        canvas.width = 900; canvas.height = 1200;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(imagenOriginal, sx, sy, sw, sh, 0, 0, 900, 1200);
-            
         imagenDataURL = canvas.toDataURL('image/jpeg', 0.9);
         document.getElementById('imagenRecortadaData').value = imagenDataURL;
         document.getElementById('previewImagenUpload').src = imagenDataURL;
         document.getElementById('previewImagenUpload').style.display = 'block';
         document.getElementById('uploadPlaceholder').style.display = 'none';
-            
         document.getElementById('recortadorOverlay').classList.remove('activo');
         actualizarPreview();
     }
 
-    // Eventos de arrastre
+    // Eventos de Arrastre Recortador
     document.getElementById('recortadorContainer').addEventListener('mousedown', function(e) {
-        arrastrando = true;
-        inicioX = e.clientX;
-        inicioY = e.clientY;
-        inicioOffX = offsetX;
-        inicioOffY = offsetY;
+        arrastrando = true; inicioX = e.clientX; inicioY = e.clientY; inicioOffX = offsetX; inicioOffY = offsetY;
         e.preventDefault();
     });
-
     document.addEventListener('mousemove', function(e) {
         if (!arrastrando) return;
-        offsetX = inicioOffX + (e.clientX - inicioX);
-        offsetY = inicioOffY + (e.clientY - inicioY);
+        offsetX = inicioOffX + (e.clientX - inicioX); offsetY = inicioOffY + (e.clientY - inicioY);
         actualizarTransform();
     });
-
-    document.addEventListener('mouseup', function() {
-        arrastrando = false;
-    });
-
-    // Zoom con rueda
+    document.addEventListener('mouseup', function() { arrastrando = false; });
     document.getElementById('recortadorContainer').addEventListener('wheel', function(e) {
         e.preventDefault();
         if (e.deltaY < 0) escalaRecorte = Math.min(3, escalaRecorte + 0.05);
@@ -327,37 +386,39 @@ if (isset($_SESSION['usuario_id'])) {
         actualizarTransform();
     });
 
-    // ========== CONTADOR ==========
     function contarPalabras() {
         const texto = document.getElementById('contenido').value.trim();
         const palabras = texto ? texto.split(/\s+/).length : 0;
         const contador = document.getElementById('contadorPalabras');
         contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
-        contador.className = 'contador-palabras ';
         if (palabras > limitePalabras) {
-            contador.className += 'error';
             document.getElementById('btnPublicar').disabled = true;
-        } else if (palabras > limitePalabras * 0.8) {
-            contador.className += 'warning';
-            document.getElementById('btnPublicar').disabled = false;
         } else {
-            contador.className += 'ok';
             document.getElementById('btnPublicar').disabled = false;
         }
     }
 
-    // ========== PREVIEW ==========
+    // ========== RENDERIZADO DE VISTA PREVIA MULTIMEDIA ==========
     function actualizarPreview() {
         const titulo = document.getElementById('titulo').value || 'Título de la publicación';
         const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
         document.getElementById('previewTitulo').textContent = titulo;
         document.getElementById('previewDescripcion').textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
-        document.getElementById('previewTitulo').className = 'preview-titulo' + (document.getElementById('titulo').value ? '' : ' vacio');
-        document.getElementById('previewDescripcion').className = 'preview-descripcion' + (document.getElementById('contenido').value ? '' : ' vacio');
-        if (imagenDataURL) {
-            document.getElementById('previewImagen').innerHTML = '<img src="' + imagenDataURL + '" alt="Preview">';
+        
+        const contenedorPreview = document.getElementById('previewImagen');
+
+        if (tipoMediaActual === 'imagen') {
+            if (imagenDataURL) {
+                contenedorPreview.innerHTML = `<img src="${imagenDataURL}" alt="Preview">`;
+            } else {
+                contenedorPreview.innerHTML = '<span>Sin imagen</span>';
+            }
         } else {
-            document.getElementById('previewImagen').innerHTML = '<span>Sin imagen</span>';
+            if (videoDataURL) {
+                contenedorPreview.innerHTML = `<video src="${videoDataURL}" autoplay muted loop></video>`;
+            } else {
+                contenedorPreview.innerHTML = '<span>Sin video</span>';
+            }
         }
     }
     </script>

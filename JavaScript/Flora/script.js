@@ -46,19 +46,32 @@ function cargarPublicaciones() {
             }
 
             publicaciones.forEach((post, i) => {
+                // Generamos la etiqueta multimedia dinámicamente según el backend (video o imagen)
+                let elementoMultimedia = "";
+                if (post.tipo_media === 'video') {
+                    elementoMultimedia = `<video class="imagen-publicacion" src="${post.imagen}" autoplay muted loop playsinline style="object-fit: cover; width: 100%; height: 100%;"></video>`;
+                } else {
+                    elementoMultimedia = `<img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">`;
+                }
+
                 // La primera publicación se renderiza como la tarjeta grande destacada
                 if (i === 0) {
                     const tarjetaGrande = document.createElement("div");
                     tarjetaGrande.classList.add("tarjeta-grande");
 
+                    // Reutilizamos el elemento multimedia adaptando las clases para la vista destacada
+                    let elementoMultimediaGrande = elementoMultimedia
+                        .replace('class="imagen-publicacion"', 'class="imagen-grande"')
+                        .replace('class="imagen-publicacion"', 'class="imagen-grande"');
+
                     tarjetaGrande.innerHTML = `
-                        <img class="imagen-grande" src="${post.imagen}" alt="${post.titulo}">
+                        ${elementoMultimediaGrande}
                         <div class="info-grande">
-                            <h2 class="titulo-grande">${post.titulo}</h2>
+                            <h2 class="titulo-grande" style="cursor: pointer;" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${post.titulo}</h2>
                             <p class="descripcion-grande">${post.descripcion}</p>
                             
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; width: 100%;">
-                                <button class="boton-ver-mas">Ver más</button>
+                                <button class="boton-ver-mas" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">Ver más</button>
                                 
                                 <div class="likes-container" style="display: flex; align-items: center; gap: 8px;">
                                     <button onclick="interactuarLike(${post.id}, this)" 
@@ -84,9 +97,12 @@ function cargarPublicaciones() {
                 // Las siguientes publicaciones se renderizan en las tarjetas comunes de la grilla
                 const tarjeta = document.createElement("div");
                 tarjeta.classList.add("tarjeta-publicacion");
+                
+                tarjeta.style.cursor = "pointer";
+                tarjeta.setAttribute("onclick", `if(!event.target.closest('.likes-container')) window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'`);
 
                 tarjeta.innerHTML = `
-                    <img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">
+                    ${elementoMultimedia}
                     <h3 class="titulo-publicacion">${post.titulo}</h3>
                     <p class="descripcion-publicacion">${post.descripcion}</p>
                     
@@ -118,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Carga asíncrona inicial de la grilla para Flora (ID 1)
     cargarPublicaciones();
 
-    // Evento de escucha en tiempo real para capturar la escritura en el input superior
+    // Evento de escucha en tiempo real para capturar la escritura en el input superior (Corregido: Declarado solo una vez)
     if (inputBuscador) {
         inputBuscador.addEventListener("input", () => {
             cargarPublicaciones();
