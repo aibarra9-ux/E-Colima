@@ -182,11 +182,11 @@ Colima posee una riqueza natural única: volcanes, selvas, costas y una gran div
 
 | Integrante | Rol |
 |-----------|-----|
-| Alan Ibarra | Desarrollo |
-| Carolina Zúñiga | Desarrollo |
-| Dana Nava | Desarrollo |
-| Miranda Montiel | Desarrollo |
-| Ricardo Barba | Desarrollo |
+| Ibarra Heredia Alan Alejandro | Desarrollo |
+| Nava Montiel Dana Paola | Desarrollo |
+| Martinez zuñiga Carolina | Desarrollo |
+| Nava Montiel Miranda Lizet | Desarrollo |
+| Barba Castillo Ricardo Jafet | Desarrollo |
 
 **Facultad de Ingeniería Electromecánica — Universidad de Colima**
 
