@@ -52,6 +52,14 @@ $modo_oscuro = $row['modo_oscuro'] ?? 0;
         .search-box svg {
             color: var(--green-mid);
         }
+        /* ESTILO INTERACTIVO UNIFICADO PARA IMÁGENES Y VIDEOS PREVIEW */
+        .post-media-preview {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #000; /* Fondo negro por si el video tiene barras horizontales */
+        }
     </style>
 </head>
 <body>
@@ -235,7 +243,6 @@ $modo_oscuro = $row['modo_oscuro'] ?? 0;
         }
     }
 
-    // 💥 Ejecución inmediata antes de renderizar la UI completa
     const preferedTheme = localStorage.getItem('theme');
     const phpTheme = <?php echo $modo_oscuro; ?>;
     if (preferedTheme === 'dark' || (preferedTheme === null && phpTheme === 1)) {
@@ -244,13 +251,11 @@ $modo_oscuro = $row['modo_oscuro'] ?? 0;
         aplicarModoOscuro(false);
     }
 
-    // Evento de cambio manual por el Administrador
     switchModoOscuro.addEventListener('change', async function() {
         const hitoDark = this.checked;
         aplicarModoOscuro(hitoDark);
         localStorage.setItem('theme', hitoDark ? 'dark' : 'light');
 
-        // Sincronizar estado en caliente con el servidor
         const syncForm = new FormData();
         syncForm.append('toggle_dark_mode', '1');
         syncForm.append('modo_oscuro', hitoDark ? '1' : '0');
@@ -262,7 +267,6 @@ $modo_oscuro = $row['modo_oscuro'] ?? 0;
 
 <script src="../../JavaScript/Dashboard/publicaciones.js"></script>
 <script>
-    // Funciones de control de UI de los drawers
     function openConfig() {
         document.getElementById('configOverlay').classList.add('open');
         document.getElementById('configDrawer').classList.add('open');
@@ -287,17 +291,14 @@ $modo_oscuro = $row['modo_oscuro'] ?? 0;
         })
     }
 
-    // 🌟 CONTROL DE ENVIÓ INTELIGENTE: Intercepción con Modal de Verificación de Email
     document.getElementById('formEditarPerfil').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Detiene la recarga nativa
+        e.preventDefault();
 
         const name = document.getElementById('cfgName').value.trim();
         const email = document.getElementById('cfgEmail').value.trim();
         const passActual = document.getElementById('cfgPassActual').value;
         const passNueva = document.getElementById('cfgPass').value;
         
-        const emailOriginal = "<?php echo $correo; ?>";
-
         if (!name || !email) {
             Swal.fire('Campos obligatorios', 'El nombre y correo no pueden estar vacíos.', 'warning');
             return;

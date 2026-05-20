@@ -10,6 +10,7 @@ session_start();
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <!-- 🔥 Detecta error -->
@@ -87,10 +88,22 @@ session_start();
 
                 <div class="divider"></div>
 
-                <button type="button" class="btn-google">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg">
-                    O únete con Google
-                </button>
+                <div id="g_id_onload"
+     data-client_id="551526400527-d7btgc4vcgpfmqsuieooo6naols4g2la.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="redirect"
+     data-login_uri="http://localhost/e-Colima/PHP/Login/callback_google.php"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="dark"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
 
                 <p class="register">
                     No tienes una cuenta aún?

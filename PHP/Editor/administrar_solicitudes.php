@@ -1,8 +1,15 @@
 <?php
 session_start();
 
-// Control de acceso para Editores
-if (!isset($_SESSION['usuario']) || ($_SESSION['rol'] !== 'editor' && $_SESSION['rol'] !== 'admin')) {
+// 🌟 CORRECCIÓN DE SEGURIDAD PARA GOOGLE LOGIN
+// Obtenemos los roles en texto y numéricos de forma segura
+$rol_string = $_SESSION['rol'] ?? '';
+$rol_numerico = isset($_SESSION['rol_id']) ? (int)$_SESSION['rol_id'] : 0;
+
+// Control de acceso flexible para Editores y Administradores
+// (Asumiendo 1 para admin y 3 para editor en tu DB. Cambia los números si mapeas diferente)
+if (!isset($_SESSION['usuario']) || 
+    ($rol_string !== 'editor' && $rol_string !== 'admin' && $rol_numerico !== 1 && $rol_numerico !== 3)) {
     header("Location: ../Home/home.php");
     exit();
 }
@@ -213,7 +220,6 @@ if (isset($_SESSION['usuario_id'])) {
     }
 
     function cerrarModalVer() {
-        // Pausar y remover reproductores al cerrar para evitar que el audio siga sonando en segundo plano
         document.getElementById('modalVerContenedorMedia').innerHTML = '';
         document.getElementById('modalVer').classList.remove('active');
     }

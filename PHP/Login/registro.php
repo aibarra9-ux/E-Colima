@@ -9,9 +9,55 @@ unset($_SESSION['error_registro']);
 <head>
     <meta charset="UTF-8">
     <title>Registro - ECOLIMA</title>
-    <link rel="stylesheet" href="../../CSS/Login/estilos.css">
+    <link rel="stylesheet" href="../../CSS/Login/estilos_registro.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Solo estilos adicionales que no están en el CSS principal */
+        .reenviar-codigo {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        .reenviar-codigo a {
+            color: #a8d5b5;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .reenviar-codigo a:hover {
+            color: #4a7c5c;
+            text-decoration: underline;
+        }
+        .reenviar-mensaje {
+            font-size: 0.8rem;
+            color: #a8d5b5;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .reenviar-mensaje i {
+            margin-right: 5px;
+        }
+        .timer {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        /* 🔥 CORRECCIÓN: Eliminamos overflow:hidden que corta la imagen */
+        .image-section {
+            overflow: visible !important;
+        }
+        
+        .jaguar {
+            max-height: 100vh !important;
+            width: auto !important;
+            right: 0 !important;
+        }
+        
+        .contenedor {
+            overflow: visible !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -95,6 +141,16 @@ unset($_SESSION['error_registro']);
                                placeholder="Código de 6 dígitos" maxlength="6" 
                                style="text-align: center; letter-spacing: 3px; font-weight: bold;">
                     </div>
+                    
+                    <div class="reenviar-codigo">
+                        <a id="btnReenviarCodigo">📧 ¿No recibiste el código? Reenviar</a>
+                    </div>
+                    <div id="mensajeReenvio" class="reenviar-mensaje" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Reenviando...
+                    </div>
+                    <div id="timerReenvio" class="reenviar-mensaje" style="display: none;">
+                        <i class="fas fa-clock"></i> Puedes reenviar en <span id="segundosRestantes" class="timer">60</span> segundos
+                    </div>
                 </div>
 
                 <button type="button" id="btnAccion" class="btn-login">Enviar código de verificación</button>
@@ -117,6 +173,77 @@ unset($_SESSION['error_registro']);
 </div>
 
 <script src="../../JavaScript/Login/login.js"></script>
+
+<script>
+document.getElementById('btnReenviarCodigo')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const correo = document.getElementById('correoRegistro').value;
+    const btnReenviar = document.getElementById('btnReenviarCodigo');
+    const mensajeReenvio = document.getElementById('mensajeReenvio');
+    const timerReenvio = document.getElementById('timerReenvio');
+    
+    if (!correo) {
+        alert('Por favor, ingresa tu correo electrónico primero.');
+        return;
+    }
+    
+    btnReenviar.style.pointerEvents = 'none';
+    btnReenviar.style.opacity = '0.5';
+    mensajeReenvio.style.display = 'block';
+    
+    fetch('verificar.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'correo=' + encodeURIComponent(correo)
+    })
+    .then(response => response.json())
+    .then(data => {
+        mensajeReenvio.style.display = 'none';
+        
+        if (data.status === 'success') {
+            timerReenvio.style.display = 'block';
+            let segundos = 60;
+            const segundosSpan = document.getElementById('segundosRestantes');
+            
+            const intervalo = setInterval(() => {
+                segundos--;
+                segundosSpan.textContent = segundos;
+                
+                if (segundos <= 0) {
+                    clearInterval(intervalo);
+                    timerReenvio.style.display = 'none';
+                    btnReenviar.style.pointerEvents = 'auto';
+                    btnReenviar.style.opacity = '1';
+                }
+            }, 1000);
+            
+            const exitoMsg = document.createElement('div');
+            exitoMsg.className = 'reenviar-mensaje';
+            exitoMsg.style.color = '#4caf50';
+            exitoMsg.innerHTML = '<i class="fas fa-check-circle"></i> ¡Código reenviado! Revisa tu correo.';
+            exitoMsg.style.marginTop = '5px';
+            document.getElementById('seccionCodigo').appendChild(exitoMsg);
+            
+            setTimeout(() => {
+                exitoMsg.remove();
+            }, 5000);
+        } else {
+            alert('Error al reenviar: ' + data.message);
+            btnReenviar.style.pointerEvents = 'auto';
+            btnReenviar.style.opacity = '1';
+        }
+    })
+    .catch(error => {
+        mensajeReenvio.style.display = 'none';
+        alert('Error de conexión. Intenta nuevamente.');
+        btnReenviar.style.pointerEvents = 'auto';
+        btnReenviar.style.opacity = '1';
+    });
+});
+</script>
 
 </body>
 </html>

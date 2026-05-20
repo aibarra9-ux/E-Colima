@@ -34,13 +34,26 @@ if ($resultado && $resultado->num_rows > 0) {
         } else {
             $fechaFormateada = "Sin fecha";
         }
+
+        // --- DETECCIÓN INTELIGENTE DEL TIPO DE ARCHIVO ADJUNTO ---
+        $archivo = $row['imagen'] ?? '';
+        $tipo_archivo = 'imagen'; // Tipo por defecto
+
+        if (!empty($archivo)) {
+            $extension = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
+            $formatos_video = ['mp4', 'mov', 'webm', 'avi', 'mkv', 'flv'];
+            if (in_array($extension, $formatos_video)) {
+                $tipo_archivo = 'video';
+            }
+        }
         
         $publicaciones[] = [
             'id' => $row['id'],
             'titulo' => $row['titulo'],
             'autor' => $row['autor'],
             'fecha' => $fechaFormateada,
-            'imagen' => !empty($row['imagen']) ? $row['imagen'] : '',
+            'imagen' => !empty($archivo) ? $archivo : '',
+            'tipo_archivo' => $tipo_archivo, // Enviamos el tipo detectado ('imagen' o 'video')
             'likes' => (int)$row['total_likes'],
             'le_gusta' => $row['dio_like'] > 0 ? true : false // Envía un booleano al JS
         ];

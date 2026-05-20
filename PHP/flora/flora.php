@@ -20,13 +20,16 @@ if ($sesion_activa) {
 }
 
 $modo_oscuro = 0;
-// 🌟 CORREGIDO: Removimos la variable inexistente '$sesion_activa'
+$foto_perfil = ''; // Variable para almacenar la imagen del usuario
+
 if (isset($_SESSION['usuario_id'])) {
     $id_user = (int)$_SESSION['usuario_id'];
-    $query_theme = "SELECT modo_oscuro FROM usuarios WHERE id = $id_user";
+    // Extraemos modo_oscuro y foto_perfil en la misma consulta
+    $query_theme = "SELECT modo_oscuro, foto_perfil FROM usuarios WHERE id = $id_user";
     $result_theme = $conn->query($query_theme);
     if ($result_theme && $row_theme = $result_theme->fetch_assoc()) {
         $modo_oscuro = (int)$row_theme['modo_oscuro'];
+        $foto_perfil = $row_theme['foto_perfil'];
     }
 }
 ?>
@@ -37,7 +40,7 @@ if (isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flora - ECOLIMA</title>
+    <title data-translate="true">Flora - ECOLIMA</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,15 +55,59 @@ if (isset($_SESSION['usuario_id'])) {
         <link rel="stylesheet" href="../../CSS/Flora/styles.css">
     <?php endif; ?>
     <style>
-    /* Caja de perfil e indicador de notificaciones activas */
+    /* ==========================================================================
+       SOLUCIÓN: HEADER FIJO AL HACER SCROLL (COMPORTAMIENTO GLOBAL UNIFICADO)
+       ========================================================================== */
+    .barra-superior {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        box-sizing: border-box;
+    }
+
+    /* Margen de compensación para evitar superposición con el contenido */
+    .seccion-hero {
+        margin-top: 70px; 
+    }
+
+    /* ==========================================================================
+       NUEVOS ESTILOS PARA EL AVATAR Y EFECTO HOVER DE LA CAJA DE PERFIL
+       ========================================================================== */
     .perfil-box {
         cursor: pointer;
-        font-size: 1.2rem;
-        color: #1a3a2a; 
         position: relative;
-        display: inline-block;
-        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
     }
+
+    /* Efecto hover interactivo */
+    .perfil-box:hover {
+        transform: scale(1.12);
+        box-shadow: 0 0 12px rgba(155, 237, 183, 0.5);
+    }
+
+    /* Estilos para la foto de perfil real */
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #9bedb7;
+    }
+
+    /* Icono si no hay foto */
+    .perfil-box i {
+        font-size: 1.4rem;
+        transition: color 0.3s;
+    }
+
     .notif-dot {
         position: absolute;
         top: 2px;
@@ -71,7 +118,20 @@ if (isset($_SESSION['usuario_id'])) {
         border-radius: 50%;
     }
 
-    /* Fondo oscuro desenfocado del modal */
+    /* ==========================================================================
+       DISEÑO DE LOS ENLACES DE SESIÓN (IGUALACIÓN VISUAL)
+       ========================================================================== */
+    .caja-login {
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        transition: background 0.3s, color 0.3s;
+        font-weight: 600;
+    }
+
+    /* ==========================================================================
+       MODALES CON CRISTALERÍA (GLASSMORPHISM)
+       ========================================================================== */
     .modal-overlay {
         display: none; 
         position: fixed;
@@ -84,7 +144,6 @@ if (isset($_SESSION['usuario_id'])) {
         align-items: center;
     }
 
-    /* Tarjeta interna (Glassmorphism) */
     .modal-content {
         background: rgba(255, 255, 255, 0.15);
         padding: 2.5rem;
@@ -109,7 +168,7 @@ if (isset($_SESSION['usuario_id'])) {
         margin-top: 25px;
     }
 
-    /* Botón Cancelar - Verde translúcido */
+    /* Botones de acción dentro de modales */
     .btn-cancelar {
         background: rgba(144, 238, 144, 0.3);
         border: none;
@@ -121,8 +180,7 @@ if (isset($_SESSION['usuario_id'])) {
         transition: 0.3s;
     }
 
-    /* Botón Confirmar - Verde Sólido */
-    .btn-confirmar {
+    .btn-confirmar, .btn-login-modal {
         background: #2d5a27;
         text-decoration: none;
         padding: 12px 24px;
@@ -130,9 +188,10 @@ if (isset($_SESSION['usuario_id'])) {
         color: white;
         font-weight: 700;
         transition: 0.3s;
+        display: inline-block;
     }
 
-    .btn-confirmar:hover { background: #1e3d1a; transform: scale(1.05); }
+    .btn-confirmar:hover, .btn-login-modal:hover { background: #1e3d1a; transform: scale(1.05); }
     .btn-cancelar:hover { background: rgba(144, 238, 144, 0.5); }
     </style>
 </head>
@@ -147,10 +206,16 @@ if (isset($_SESSION['usuario_id'])) {
                 <img src="../../assets/Home/logomini.png" alt="Logo" class="imagen-logo">
             </div>
 
-            <div class="perfil-box" onclick="window.location.href='<?php echo $ruta_perfil; ?>'">
-                <i class="fas fa-user"></i>
+            <div class="perfil-box" id="perfilBox" data-sesion="<?php echo $sesion_activa ? 'true' : 'false'; ?>" data-url="<?php echo $ruta_perfil; ?>">
                 <?php if ($sesion_activa): ?>
+                    <?php if (!empty($foto_perfil)): ?>
+                        <img src="../../assets/Fotos_perfil/<?php echo htmlspecialchars($foto_perfil); ?>" alt="Avatar" class="avatar-img">
+                    <?php else: ?>
+                        <i class="fas fa-user-circle" style="color: #9bedb7;"></i>
+                    <?php endif; ?>
                     <span class="notif-dot"></span> 
+                <?php else: ?>
+                    <i class="fas fa-user"></i>
                 <?php endif; ?>
             </div>
 
@@ -159,17 +224,16 @@ if (isset($_SESSION['usuario_id'])) {
         <div class="botones-derecha">
 
             <div class="caja-buscador">
-                <input type="text" id="inputBuscador" data-categoria-id="1" placeholder="Buscar en flora...">
+                <input type="text" id="inputBuscador" data-categoria-id="1" placeholder="Buscar en flora..." data-translate-placeholder="true">
                 <i class="fas fa-search"></i>
             </div>
 
-            <div class="caja-idioma">ES / EN</div>
-
-            <?php if($sesion_activa): ?>
-                <a href="#" class="caja-login" onclick="mostrarModal(event)">Cerrar sesión</a>
-            <?php else: ?>
-                <a href="../Login/login.php" class="caja-login">Iniciar sesión</a>
-            <?php endif; ?>
+            <div class="lang-box">ES / EN</div>
+                <?php if(isset($_SESSION['usuario'])): ?>
+                    <a href="../../JavaScript/Traduccion/traduccion.js" class="caja-login" onclick="mostrarModal(event)" data-translate>Cerrar sesión</a>
+                <?php else: ?>
+                    <a href="../Login/login.php" class="caja-login" data-translate>Iniciar sesión</a>
+                <?php endif; ?>
 
         </div>
 
@@ -177,18 +241,17 @@ if (isset($_SESSION['usuario_id'])) {
 
 
     <div class="seccion-hero">
-        <h1 class="titulo-hero">FLORA</h1>
-        <p class="texto-hero">Una categoría centrada en mostrar la diversidad de plantas del estado de Colima</p>
+        <h1 class="titulo-hero" data-translate="true">FLORA</h1>
+        <p class="texto-hero" data-translate="true">Una categoría centrada en mostrar la diversidad de plantas del estado de Colima</p>
 
         <div class="barra-botones">
-            <button class="boton-filtro"  data-bg="../../assets/flora/subcategorias_bg/flora_todos.jpg">Todos</button>
-
-            <button class="boton-filtro" data-subcategoria="7" data-bg="../../assets/flora/subcategorias_bg/flora_arboles.jpg">Arboles</button>
-            <button class="boton-filtro" data-subcategoria="8" data-bg="../../assets/flora/subcategorias_bg/flora_arbustos.jpg">Arbustos</button>
-            <button class="boton-filtro" data-subcategoria="9" data-bg="../../assets/flora/subcategorias_bg/flora_cactacea.jpg">Cactaceas</button>
-            <button class="boton-filtro" data-subcategoria="10" data-bg="../../assets/flora/subcategorias_bg/flora_endemica.jpg">Plantas Endémicas</button>
-            <button class="boton-filtro" data-subcategoria="11" data-bg="../../assets/flora/subcategorias_bg/flora_extintas.jpg">Plantas en riesgo</button>
-            <button class="boton-filtro" data-subcategoria="12" data-bg="../../assets/flora/subcategorias_bg/flora_fungi.jpg">Reino Fungi</button>
+            <button class="boton-filtro" data-bg="../../assets/flora/subcategorias_bg/flora_todos.jpg" data-translate="true">Todos</button>
+            <button class="boton-filtro" data-subcategoria="7" data-bg="../../assets/flora/subcategorias_bg/flora_arboles.jpg" data-translate="true">Arboles</button>
+            <button class="boton-filtro" data-subcategoria="8" data-bg="../../assets/flora/subcategorias_bg/flora_arbustos.jpg" data-translate="true">Arbustos</button>
+            <button class="boton-filtro" data-subcategoria="9" data-bg="../../assets/flora/subcategorias_bg/flora_cactacea.jpg" data-translate="true">Cactaceas</button>
+            <button class="boton-filtro" data-subcategoria="10" data-bg="../../assets/flora/subcategorias_bg/flora_endemica.jpg" data-translate="true">Plantas Endémicas</button>
+            <button class="boton-filtro" data-subcategoria="11" data-bg="../../assets/flora/subcategorias_bg/flora_extintas.jpg" data-translate="true">Plantas en riesgo</button>
+            <button class="boton-filtro" data-subcategoria="12" data-bg="../../assets/flora/subcategorias_bg/flora_fungi.jpg" data-translate="true">Reino Fungi</button>
         </div>
 
     </div>
@@ -207,14 +270,30 @@ if (isset($_SESSION['usuario_id'])) {
         <div class="modal-content">
             <div class="modal-header">
                 <i class="fas fa-paw" style="color: #9bedb7; font-size: 2rem; margin-bottom: 10px; transform: rotate(-20deg);"></i>
-                <h2>¿CERRAR SESIÓN?</h2>
-                <p style="color: #ffffff; font-weight: 600; font-size: 0.95rem; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; line-height: 1.4; text-shadow: 0px 1px 2px rgba(0,0,0,0.2);">
+                <h2 data-translate="true">¿CERRAR SESIÓN?</h2>
+                <p style="color: #ffffff; font-weight: 600; font-size: 0.95rem; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; line-height: 1.4; text-shadow: 0px 1px 2px rgba(0,0,0,0.2);" data-translate="true">
                     Si cierras sesión, tendrás que volver a ingresar para ver tu perfil e interactuar en las publicaciones.
                 </p>
             </div>
             <div class="modal-buttons">
-                <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
-                <a href="../Login/logout.php" class="btn-confirmar">Aceptar</a>
+                <button id="btnCancelar" class="btn-cancelar" data-translate="true">Cancelar</button>
+                <a href="../Login/logout.php" class="btn-confirmar" data-translate="true">Aceptar</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRequRequiresLogin" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-lock" style="color: #ff4d4d; font-size: 2.2rem; margin-bottom: 12px;"></i>
+                <h2 data-translate="true">INICIO REQUERIDO</h2>
+                <p style="color: #ffffff; font-weight: 600; font-size: 0.95rem; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; line-height: 1.4;" data-translate="true">
+                    Para explorar tu perfil, personalizar tu interfaz e interactuar en la comunidad de E-COLIMA, necesitas iniciar sesión.
+                </p>
+            </div>
+            <div class="modal-buttons">
+                <button id="btnCancelarLogin" class="btn-cancelar" data-translate="true">Quedarme aquí</button>
+                <a href="../Login/login.php" class="btn-login-modal" data-translate="true">Iniciar Sesión</a>
             </div>
         </div>
     </div>
@@ -224,30 +303,57 @@ if (isset($_SESSION['usuario_id'])) {
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('modalCerrarSesion');
-        const btnCancelar = document.getElementById('btnCancelar');
+        const modalCerrar = document.getElementById('modalCerrarSesion');
+        const btnCancelarCerrar = document.getElementById('btnCancelar');
 
-        // Muestra el modal interceptando el clic del enlace
+        const perfilBox = document.getElementById('perfilBox');
+        const modalLogin = document.getElementById('modalRequRequiresLogin');
+        const btnCancelarLogin = document.getElementById('btnCancelarLogin');
+
+        // Disparar modal de logout desde el navbar
         window.mostrarModal = function(event) {
             event.preventDefault(); 
-            if(modal) modal.style.display = 'flex';
+            if(modalCerrar) modalCerrar.style.display = 'flex';
         }
 
-        if (btnCancelar) {
-            btnCancelar.onclick = function() {
-                modal.style.display = 'none';
+        if (btnCancelarCerrar) {
+            btnCancelarCerrar.onclick = function() {
+                modalCerrar.style.display = 'none';
             }
         }
 
-        // Cierra el modal al pulsar en las zonas externas borrosas
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+        // Control dinámico del clic en el Avatar
+        if (perfilBox) {
+            perfilBox.addEventListener('click', function() {
+                const tieneSesion = perfilBox.getAttribute('data-sesion') === 'true';
+                const urlDestino = perfilBox.getAttribute('data-url');
+
+                if (tieneSesion) {
+                    window.location.href = urlDestino;
+                } else {
+                    if (modalLogin) modalLogin.style.display = 'flex';
+                }
+            });
+        }
+
+        if (btnCancelarLogin) {
+            btnCancelarLogin.onclick = function() {
+                modalLogin.style.display = 'none';
             }
         }
+
+        // Cerrar modales haciendo clic en las capas traseras opacas
+        window.addEventListener('click', function(event) {
+            if (event.target == modalCerrar) {
+                modalCerrar.style.display = 'none';
+            }
+            if (event.target == modalLogin) {
+                modalLogin.style.display = 'none';
+            }
+        });
     });
 
-    // Forzar renderizado fresco al regresar usando el historial del cliente
+    // Evitar bugs visuales al regresar con las flechas nativas del navegador
     window.addEventListener('pageshow', function(event) {
         if (event.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) {
             window.location.reload();
@@ -255,5 +361,6 @@ if (isset($_SESSION['usuario_id'])) {
     });
     </script>
 
+    <script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

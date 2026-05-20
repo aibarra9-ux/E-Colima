@@ -1,6 +1,6 @@
 /**
- * @fileoverview Sistema Core de Traducción Dinámica con Persistencia - Proyecto Ecolima
- * @version 3.0.0
+ * @fileoverview Sistema Core de Traducción Dinámica e Individual - Proyecto Ecolima
+ * @version 3.1.0
  */
 
 const POOL_DESARROLLADORES = [
@@ -10,25 +10,21 @@ const POOL_DESARROLLADORES = [
     "miranda.ecolima@gmail.com"
 ];
 
-const DELIMITADOR_BLOQUE = "|||";
-
-// Sistema de persistencia: Recupera el idioma del almacenamiento del navegador o por defecto usa español 'es'
 let idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
 
 document.addEventListener("DOMContentLoaded", async () => {
     const langBox = document.querySelector(".lang-box");
     
-    // Configuración inicial del botón en base al almacenamiento persistente
     if (langBox) {
         langBox.style.cursor = "pointer";
         langBox.textContent = (idiomaActual === 'es') ? "ES / EN" : "EN / ES";
         
         langBox.addEventListener("click", async () => {
             idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
-            localStorage.setItem("ecolima_lang", idiomaActual); // Guardamos la elección del usuario
+            localStorage.setItem("ecolima_lang", idiomaActual);
             
             if (idiomaActual === 'es') {
-                location.reload();
+                location.reload(); // Vuelve al estado nativo en Español de PHP
             } else {
                 langBox.textContent = "EN / ES";
                 await ejecutarTraduccionMasiva();
@@ -36,58 +32,48 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // FLUJO PERSISTENTE AUTOMÁTICO: Si la página carga y el almacenamiento dice 'en', se traduce sola inmediatamente
+    // Si al cargar el sitio la persistencia está en inglés, ejecutamos la traducción
     if (idiomaActual === 'en') {
         await ejecutarTraduccionMasiva();
     }
 });
 
 async function ejecutarTraduccionMasiva() {
-    const elementosTexto = Array.from(document.querySelectorAll("[data-translate]"));
-    const elementosPlaceholder = Array.from(document.querySelectorAll("[data-translate-placeholder]"));
+    const elementosTexto = document.querySelectorAll("[data-translate]");
+    const elementosPlaceholder = document.querySelectorAll("[data-translate-placeholder]");
 
-    // --- TEXTOS DE INTERFAZ ---
-    if (elementosTexto.length > 0) {
-        let arrayTextos = elementosTexto.map(el => el.textContent.trim());
-        let paqueteTextos = arrayTextos.join(DELIMITADOR_BLOQUE);
-
-        let respuestaServidor = await consumirApiTraduccion(paqueteTextos);
-        
-        if (respuestaServidor) {
-            let textosTraducidos = respuestaServidor.split(DELIMITADOR_BLOQUE);
-            elementosTexto.forEach((el, index) => {
-                if (textosTraducidos[index]) {
-                    el.textContent = textosTraducidos[index].trim();
-                }
-            });
+    // --- Traducir Textos de Interfaz de forma segura (Individual e Inmediata) ---
+    const promesasTexto = Array.from(elementosTexto).map(async (el) => {
+        // Evitamos traducir nodos vacíos o que ya se hayan guardado en un estado intermedio
+        const textoOriginal = el.textContent.trim();
+        if (textoOriginal.length > 0) {
+            let traduccion = await consumirApiTraduccion(textoOriginal);
+            if (traduccion) {
+                el.textContent = traduccion;
+            }
         }
-    }
+    });
 
-    // --- PLACEHOLDERS ---
-    if (elementosPlaceholder.length > 0) {
-        let arrayPlaceholders = elementosPlaceholder.map(input => input.getAttribute("placeholder") || "");
-        let paquetePlaceholders = arrayPlaceholders.join(DELIMITADOR_BLOQUE);
-
-        let respuestaServidorPl = await consumirApiTraduccion(paquetePlaceholders);
-        
-        if (respuestaServidorPl) {
-            let placeholdersTraducidos = respuestaServidorPl.split(DELIMITADOR_BLOQUE);
-            elementosPlaceholder.forEach((input, index) => {
-                if (placeholdersTraducidos[index]) {
-                    input.setAttribute("placeholder", placeholdersTraducidos[index].trim());
-                }
-            });
+    // --- Traducir Placeholders de forma segura ---
+    const promesasPlaceholder = Array.from(elementosPlaceholder).map(async (input) => {
+        const placeholderOriginal = input.getAttribute("placeholder") || "";
+        if (placeholderOriginal.trim().length > 0) {
+            let traduccionPl = await consumirApiTraduccion(placeholderOriginal);
+            if (traduccionPl) {
+                input.setAttribute("placeholder", traduccionPl);
+            }
         }
-    }
+    });
+
+    // Ejecutamos todos los hilos de traducción en paralelo para máxima velocidad
+    await Promise.all([...promesasTexto, ...promesasPlaceholder]);
 }
 
-async function consumirApiTraduccion(bloqueTexto) {
+async function consumirApiTraduccion(texto) {
     try {
         const indiceAleatorio = Math.floor(Math.random() * POOL_DESARROLLADORES.length);
         const identificadorActivo = POOL_DESARROLLADORES[indiceAleatorio];
-        const urlPeticion = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(bloqueTexto)}&langpair=es|en&de=${identificadorActivo}`;
-
-        console.log(`[Ecolima Sync] Traduciendo bloque mediante: ${identificadorActivo}`);
+        const urlPeticion = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=es|en&de=${identificadorActivo}`;
 
         const response = await fetch(urlPeticion);
         if (!response.ok) throw new Error(`HTTP Status ${response.status}`);
@@ -95,7 +81,7 @@ async function consumirApiTraduccion(bloqueTexto) {
         const jsonResponse = await response.json();
         return jsonResponse.responseData.translatedText;
     } catch (error) {
-        console.error("Error en comunicación externa de idiomas:", error);
+        console.error("Error al traducir el fragmento:", texto, error);
         return null;
     }
 }

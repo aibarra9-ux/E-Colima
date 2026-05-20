@@ -35,6 +35,25 @@ async function cargarPublicaciones() {
             card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
             card.style.overflow = 'hidden';
 
+            // 🌟 LÓGICA DE DETECCIÓN MULTIMEDIA (IMAGEN VS VIDEO)
+            let componenteMultimedia = '';
+
+            if (post.imagen) {
+                if (post.tipo_archivo === 'video') {
+                    // Extraemos la extensión del archivo dinámicamente para el atributo type
+                    const extension = post.imagen.split('.').pop().toLowerCase();
+                    componenteMultimedia = `
+                        <video style="width: 100%; height: 100%; object-fit: cover;" controls preload="metadata">
+                            <source src="../../assets/Publicaciones/${post.imagen}" type="video/${extension}">
+                            Tu navegador no soporta la reproducción de este video.
+                        </video>`;
+                } else {
+                    componenteMultimedia = `<img src="../../assets/Publicaciones/${post.imagen}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                }
+            } else {
+                componenteMultimedia = `<img src="../../assets/Publicaciones/default_post.jpg" style="width: 100%; height: 100%; object-fit: cover;">`;
+            }
+
             card.innerHTML = `
                 <div style="padding: 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f1f5f9;">
                     <img src="../../assets/Fotos_perfil/default_avatar.png" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
@@ -46,7 +65,7 @@ async function cargarPublicaciones() {
                 <div style="padding: 16px;">
                     <h3 style="font-size: 1rem; color: #1e293b; margin-bottom: 8px;">${post.titulo}</h3>
                     <div style="border-radius: 12px; overflow: hidden; height: 200px; background: #f8fafc; margin-top: 10px;">
-                        <img src="../../assets/Publicaciones/${post.imagen || 'default_post.jpg'}" style="width: 100%; height: 100%; object-fit: cover;">
+                        ${componenteMultimedia}
                     </div>
                 </div>
                 <div style="padding: 12px 16px; background: #fafafa; text-align: right;">
@@ -60,7 +79,7 @@ async function cargarPublicaciones() {
         });
     } catch (error) {
         console.error("Error cargando posts:", error);
-        container.innerHTML = `<p style="color: red;">Error al conectar con el servidor: ${error.message}</p>';`;
+        container.innerHTML = `<p style="color: red;">Error al conectar con el servidor: ${error.message}</p>`;
     }
 }
 
@@ -88,14 +107,13 @@ function eliminarPost(id) {
     });
 }
 
-// 🌟 Buscador Corregido para tu nueva estructura HTML
+// 🌟 Buscador adaptado
 document.getElementById('searchPost').addEventListener('keyup', function(e) {
     const texto = e.target.value.toLowerCase();
     const publicaciones = document.querySelectorAll('.feed-card');
     
     publicaciones.forEach(card => {
         const titulo = card.querySelector('h3').textContent.toLowerCase();
-        // 🌟 Corregido: Buscamos la clase nueva ".post-autor" para evitar que se rompa el código
         const autor = card.querySelector('.post-autor').textContent.toLowerCase();
 
         if (titulo.includes(texto) || autor.includes(texto)) {
