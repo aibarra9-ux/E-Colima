@@ -110,85 +110,54 @@ Encuentra en segundos. La barra de búsqueda rastrea **títulos y contenido** en
 
 ## 📁 Estructura del Proyecto
 
+```
 Ecolima/
-├── index.php # Punto de entrada
-├── README.md # Documentación
-├── LICENSE # Licencia MIT
+├── index.php                  # Punto de entrada
+├── README.md                  # Documentación
+├── LICENSE                    # Licencia MIT
 ├── Database/
-│ └── ecolima.sql # Respaldo de la base de datos
+│   └── ecolima.sql            # Respaldo de la base de datos
 │
 ├── PHP/
-│ ├── buscar.php # Buscador global
-│ │
-│ ├── Home/
-│ │ ├── home.php # Página principal
-│ │ └── buscar.php # Backend de búsqueda
-│ │
-│ ├── Login/
-│ │ ├── login.php # Inicio de sesión
-│ │ ├── registro.php # Registro
-│ │ ├── logout.php # Cerrar sesión
-│ │ ├── procesar_login.php
-│ │ └── procesar_registro.php
-│ │
-│ ├── Perfil/
-│ │ ├── perfil.php # Perfil de usuario
-│ │ ├── dashboard_perfil.php # Panel administrador
-│ │ ├── dashboard_estadisticas.php
-│ │ └── conexion.php # Conexión a la BD
-│ │
-│ ├── Fauna/
-│ ├── Flora/
-│ ├── Ecosistemas/
-│ ├── Noticias/
-│ ├── Consejos/ # Una carpeta por categoría
-│ │ ├── categoria.php
-│ │ └── obtener_publicaciones.php
-│ │
-│ ├── Publicar/
-│ │ ├── publicar.php # Interfaz de publicación
-│ │ └── procesar_publicacion.php
-│ │
-│ └── Editor/
-│ ├── administrar_solicitudes.php
-│ └── procesar_revision.php
+│   ├── buscar.php             # Buscador global
+│   │
+│   ├── Home/
+│   │   └── home.php           # Página principal
+│   │
+│   ├── Login/
+│   │   ├── login.php          # Inicio de sesión
+│   │   ├── registro.php       # Registro
+│   │   └── logout.php         # Cerrar sesión
+│   │
+│   ├── Perfil/
+│   │   ├── perfil.php         # Perfil de usuario
+│   │   └── conexion.php       # Conexión a BD
+│   │
+│   ├── Fauna/
+│   ├── Flora/
+│   ├── Ecosistemas/
+│   ├── Noticias/
+│   └── Consejos/
 │
 ├── CSS/
-│ ├── Home/
-│ ├── Fauna/
-│ ├── Flora/
-│ ├── Ecosistemas/
-│ ├── Noticias/
-│ ├── Consejos/
-│ ├── Perfil/
-│ ├── Login/
-│ └── Publicar/ # Una carpeta por sección
-│ ├── styles.css # Modo claro
-│ └── styles_oscuro.css # Modo oscuro
+│   ├── Home/
+│   ├── Fauna/
+│   ├── Flora/
+│   ├── Perfil/
+│   └── Login/
 │
 ├── JavaScript/
-│ ├── Fauna/
-│ ├── Flora/
-│ ├── Ecosistemas/
-│ ├── Noticias/
-│ ├── Consejos/
-│ ├── Perfil/
-│ └── Dashboard/ # Una carpeta por sección
-│ └── script.js
+│   ├── Fauna/
+│   ├── Flora/
+│   └── Perfil/
 │
 └── assets/
-├── Home/ # Imágenes de la página principal
-├── Fauna/ # Imágenes de la categoría
-├── Flora/
-├── Ecosistemas/
-├── Noticias/
-├── Consejos/
-├── Login/ # Imágenes del login
-├── Perfil/ # Fotos de perfil
-├── Publicaciones/ # Imágenes subidas por usuarios
-├── Fotos_perfil/
-├── Fotos_banner/
-└── Fotos_post/
+    ├── Home/
+    ├── Fauna/
+    ├── Flora/
+    ├── Login/
+    └── Publicaciones/
+```
 
 ---
 ## 🌄 Inspiración
