@@ -160,7 +160,14 @@ Ecolima/
     └── Publicaciones/
 ```
 
+## 🔗 Acceso a la plataforma
+
+Para acceder a ECOLIMA, visita el siguiente enlace:
+
+--> [**e-colima.com**](http://e-colima.com)
+
 ---
+
 ## 🌄 Inspiración
 
 Colima posee una riqueza natural única: volcanes, selvas, costas y una gran diversidad de especies. ECOLIMA busca ser una herramienta digital que permita explorar, aprender y valorar estos ecosistemas.
