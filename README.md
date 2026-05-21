@@ -38,7 +38,7 @@ Facilitar el acceso a información ambiental sobre la biodiversidad de Colima, f
 
 ### 🌍 Cinco categorías temáticas
 
-*![Categorías](ruta-imagen)*
+![Categorías](assets/README/Imagen%201.jpeg)
 
 La biodiversidad de Colima organizada en cinco mundos por descubrir: **Flora**, **Fauna**, **Ecosistemas**, **Noticias** y **Consejos**. Cada categoría es una puerta a información curada y visual.
 
@@ -46,7 +46,7 @@ La biodiversidad de Colima organizada en cinco mundos por descubrir: **Flora**, 
 
 ### 🌐 Cambio de idioma
 
-*![Idioma](ruta-imagen)*
+![Categorías](assets/README/Imagen%202.jpeg)
 
 Una plataforma sin fronteras. Alterna entre **español e inglés** con un solo clic desde cualquier sección del sitio.
 
@@ -54,7 +54,7 @@ Una plataforma sin fronteras. Alterna entre **español e inglés** con un solo c
 
 ### 🌗 Modo oscuro / claro
 
-*![Modo oscuro](ruta-imagen)*
+![Categorías](assets/README/Imagen%204.jpeg)
 
 Dos caras, una misma esencia. El usuario elige entre **modo oscuro y modo claro** según su preferencia, mejorando la experiencia visual y la accesibilidad.
 
@@ -62,7 +62,8 @@ Dos caras, una misma esencia. El usuario elige entre **modo oscuro y modo claro*
 
 ### 🔐 Registro e inicio de sesión
 
-*![Registro](ruta-imagen)*
+![Categorías](assets/README/Imagen%205.jpeg)
+![Categorías](assets/README/Imagen%206.jpeg)
 
 Un acceso seguro y sin complicaciones. Registro con **validación de datos**, **encriptación de contraseña** y **detección de duplicados**. El sistema asigna roles automáticamente.
 
@@ -70,7 +71,7 @@ Un acceso seguro y sin complicaciones. Registro con **validación de datos**, **
 
 ### ✍️ Publicaciones (Escritores)
 
-*![Publicar](ruta-imagen)*
+![Categorías](assets/README/Imagen%207.jpeg)
 
 Dar voz a la naturaleza. Los escritores crean contenido mediante un **botón flotante** que despliega las categorías. La herramienta incluye **carga de imagen con recorte interactivo**, **vista previa en tiempo real** y **contador de palabras**.
 
@@ -78,7 +79,7 @@ Dar voz a la naturaleza. Los escritores crean contenido mediante un **botón flo
 
 ### ✅ Validación (Editores)
 
-*![Validar](ruta-imagen)*
+![Categorías](assets/README/Imagen%208.jpeg)
 
 Calidad antes que cantidad. Los editores **revisan, aprueban o rechazan** cada publicación antes de que vea la luz, asegurando contenido confiable.
 
@@ -86,7 +87,7 @@ Calidad antes que cantidad. Los editores **revisan, aprueban o rechazan** cada p
 
 ### 👤 Perfil de usuario
 
-*![Perfil](ruta-imagen)*
+![Categorías](assets/README/Imagen%209.jpeg)
 
 Un espacio personal. Cada usuario accede a su perfil con **información de cuenta**, **rol asignado** y **registro de actividad** en la plataforma.
 
@@ -94,7 +95,7 @@ Un espacio personal. Cada usuario accede a su perfil con **información de cuent
 
 ### 📊 Panel de administración
 
-*![Estadísticas](ruta-imagen)*
+![Categorías](assets/README/Imagen%2010.jpeg)
 
 El centro de mando. El administrador visualiza **métricas en tiempo real**: publicaciones por categoría, usuarios registrados y actividad del sitio.
 
@@ -102,7 +103,7 @@ El centro de mando. El administrador visualiza **métricas en tiempo real**: pub
 
 ### 🔍 Búsqueda inteligente
 
-*![Búsqueda](ruta-imagen)*
+![Categorías](assets/README/Imagen%2011.jpeg)
 
 Encuentra en segundos. La barra de búsqueda rastrea **títulos y contenido** en todas las categorías para ofrecer resultados inmediatos.
 
