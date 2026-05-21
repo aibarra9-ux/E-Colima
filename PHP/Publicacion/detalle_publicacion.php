@@ -47,6 +47,13 @@ if (!$publicacion) {
     echo "La publicación no existe o no ha sido aprobada.";
     exit();
 }
+
+// Guardar datos en variables PHP
+$titulo_original = htmlspecialchars($publicacion['titulo']);
+$contenido_original = htmlspecialchars($publicacion['contenido']);
+$categoria_original = htmlspecialchars($publicacion['categoria']);
+$autor_original = htmlspecialchars($publicacion['autor']);
+$fecha_original = date("d/m/Y", strtotime($publicacion['fecha_creacion']));
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +61,7 @@ if (!$publicacion) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($publicacion['titulo']); ?> - ECOLIMA</title>
+    <title><?php echo $titulo_original; ?> - ECOLIMA</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=League+Spartan:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -253,17 +260,17 @@ if (!$publicacion) {
 
     <div class="barra-superior">
         <img src="../../assets/Home/logomini.png" alt="Logo" class="imagen-logo" onclick="window.location.href='../Home/home.php'">
-        <a href="javascript:history.back()" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</a>
+        <a href="javascript:history.back()" class="btn-volver"><i class="fas fa-arrow-left"></i> <span data-translate="true">Volver</span></a>
     </div>
 
     <main class="article-container">
         <div class="article-meta">
-            <span><i class="fas fa-folder"></i> <?php echo htmlspecialchars($publicacion['categoria']); ?></span>
-            <span><i class="fas fa-user"></i> Por: <?php echo htmlspecialchars($publicacion['autor']); ?></span>
-            <span><i class="fas fa-calendar-alt"></i> <?php echo date("d/m/Y", strtotime($publicacion['fecha_creacion'])); ?></span>
+            <span><i class="fas fa-folder"></i> <span class="categoria-texto" data-original="<?php echo $categoria_original; ?>"><?php echo $categoria_original; ?></span></span>
+            <span><i class="fas fa-user"></i> <span data-translate="true">Por:</span> <span class="autor-texto"><?php echo $autor_original; ?></span></span>
+            <span><i class="fas fa-calendar-alt"></i> <span class="fecha-texto"><?php echo $fecha_original; ?></span></span>
         </div>
         
-        <h1 class="article-title"><?php echo htmlspecialchars($publicacion['titulo']); ?></h1>
+        <h1 class="article-title titulo-publicacion" data-original="<?php echo $titulo_original; ?>"><?php echo $titulo_original; ?></h1>
         
         <?php if (!empty($publicacion['imagen'])): ?>
             <?php if (isset($publicacion['tipo_media']) && $publicacion['tipo_media'] === 'video'): ?>
@@ -273,23 +280,21 @@ if (!$publicacion) {
             <?php endif; ?>
         <?php endif; ?>
 
-        <div class="article-content">
-            <?php echo htmlspecialchars($publicacion['contenido']); ?>
-        </div>
+        <div class="article-content contenido-publicacion" data-original="<?php echo $contenido_original; ?>"><?php echo $contenido_original; ?></div>
 
         <section class="seccion-comentarios">
-            <h3><i class="far fa-comments"></i> Comentarios</h3>
+            <h3><i class="far fa-comments"></i> <span data-translate="true">Comentarios</span></h3>
 
             <?php if (isset($_SESSION['usuario'])): ?>
                 <div class="form-comentario">
-                    <textarea id="txtComentario" placeholder="Escribe un comentario respetuoso..."></textarea>
+                    <textarea id="txtComentario" placeholder="Escribe un comentario respetuoso..." data-translate-placeholder="true"></textarea>
                     <button class="btn-comentar" onclick="enviarComentario()">
-                        <i class="far fa-paper-plane"></i> Publicar comentario
+                        <i class="far fa-paper-plane"></i> <span data-translate="true">Publicar comentario</span>
                     </button>
                 </div>
             <?php else: ?>
                 <div class="aviso-sesion">
-                    <i class="fas fa-info-circle"></i> Debes <a href="../Login/login.php" style="color: var(--accent-color); font-weight: 600; text-decoration: none;">iniciar sesión</a> para dejar un comentario.
+                    <i class="fas fa-info-circle"></i> <span data-translate="true">Debes</span> <a href="../Login/login.php" style="color: var(--accent-color); font-weight: 600; text-decoration: none;" data-translate="true">iniciar sesión</a> <span data-translate="true">para dejar un comentario.</span>
                 </div>
             <?php endif; ?>
 
@@ -300,35 +305,137 @@ if (!$publicacion) {
 <script>
 const idPublicacionActual = <?php echo isset($_GET['id']) ? (int)$_GET['id'] : 0; ?>;
 
-function cargarComentarios() {
+// Array para almacenar comentarios originales
+let comentariosOriginales = [];
+
+// Función para traducir comentarios
+async function traducirComentarios() {
+    const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+    if (idiomaActual !== 'en') return comentariosOriginales;
+    
+    // Extraer todos los contenidos de comentarios para traducir
+    const textosATraducir = comentariosOriginales.map(com => com.contenido_original);
+    
+    if (textosATraducir.length === 0) return comentariosOriginales;
+    
+    if (typeof window.traducirBloquePublicacion === 'function') {
+        const traducidos = await window.traducirBloquePublicacion(textosATraducir);
+        
+        // Aplicar traducciones
+        comentariosOriginales.forEach((com, idx) => {
+            if (traducidos[idx]) {
+                com.contenido_traducido = traducidos[idx];
+            }
+        });
+    }
+    
+    return comentariosOriginales;
+}
+
+// Función para renderizar comentarios
+function renderizarComentarios() {
+    const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+    const divContenedor = document.getElementById("contenedorComentarios");
+    
+    if (!divContenedor) return;
+    
+    if (comentariosOriginales.length === 0) {
+        const mensajeVacio = idiomaActual === 'en' 
+            ? "Be the first to comment on this post."
+            : "Sé el primero en comentar esta publicación.";
+        divContenedor.innerHTML = `<p style="color: var(--text-muted); font-style: italic; padding-left: 5px;">${mensajeVacio}</p>`;
+        return;
+    }
+
+    divContenedor.innerHTML = "";
+    
+    comentariosOriginales.forEach(com => {
+        let contenidoMostrar = com.contenido_original;
+        
+        if (idiomaActual === 'en' && com.contenido_traducido) {
+            contenidoMostrar = com.contenido_traducido;
+        }
+        
+        divContenedor.innerHTML += `
+            <div class="tarjeta-comentario">
+                <div class="header-comentario">
+                    <div class="autor-comentario">
+                        <i class="fas fa-user-circle"></i> @${escapeHTML(com.username)}
+                    </div>
+                    <span class="fecha-comentario">${com.fecha}</span>
+                </div>
+                <p class="texto-comentario">${escapeHTML(contenidoMostrar)}</p>
+            </div>
+        `;
+    });
+}
+
+async function cargarComentarios() {
     if (!idPublicacionActual) return;
 
-    fetch(`comentarios_backend.php?publicacion_id=${idPublicacionActual}`)
-        .then(res => res.json())
-        .then(comentarios => {
-            const divContenedor = document.getElementById("contenedorComentarios");
-            divContenedor.innerHTML = "";
+    try {
+        const response = await fetch(`comentarios_backend.php?publicacion_id=${idPublicacionActual}`);
+        let comentarios = await response.json();
 
-            if (comentarios.length === 0) {
-                divContenedor.innerHTML = `<p style="color: var(--text-muted); font-style: italic; padding-left: 5px;">Sé el primero en comentar esta publicación.</p>`;
-                return;
-            }
+        // Guardar comentarios originales
+        comentariosOriginales = comentarios.map(com => ({
+            ...com,
+            contenido_original: com.contenido,
+            contenido_traducido: null,
+            username: com.username,
+            fecha: com.fecha
+        }));
+        
+        // Traducir si es necesario
+        await traducirComentarios();
+        renderizarComentarios();
+        
+    } catch (err) {
+        console.error("Error al cargar comentarios:", err);
+    }
+}
 
-            comentarios.forEach(com => {
-                divContenedor.innerHTML += `
-                    <div class="tarjeta-comentario">
-                        <div class="header-comentario">
-                            <div class="autor-comentario">
-                                <i class="fas fa-user-circle"></i> @${com.username}
-                            </div>
-                            <span class="fecha-comentario">${com.fecha}</span>
-                        </div>
-                        <p class="texto-comentario">${com.contenido}</p>
-                    </div>
-                `;
-            });
-        })
-        .catch(err => console.error("Error al cargar comentarios:", err));
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// Función para traducir la publicación completa
+async function traducirPublicacion() {
+    const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+    if (idiomaActual !== 'en') return;
+    
+    const tituloElement = document.querySelector('.titulo-publicacion');
+    const contenidoElement = document.querySelector('.contenido-publicacion');
+    const categoriaElement = document.querySelector('.categoria-texto');
+    
+    if (!tituloElement || !contenidoElement) return;
+    
+    const tituloOriginal = tituloElement.getAttribute('data-original');
+    const contenidoOriginal = contenidoElement.getAttribute('data-original');
+    const categoriaOriginal = categoriaElement ? categoriaElement.getAttribute('data-original') : '';
+    
+    // Traducir en bloque
+    const textosATraducir = [];
+    if (tituloOriginal) textosATraducir.push(tituloOriginal);
+    if (contenidoOriginal) textosATraducir.push(contenidoOriginal);
+    if (categoriaOriginal) textosATraducir.push(categoriaOriginal);
+    
+    if (textosATraducir.length === 0) return;
+    
+    if (typeof window.traducirBloquePublicacion === 'function') {
+        const traducidos = await window.traducirBloquePublicacion(textosATraducir);
+        if (traducidos && traducidos.length > 0) {
+            if (traducidos[0]) tituloElement.textContent = traducidos[0];
+            if (traducidos[1]) contenidoElement.textContent = traducidos[1];
+            if (traducidos[2] && categoriaElement) categoriaElement.textContent = traducidos[2];
+        }
+    }
 }
 
 function enviarComentario() {
@@ -336,7 +443,9 @@ function enviarComentario() {
     const texto = txtArea.value.trim();
 
     if (!texto) {
-        alert("El comentario no puede estar vacío.");
+        const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+        const msgVacio = idiomaActual === 'en' ? "Comment cannot be empty." : "El comentario no puede estar vacío.";
+        alert(msgVacio);
         return;
     }
 
@@ -360,8 +469,19 @@ function enviarComentario() {
     .catch(err => console.error("Error al enviar comentario:", err));
 }
 
-document.addEventListener("DOMContentLoaded", cargarComentarios);
+// Escuchar cambios de idioma
+window.addEventListener('idioma-cambiado', () => {
+    console.log("[Detalle Publicacion] Idioma cambiado, traduciendo publicación y comentarios...");
+    traducirPublicacion();
+    cargarComentarios();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarComentarios();
+    traducirPublicacion();
+});
 </script>
 
+<script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

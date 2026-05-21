@@ -224,7 +224,7 @@ if (isset($_SESSION['usuario_id'])) {
 
             <div class="lang-box">ES / EN</div>
                 <?php if(isset($_SESSION['usuario'])): ?>
-                    <a href="../../JavaScript/Traduccion/traduccion.js" class="caja-login" onclick="mostrarModal(event)" data-translate>Cerrar sesión</a>
+                <a href="#" class="caja-login" onclick="mostrarModal(event)" data-translate>Cerrar sesión</a>
                 <?php else: ?>
                     <a href="../Login/login.php" class="caja-login" data-translate>Iniciar sesión</a>
                 <?php endif; ?>

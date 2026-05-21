@@ -201,7 +201,7 @@ if ($sesion_activa) {
                 </form>
                 <div class="lang-box">ES / EN</div>
                 <?php if(isset($_SESSION['usuario'])): ?>
-                    <a href="../../JavaScript/Traduccion/traduccion.js" class="login-box" onclick="mostrarModal(event)" data-translate>Cerrar sesión</a>
+                    <a href="#" class="login-box" onclick="mostrarModal(event)" data-translate>Cerrar sesión</a>
                 <?php else: ?>
                     <a href="../Login/login.php" class="login-box" data-translate>Iniciar sesión</a>
                 <?php endif; ?>        
@@ -420,7 +420,7 @@ if ($sesion_activa) {
                 <i class="fas fa-paw" style="color: #9bedb7; font-size: 2rem; margin-bottom: 10px;"></i>
                 <h2 data-translate>¿CERRAR SESIÓN?</h2>
                 <p style="color: #ffffff; font-weight: 600; font-size: 0.95rem; margin-bottom: 20px; font-family: 'League Spartan', sans-serif; line-height: 1.4;" data-translate>
-                    Si closes sesión, tendrás que volver a ingresar para ver tu perfil e interactuar en las publicaciones.
+                    Si cierras sesión, tendrás que volver a ingresar para ver tu perfil e interactuar en las publicaciones.
                 </p>
             </div>
             <div class="modal-buttons">

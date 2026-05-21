@@ -8,7 +8,7 @@ unset($_SESSION['error_registro']);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro - ECOLIMA</title>
+    <title data-translate="true">Registro - ECOLIMA</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos_registro.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -65,10 +65,10 @@ unset($_SESSION['error_registro']);
 
     <div class="login-section">
 
-        <a href="../Home/home.php" class="back-home">← Volver</a>
+        <a href="../Home/home.php" class="back-home" data-translate="true">← Volver</a>
 
         <div class="card">
-            <h3>Crea tu cuenta</h3>
+            <h3 data-translate="true">Crea tu cuenta</h3>
 
             <?php if($error_registro): ?>
                 <div class="login-error mostrar-error" id="errorPHP">
@@ -91,7 +91,7 @@ unset($_SESSION['error_registro']);
 
             <div class="login-error" id="errorJS">
                 <span>⚠</span>
-                <span>Las contraseñas no coinciden</span>
+                <span data-translate="true">Las contraseñas no coinciden</span>
             </div>
 
 <form action="procesar_registro.php" method="POST" id="registroForm" onkeydown="return event.key != 'Enter';">
@@ -100,12 +100,16 @@ unset($_SESSION['error_registro']);
                         minlength="4" maxlength="20"
                         pattern="[A-Za-z0-9_.]+"
                         title="Solo letras, números, _ o ."
-                        placeholder="Nombre de usuario" required>
+                        placeholder="Nombre de usuario"
+                        data-translate-placeholder="true"
+                        required>
                 </div>
 
                 <div class="input-group">
                     <input type="email" name="correo" id="correoRegistro"
-                        placeholder="Correo electrónico" required>
+                        placeholder="Correo electrónico"
+                        data-translate-placeholder="true"
+                        required>
                 </div>
 
                 <div id="strengthMessage"></div>
@@ -113,7 +117,9 @@ unset($_SESSION['error_registro']);
                 <div class="input-group password">
                     <input type="password" name="password" id="password"
                         minlength="8" maxlength="32"
-                        placeholder="Crear contraseña" required>
+                        placeholder="Crear contraseña"
+                        data-translate-placeholder="true"
+                        required>
                     <span class="eye">
                         <img src="../../assets/Login/eye-off-fill.png"
                              class="togglePassword"
@@ -124,7 +130,9 @@ unset($_SESSION['error_registro']);
                 <div class="input-group password">
                     <input type="password" name="confirmar" id="confirmar"
                         minlength="8" maxlength="32"
-                        placeholder="Confirmar contraseña" required>
+                        placeholder="Confirmar contraseña"
+                        data-translate-placeholder="true"
+                        required>
                     <span class="eye">
                         <img src="../../assets/Login/eye-off-fill.png"
                              class="togglePassword"
@@ -133,32 +141,34 @@ unset($_SESSION['error_registro']);
                 </div>
 
                 <div id="seccionCodigo" style="display: none; margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.1); pt-3">
-                    <p style="color: #a8d5b5; font-size: 0.85rem; margin: 15px 0 10px 0; font-family: 'Segoe UI', sans-serif;">
+                    <p style="color: #a8d5b5; font-size: 0.85rem; margin: 15px 0 10px 0; font-family: 'Segoe UI', sans-serif;" data-translate="true">
                         Te hemos enviado un código a tu correo:
                     </p>
                     <div class="input-group">
                         <input type="text" id="codigoVerificacion" name="codigo_ingresado" 
-                               placeholder="Código de 6 dígitos" maxlength="6" 
+                               placeholder="Código de 6 dígitos" 
+                               data-translate-placeholder="true"
+                               maxlength="6" 
                                style="text-align: center; letter-spacing: 3px; font-weight: bold;">
                     </div>
                     
                     <div class="reenviar-codigo">
-                        <a id="btnReenviarCodigo">📧 ¿No recibiste el código? Reenviar</a>
+                        <a id="btnReenviarCodigo"><span data-translate="true">📧 ¿No recibiste el código? Reenviar</span></a>
                     </div>
                     <div id="mensajeReenvio" class="reenviar-mensaje" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> Reenviando...
+                        <i class="fas fa-spinner fa-spin"></i> <span data-translate="true">Reenviando...</span>
                     </div>
                     <div id="timerReenvio" class="reenviar-mensaje" style="display: none;">
-                        <i class="fas fa-clock"></i> Puedes reenviar en <span id="segundosRestantes" class="timer">60</span> segundos
+                        <i class="fas fa-clock"></i> <span data-translate="true">Puedes reenviar en</span> <span id="segundosRestantes" class="timer">60</span> <span data-translate="true">segundos</span>
                     </div>
                 </div>
 
-                <button type="button" id="btnAccion" class="btn-login">Enviar código de verificación</button>
+                <button type="button" id="btnAccion" class="btn-login" data-translate="true">Enviar código de verificación</button>
 
                 <button type="submit" id="btnSubmitReal" style="display:none;"></button>
 
                 <p class="register">
-                    ¿Ya tienes una cuenta?
+                    <span data-translate="true">¿Ya tienes una cuenta?</span>
                     <a href="login.php">Logeate</a>
                 </p>
 
@@ -173,6 +183,7 @@ unset($_SESSION['error_registro']);
 </div>
 
 <script src="../../JavaScript/Login/login.js"></script>
+<script src="../../JavaScript/Traduccion/traduccion.js"></script>
 
 <script>
 document.getElementById('btnReenviarCodigo')?.addEventListener('click', function(e) {
@@ -223,7 +234,7 @@ document.getElementById('btnReenviarCodigo')?.addEventListener('click', function
             const exitoMsg = document.createElement('div');
             exitoMsg.className = 'reenviar-mensaje';
             exitoMsg.style.color = '#4caf50';
-            exitoMsg.innerHTML = '<i class="fas fa-check-circle"></i> ¡Código reenviado! Revisa tu correo.';
+            exitoMsg.innerHTML = '<i class="fas fa-check-circle"></i> <span data-translate="true">¡Código reenviado! Revisa tu correo.</span>';
             exitoMsg.style.marginTop = '5px';
             document.getElementById('seccionCodigo').appendChild(exitoMsg);
             

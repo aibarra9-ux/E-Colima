@@ -6,7 +6,7 @@ session_start();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title data-translate="true">Login</title>
     <link rel="stylesheet" href="../../CSS/Login/estilos.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -21,10 +21,10 @@ session_start();
     <!-- LADO IZQUIERDO -->
     <div class="login-section">
 
-        <a href="../Home/home.php" class="back-home">← Volver</a>
+        <a href="../Home/home.php" class="back-home" data-translate="true">← Volver</a>
 
         <div class="card">
-            <h3>Bienvenido de nuevo 👋</h3>
+            <h3 data-translate="true">Bienvenido de nuevo 👋</h3>
 
             <!-- ERROR -->
            <?php if(isset($_GET['error'])): ?>
@@ -58,6 +58,7 @@ session_start();
                         minlength="4" maxlength="20"
                         pattern="[A-Za-z0-9_.]+"
                         placeholder="Nombre de usuario"
+                        data-translate-placeholder="true"
                         autocomplete="username"
                         required>
                 </div>
@@ -65,6 +66,7 @@ session_start();
                 <div class="input-group password">
                     <input type="password" name="password" id="password"
                         placeholder="Ingresar contraseña"
+                        data-translate-placeholder="true"
                         autocomplete="current-password"
                         required>
 
@@ -79,12 +81,13 @@ session_start();
                     <label class="switch">
                         <input type="checkbox" name="remember">
                         <span class="slider"></span>
-                        Recordar usuario
+                        <span data-translate="true">Recordar usuario</span>
                     </label>
 
-                    <a href="javascript:void(0);" id="forgotPassword" class="forgot">¿Olvidaste tu contraseña?</a>                </div>
+                    <a href="javascript:void(0);" id="forgotPassword" class="forgot" data-translate="true">¿Olvidaste tu contraseña?</a>
+                </div>
 
-                <button type="submit" class="btn-login">Entrar</button>
+                <button type="submit" class="btn-login" data-translate="true">Entrar</button>
 
                 <div class="divider"></div>
 
@@ -106,7 +109,7 @@ session_start();
 </div>
 
                 <p class="register">
-                    No tienes una cuenta aún?
+                    <span data-translate="true">No tienes una cuenta aún?</span>
                     <a href="registro.php">Regístrate</a>
                 </p>
 
@@ -123,5 +126,6 @@ session_start();
 </div>
 
 <script src="../../JavaScript/Login/login.js"></script>
+<script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

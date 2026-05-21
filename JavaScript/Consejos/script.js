@@ -9,119 +9,171 @@ const inputBuscador = document.getElementById("inputBuscador");
 let subcategoriaActivaId = null; 
 const categoriaId = inputBuscador ? inputBuscador.getAttribute("data-categoria-id") : "5";
 
-// Función centralizada para renderizar la grilla con soporte de búsqueda interna
-function cargarPublicaciones() {
-    // 1. Construimos la URL base filtrando por la Categoría fija
+// Array para almacenar las publicaciones originales (sin traducir)
+let publicacionesOriginales = [];
+
+// Función para renderizar las publicaciones (con o sin traducción)
+function renderizarPublicaciones() {
+    const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+    const publicaciones = publicacionesOriginales;
+    
+    if (publicaciones.length === 0) {
+        const mensajeNoResultados = idiomaActual === 'en' 
+            ? "No tips found matching your search."
+            : "No se encontraron consejos que coincidan con la búsqueda.";
+            
+        contenedor.innerHTML = `
+            <div class="sin-publicaciones" style="grid-column: 1 / -1; text-align: center; padding: 50px; color: white;">
+                <i class="fas fa-search-minus" style="font-size: 3rem; margin-bottom: 15px; color: rgba(255,255,255,0.4);"></i>
+                <p style="font-family: 'Outfit', sans-serif; font-size: 1.2rem;">${mensajeNoResultados}</p>
+            </div>
+        `;
+        return;
+    }
+
+    contenedor.innerHTML = "";
+    
+    publicaciones.forEach((post, i) => {
+        // Usar título traducido si está en inglés y existe
+        let tituloMostrar = post.titulo_original;
+        let descMostrar = post.descripcion_original;
+        
+        if (idiomaActual === 'en') {
+            if (post.titulo_traducido) tituloMostrar = post.titulo_traducido;
+            if (post.descripcion_traducida) descMostrar = post.descripcion_traducida;
+        }
+        
+        let htmlMultimedia = "";
+        if (post.tipo_media === 'video') {
+            htmlMultimedia = `<video class="imagen-publicacion" src="${post.imagen}" autoplay muted loop playsinline style="object-fit: cover;"></video>`;
+        } else {
+            htmlMultimedia = `<img class="imagen-publicacion" src="${post.imagen}" alt="${tituloMostrar}">`;
+        }
+
+        // Tarjeta Grande Destacada
+        if (i === 0) {
+            const tarjetaGrande = document.createElement("div");
+            tarjetaGrande.classList.add("tarjeta-grande");
+            
+            let htmlMultimediaGrande = htmlMultimedia.replace('class="imagen-publicacion"', 'class="imagen-grande"');
+            
+            const verMasTexto = (idiomaActual === 'en' && typeof traducciones !== 'undefined' && traducciones['Ver más']) 
+                ? traducciones['Ver más'] 
+                : 'Ver más';
+
+            tarjetaGrande.innerHTML = `
+                ${htmlMultimediaGrande}
+                <div class="info-grande">
+                    <h2 class="titulo-grande" style="cursor: pointer;" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${escapeHTML(tituloMostrar)}</h2>
+                    <p class="descripcion-grande">${escapeHTML(descMostrar)}</p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; width: 100%;">
+                        <button class="boton-ver-mas" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${verMasTexto}</button>
+                        <div class="likes-container" style="display: flex; align-items: center; gap: 8px;">
+                            <button onclick="interactuarLike(${post.id}, this)" 
+                                    style="background: none; border: none; cursor: pointer; font-size: 1.4rem; padding: 0; transition: transform 0.1s;">
+                                <i class="${post.le_gusta ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}" 
+                                   style="color: ${post.le_gusta ? '#e63946' : 'rgba(255,255,255,0.6)'};"></i>
+                            </button>
+                            <span class="likes-count" style="font-weight: 700; color: white; font-size: 1rem;">${post.likes}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            contenedor.appendChild(tarjetaGrande);
+            setTimeout(() => { tarjetaGrande.classList.add("mostrar"); }, 100);
+            return;
+        }
+
+        // Tarjetas Comunes de la Grilla
+        const tarjeta = document.createElement("div");
+        tarjeta.classList.add("tarjeta-publicacion");
+        tarjeta.style.cursor = "pointer"; 
+        
+        tarjeta.setAttribute("onclick", `if(!event.target.closest('.likes-container')) window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'`);
+        
+        tarjeta.innerHTML = `
+            ${htmlMultimedia}
+            <h3 class="titulo-publicacion">${escapeHTML(tituloMostrar)}</h3>
+            <p class="descripcion-publicacion">${escapeHTML(descMostrar)}</p>
+            <div class="likes-container" style="display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <button onclick="interactuarLike(${post.id}, this)" 
+                        style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; transition: transform 0.1s;">
+                    <i class="${post.le_gusta ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}" 
+                       style="color: ${post.le_gusta ? '#e63946' : 'rgba(255,255,255,0.5)'};"></i>
+                </button>
+                <span class="likes-count" style="font-weight: 700; color: rgba(255,255,255,0.8); font-size: 0.9rem;">${post.likes}</span>
+            </div>
+        `;
+        contenedor.appendChild(tarjeta);
+        setTimeout(() => { tarjeta.classList.add("mostrar"); }, 150 * i);
+    });
+}
+
+// Función auxiliar para escapar HTML
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// Función centralizada para cargar publicaciones
+async function cargarPublicaciones() {
     let url = `obtener_publicaciones.php?categoria_id=${categoriaId}`;
     
-    // 2. Si hay una subcategoría seleccionada por los botones, mutamos la petición
     if (subcategoriaActivaId) {
         url = `obtener_publicaciones.php?subcategoria_id=${subcategoriaActivaId}`;
     }
     
-    // 3. Si el usuario ha escrito algo en el buscador, añadimos el término por parámetro
     if (inputBuscador && inputBuscador.value.trim() !== "") {
         url += `&search=${encodeURIComponent(inputBuscador.value.trim())}`;
     }
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
-            }
-            return response.json();
-        })
-        .then(publicaciones => {
-            contenedor.innerHTML = "";
-
-            if (publicaciones.length === 0) {
-                contenedor.innerHTML = `
-                    <div class="sin-publicaciones" style="grid-column: 1 / -1; text-align: center; padding: 50px; color: white;">
-                        <i class="fas fa-search-minus" style="font-size: 3rem; margin-bottom: 15px; color: rgba(255,255,255,0.4);"></i>
-                        <p style="font-family: 'Outfit', sans-serif; font-size: 1.2rem;">No se encontraron consejos que coincidan con la búsqueda.</p>
-                    </div>
-                `;
-                return;
-            }
-
-           publicaciones.forEach((post, i) => {
-                
-                // 🌟 NUEVO: Lógica dinámica para renderizar la etiqueta multimedia correcta
-                let htmlMultimedia = "";
-                if (post.tipo_media === 'video') {
-                    // Si es video, usamos la etiqueta nativa con autoplay, muted, loop y object-fit para que no se deforme
-                    htmlMultimedia = `<video class="imagen-publicacion" src="${post.imagen}" autoplay muted loop playsinline style="object-fit: cover;"></video>`;
-                } else {
-                    // Si es imagen (o fallback), se queda con tu img clásica
-                    htmlMultimedia = `<img class="imagen-publicacion" src="${post.imagen}" alt="${post.titulo}">`;
-                }
-
-                // Tarjeta Grande Destacada
-                if (i === 0) {
-                    const tarjetaGrande = document.createElement("div");
-                    tarjetaGrande.classList.add("tarjeta-grande");
-                    
-                    // Ajustamos el multimedia de la tarjeta grande aplicando su respectiva clase CSS
-                    let htmlMultimediaGrande = htmlMultimedia.replace('class="imagen-publicacion"', 'class="imagen-grande"');
-
-                    tarjetaGrande.innerHTML = `
-                        ${htmlMultimediaGrande}
-                        <div class="info-grande">
-                            <h2 class="titulo-grande" style="cursor: pointer;" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">${post.titulo}</h2>
-                            <p class="descripcion-grande">${post.descripcion}</p>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; width: 100%;">
-                                <button class="boton-ver-mas" onclick="window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'">Ver más</button>
-                                <div class="likes-container" style="display: flex; align-items: center; gap: 8px;">
-                                    <button onclick="interactuarLike(${post.id}, this)" 
-                                            style="background: none; border: none; cursor: pointer; font-size: 1.4rem; padding: 0; transition: transform 0.1s;">
-                                        <i class="${post.le_gusta ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}" 
-                                           style="color: ${post.le_gusta ? '#e63946' : 'rgba(255,255,255,0.6)'};"></i>
-                                    </button>
-                                    <span class="likes-count" style="font-weight: 700; color: white; font-size: 1rem;">${post.likes}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    contenedor.appendChild(tarjetaGrande);
-                    setTimeout(() => { tarjetaGrande.classList.add("mostrar"); }, 100);
-                    return;
-                }
-
-                // Tarjetas Comunes de la Grilla
-                const tarjeta = document.createElement("div");
-                tarjeta.classList.add("tarjeta-publicacion");
-                tarjeta.style.cursor = "pointer"; 
-                
-                tarjeta.setAttribute("onclick", `if(!event.target.closest('.likes-container')) window.location.href='../../PHP/Publicacion/detalle_publicacion.php?id=${post.id}'`);
-                
-                tarjeta.innerHTML = `
-                    ${htmlMultimedia}
-                    <h3 class="titulo-publicacion">${post.titulo}</h3>
-                    <p class="descripcion-publicacion">${post.descripcion}</p>
-                    <div class="likes-container" style="display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
-                        <button onclick="interactuarLike(${post.id}, this)" 
-                                style="background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0; transition: transform 0.1s;">
-                            <i class="${post.le_gusta ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}" 
-                               style="color: ${post.le_gusta ? '#e63946' : 'rgba(255,255,255,0.5)'};"></i>
-                        </button>
-                        <span class="likes-count" style="font-weight: 700; color: rgba(255,255,255,0.8); font-size: 0.9rem;">${post.likes}</span>
-                    </div>
-                `;
-                contenedor.appendChild(tarjeta);
-                setTimeout(() => { tarjeta.classList.add("mostrar"); }, 150 * i);
-            });
-        })
-        .catch(error => {
-            console.error('Error al cargar:', error);
-            contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">Error al cargar las publicaciones de Consejos.</p>';
-        });
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        
+        let publicaciones = await response.json();
+        
+        // Guardar publicaciones originales
+        publicacionesOriginales = publicaciones.map(pub => ({
+            ...pub,
+            titulo_original: pub.titulo,
+            descripcion_original: pub.descripcion,
+            titulo_traducido: null,
+            descripcion_traducida: null
+        }));
+        
+        // Si el idioma es inglés y existe la función global de traducción, traducir en bloque
+        const idiomaActual = localStorage.getItem("ecolima_lang") || 'es';
+        if (idiomaActual === 'en' && typeof window.traducirPublicaciones === 'function') {
+            console.log("[Consejos] Traduciendo publicaciones con función global...");
+            publicacionesOriginales = await window.traducirPublicaciones(publicacionesOriginales);
+        }
+        
+        renderizarPublicaciones();
+        
+    } catch (error) {
+        console.error('Error al cargar:', error);
+        contenedor.innerHTML = '<p style="text-align:center;color:white;padding:50px;">Error al cargar las publicaciones de Consejos.</p>';
+    }
 }
+
+// Escuchar cambios de idioma para recargar publicaciones
+window.addEventListener('idioma-cambiado', () => {
+    console.log("[Consejos] Idioma cambiado, recargando publicaciones...");
+    cargarPublicaciones();
+});
 
 // Carga inicial al cargar el DOM
 document.addEventListener("DOMContentLoaded", () => {
     cargarPublicaciones();
 
-    // Evento del buscador interno para buscar mientras escribe (Filtro en tiempo real)
     if (inputBuscador) {
         inputBuscador.addEventListener("input", () => {
             cargarPublicaciones();

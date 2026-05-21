@@ -52,7 +52,7 @@ if ($resultado->num_rows > 0) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ECOLIMA – Perfil</title>
+  <title data-translate="true">ECOLIMA – Perfil</title>
   
   <?php if (isset($user['modo_oscuro']) && $user['modo_oscuro'] == 1): ?>
       <link rel="stylesheet" href="../../CSS/Perfil/Perfil_oscuro.css"/>
@@ -75,13 +75,13 @@ if ($resultado->num_rows > 0) {
   </div>
 
   <div class="sidebar-nav">
-    <button class="nav-item active" onclick="switchSection('panel-perfil')">Panel de perfil</button>
-    <button class="nav-item" onclick="switchSection('panel-permisos')">Solicitar cambio de Permisos</button>
+    <button class="nav-item active" onclick="switchSection('panel-perfil')"><span data-translate="true">Panel de perfil</span></button>
+    <button class="nav-item" onclick="switchSection('panel-permisos')"><span data-translate="true">Solicitar cambio de Permisos</span></button>
   </div>
 
   <div class="sidebar-bottom">
-    <button class="nav-item" onclick="openConfig()">Configuración</button>
-    <button type="button" class="nav-item danger" onclick="cerrarSesion()" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer; font-family: inherit;">Cerrar sesión</button>
+    <button class="nav-item" onclick="openConfig()"><span data-translate="true">Configuración</span></button>
+    <button type="button" class="nav-item danger" onclick="cerrarSesion()" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer; font-family: inherit;"><span data-translate="true">Cerrar sesión</span></button>
   </div>
 </nav>
 
@@ -89,11 +89,11 @@ if ($resultado->num_rows > 0) {
   <div id="section-perfil" style="display: contents;">
     <div class="profile-card">
       <div class="profile-hero">
-        <div class="cover-clickable" onclick="document.getElementById('input-banner').click();" title="Haga clic para cambiar la foto de portada" style="cursor: pointer; width: 100%; height: 100%;">
+        <div class="cover-clickable" onclick="document.getElementById('input-banner').click();" title="Haga clic para cambiar la foto de portada" style="cursor: pointer; width: 100%; height: 100%;" data-translate="true">
           <img class="cover" src="<?php echo htmlspecialchars($banner); ?>" alt="Portada"/>
         </div>
         
-        <div class="profile-avatar-wrap" onclick="document.getElementById('input-avatar').click();" title="Haga clic para cambiar su foto de perfil" style="cursor: pointer;">
+        <div class="profile-avatar-wrap" onclick="document.getElementById('input-avatar').click();" title="Haga clic para cambiar su foto de perfil" style="cursor: pointer;" data-translate="true">
           <img class="profile-avatar" src="<?php echo htmlspecialchars($avatar); ?>" alt="Avatar"/>
         </div>
       </div>
@@ -106,7 +106,7 @@ if ($resultado->num_rows > 0) {
       <div class="profile-info">
         <div class="profile-name"><?php echo htmlspecialchars($user['username']); ?></div>
         <div class="profile-role"><?php echo htmlspecialchars($user['nombre_rol']); ?></div>
-        <div class="profile-bio" contenteditable="true" id="bioElement" title="Haz clic para editar tu biografía" onblur="guardarBiografia(this.innerText)">
+        <div class="profile-bio" contenteditable="true" id="bioElement" title="Haz clic para editar tu biografía" onblur="guardarBiografia(this.innerText)" data-translate-placeholder="true">
           <?php echo htmlspecialchars($biografia); ?>
         </div>
       </div>
@@ -116,13 +116,13 @@ if ($resultado->num_rows > 0) {
       <div class="feed-tabs" style="display: flex; gap: 10px;">
         <button class="tab-btn active" data-tab="megusta" onclick="switchTab('megusta', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Me gusta
+          <span data-translate="true">Me gusta</span>
         </button>
 
         <?php if ($user['rol_id'] == 1 || $user['rol_id'] == 3): ?>
         <button class="tab-btn" data-tab="mispublicaciones" onclick="switchTab('mispublicaciones', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          Mis Publicaciones
+          <span data-translate="true">Mis Publicaciones</span>
         </button>
         <?php endif; ?>
       </div>
@@ -136,25 +136,25 @@ if ($resultado->num_rows > 0) {
         <form id="formSolicitudRol">
             <input type="hidden" name="usuario_id" value="<?php echo $user['id']; ?>">
             
-            <h2 style="font-family: 'Playfair Display', serif; color: #1a3a2a; margin-bottom: 10px;">Solicitud de rango avanzado</h2>
-            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+            <h2 style="font-family: 'Playfair Display', serif; color: #1a3a2a; margin-bottom: 10px;" data-translate="true">Solicitud de rango avanzado</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;" data-translate="true">
                 Envía una propuesta detallando por qué deseas cambiar de rol (ej. Escritor o Editor). Tu caso será evaluado por los administradores.
             </p>
 
             <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: 700; margin-bottom: 5px; color: #1a3a2a;">Rango solicitado:</label>
+                <label style="display: block; font-weight: 700; margin-bottom: 5px; color: #1a3a2a;" data-translate="true">Rango solicitado:</label>
                 <select name="rol_solicitado" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit;" required>
-                    <option value="2">Editor (Modificar y validar contenido)</option>
-                    <option value="3">Autor / Escritor (Subir flora, fauna, etc.)</option>
+                    <option value="2" data-translate="true">Editor (Modificar y validar contenido)</option>
+                    <option value="3" data-translate="true">Autor / Escritor (Subir flora, fauna, etc.)</option>
                 </select>
             </div>
 
             <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 700; margin-bottom: 5px; color: #1a3a2a;">Motivo detallado:</label>
-                <textarea name="motivo" placeholder="Escribe aquí tu experiencia o razones para el cambio..." style="width: 100%; height: 120px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; resize: none;" required></textarea>
+                <label style="display: block; font-weight: 700; margin-bottom: 5px; color: #1a3a2a;" data-translate="true">Motivo detallado:</label>
+                <textarea name="motivo" placeholder="Escribe aquí tu experiencia o razones para el cambio..." data-translate-placeholder="true" style="width: 100%; height: 120px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; resize: none;" required></textarea>
             </div>
 
-            <button type="submit" style="width: 100%; background: #2d6a4f; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;">
+            <button type="submit" style="width: 100%; background: #2d6a4f; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;" data-translate="true">
                 Enviar Solicitud
             </button>
         </form>
@@ -164,30 +164,30 @@ if ($resultado->num_rows > 0) {
 
 <aside class="config-drawer" id="configDrawer">
   <div class="drawer-header">
-    <h2>⚙️ Configuración</h2>
+    <h2 data-translate="true">⚙️ Configuración</h2>
     <button class="drawer-close" onclick="closeConfig()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
   <div class="drawer-body">
     <div class="config-group">
-      <label>Nombre de usuario</label>
-      <input class="config-input" type="text" id="cfgName" value="<?php echo htmlspecialchars($user['username']); ?>"/>
+      <label data-translate="true">Nombre de usuario</label>
+      <input class="config-input" type="text" id="cfgName" value="<?php echo htmlspecialchars($user['username']); ?>" data-translate-placeholder="true"/>
     </div>
     <div class="config-group">
-      <label>Correo electrónico</label>
-      <input class="config-input" type="email" id="cfgEmail" value="<?php echo htmlspecialchars($user['email']); ?>"/>
+      <label data-translate="true">Correo electrónico</label>
+      <input class="config-input" type="email" id="cfgEmail" value="<?php echo htmlspecialchars($user['email']); ?>" data-translate-placeholder="true"/>
     </div>
     
     <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
     
     <div class="config-group">
-      <label style="color: #b91c1c; font-weight: 700;">Contraseña Actual</label>
-      <input class="config-input" type="password" id="cfgPassActual" placeholder="Requerida para confirmar cambios"/>
+      <label style="color: #b91c1c; font-weight: 700;" data-translate="true">Contraseña Actual</label>
+      <input class="config-input" type="password" id="cfgPassActual" placeholder="Requerida para confirmar cambios" data-translate-placeholder="true"/>
     </div>
     <div class="config-group">
-      <label>Contraseña Nueva</label>
-      <input class="config-input" type="password" id="cfgPass" minlength="8" maxlength="32" placeholder="Dejar vacío para no cambiar"/>
+      <label data-translate="true">Contraseña Nueva</label>
+      <input class="config-input" type="password" id="cfgPass" minlength="8" maxlength="32" placeholder="Dejar vacío para no cambiar" data-translate-placeholder="true"/>
     </div>
 
     <label class="switch">
@@ -216,12 +216,13 @@ if ($resultado->num_rows > 0) {
       </div>
     </label>
         
-    <button class="btn-save" onclick="guardarConfig()">Guardar cambios</button>
+    <button class="btn-save" onclick="guardarConfig()" data-translate="true">Guardar cambios</button>
   </div>
 </aside>
 
 <div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
 <div class="toast" id="toast"></div>
 
+<script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

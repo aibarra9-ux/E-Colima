@@ -40,10 +40,10 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECOLIMA – Gestión de Usuarios</title>
+    <title data-translate="true">ECOLIMA – Gestión de Usuarios</title>
     <link rel="stylesheet" href="../../CSS/Perfil/dashboard.css">
     <link class="config-style" rel="stylesheet" href="">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&family=Playfair+Display:ital,wght=0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Estilos para la tabla adaptados al nuevo diseño */
@@ -243,34 +243,34 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
   <div class="sidebar-nav">
     <a href="dashboard_perfil.php" class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Mi Perfil
+      <span data-translate="true">Mi Perfil</span>
     </a>
     <a href="dashboard_usuarios.php" class="nav-item active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Usuarios
+      <span data-translate="true">Usuarios</span>
     </a>
     <a href="dashboard_publicaciones.php" class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      Publicaciones
+      <span data-translate="true">Publicaciones</span>
     </a>
     <a href="dashboard_solicitudes.php" class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Solicitudes
+      <span data-translate="true">Solicitudes</span>
     </a>
     <a href="dashboard_estadisticas.php" class="nav-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Estadísticas
+        <span data-translate="true">Estadísticas</span>
     </a>
   </div>
 
   <div class="sidebar-bottom">
     <button class="nav-item" onclick="openConfig()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
-      Configuración
+      <span data-translate="true">Configuración</span>
     </button>
     <button class="nav-item danger" onclick="cerrarSesion()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Cerrar sesión
+      <span data-translate="true">Cerrar sesión</span>
     </button>
   </div>
 </nav>
@@ -287,7 +287,7 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
     </div>
     <div class="profile-info" style="padding-top: 45px;">
       <div class="profile-name" style="font-size: 0.9rem;"><?php echo strtoupper($nombre); ?></div>
-      <div class="profile-role">Gestión de Comunidad</div>
+      <div class="profile-role" data-translate="true">Gestión de Comunidad</div>
     </div>
   </div>
 
@@ -295,10 +295,10 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
     <div class="feed-tabs" style="width: 100%; display: flex; align-items: center; justify-content: space-between;">
       <div class="tab-btn active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Lista de Usuarios
+        <span data-translate="true">Lista de Usuarios</span>
       </div>
       <div class="search-container">
-          <input type="text" id="user-search" class="search-input" placeholder="🔍 Buscar nombre o correo...">
+          <input type="text" id="user-search" class="search-input" placeholder="🔍 Buscar nombre o correo..." data-translate-placeholder="true">
       </div>
     </div>
 
@@ -308,11 +308,11 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
                 <table class="users-table">
                     <thead>
                         <tr>
-                            <th>Usuario</th>
-                            <th>Correo Electrónico</th>
-                            <th>Registro</th>
-                            <th>Rol</th>
-                            <th>Acciones</th>
+                            <th data-translate="true">Usuario</th>
+                            <th data-translate="true">Correo Electrónico</th>
+                            <th data-translate="true">Registro</th>
+                            <th data-translate="true">Rol</th>
+                            <th data-translate="true">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="users-table-body">
@@ -327,7 +327,7 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
 <div class="config-overlay" id="configOverlay" onclick="closeConfig()"></div>
 <aside class="config-drawer" id="configDrawer">
   <div class="drawer-header">
-    <h2>⚙️ Editar Perfil</h2>
+    <h2 data-translate="true">⚙️ Editar Perfil</h2>
     <button class="drawer-close" onclick="closeConfig()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -335,18 +335,18 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
   <div class="drawer-body">
     <form id="formEditarPerfil">
         <div class="config-group">
-            <label>Nombre de Usuario</label>
-            <input class="config-input" type="text" name="username" id="cfgName" value="<?php echo htmlspecialchars($nombre); ?>" required />
+            <label data-translate="true">Nombre de Usuario</label>
+            <input class="config-input" type="text" name="username" id="cfgName" value="<?php echo htmlspecialchars($nombre); ?>" data-translate-placeholder="true" required />
         </div>
         <div class="config-group">
-            <label>Correo Electrónico</label>
-            <input class="config-input" type="email" name="email" id="cfgEmail" value="<?php echo htmlspecialchars($correo); ?>" required />
+            <label data-translate="true">Correo Electrónico</label>
+            <input class="config-input" type="email" name="email" id="cfgEmail" value="<?php echo htmlspecialchars($correo); ?>" data-translate-placeholder="true" required />
         </div>
         
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
 
         <div class="config-group">
-            <label>Apariencia del Sistema</label>
+            <label data-translate="true">Apariencia del Sistema</label>
             <div class="theme-switch-wrapper" style="margin-top: 8px;">
                 <label class="switch" for="switchModoOscuro" style="display: flex; align-items: center; width: 100%; height: 45px; background: rgba(0,0,0,0.05); border-radius: 12px; position: relative; cursor: pointer;">
                     <input type="checkbox" id="switchModoOscuro" style="display:none;" <?php echo ($modo_oscuro == 1) ? 'checked' : ''; ?>>
@@ -367,7 +367,7 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
                             <svg class="moon-svg" viewBox="0 0 24 24" fill="none" stroke="#f1f5f9" stroke-width="2.2" style="width:18px; height:18px; transition: 0.4s; display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                         </div>
                         
-                        <span class="lbl-modo" style="margin-left: 10px; font-family:'Nunito', sans-serif; font-size:0.88rem; font-weight:700; color: var(--green-dark); z-index:2; transition:0.4s;">Modo Claro</span>
+                        <span class="lbl-modo" style="margin-left: 10px; font-family:'Nunito', sans-serif; font-size:0.88rem; font-weight:700; color: var(--green-dark); z-index:2; transition:0.4s;" data-translate="true">Modo Claro</span>
                     </div>
                 </label>
             </div>
@@ -376,19 +376,19 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
 
         <div class="config-group">
-            <label style="color: #b91c1c; font-weight: 700;">Contraseña Actual</label>
-            <input class="config-input" type="password" name="password_actual" id="cfgPassActual" placeholder="Requerida para confirmar cambios" />
+            <label style="color: #b91c1c; font-weight: 700;" data-translate="true">Contraseña Actual</label>
+            <input class="config-input" type="password" name="password_actual" id="cfgPassActual" placeholder="Requerida para confirmar cambios" data-translate-placeholder="true" />
         </div>
         <div class="config-group">
-            <label>Contraseña Nueva</label>
-            <input class="config-input" type="password" name="password_nueva" id="cfgPass" minlength="8" maxlength="32" placeholder="Dejar vacío para no cambiar" />
+            <label data-translate="true">Contraseña Nueva</label>
+            <input class="config-input" type="password" name="password_nueva" id="cfgPass" minlength="8" maxlength="32" placeholder="Dejar vacío para no cambiar" data-translate-placeholder="true" />
         </div>
         
         <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 10px;">
-            ID de Administrador: #<?php echo $id_admin; ?>
+            <span data-translate="true">ID de Administrador:</span> #<?php echo $id_admin; ?>
         </p>
 
-        <button type="submit" class="btn-save" style="width: 100%; margin-top: 20px;">Guardar Cambios</button>
+        <button type="submit" class="btn-save" style="width: 100%; margin-top: 20px;" data-translate="true">Guardar Cambios</button>
     </form>
   </div>
 </aside>
@@ -597,5 +597,6 @@ if ($resultado && $row = $resultado->fetch_assoc()) {
         }
     });
 </script>
+<script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

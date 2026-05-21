@@ -48,7 +48,7 @@ if (isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Solicitudes - ECOLIMA</title>
+    <title data-translate="true">Panel de Solicitudes - ECOLIMA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php if ($modo_oscuro === 1): ?>
         <link rel="stylesheet" href="../../CSS/Editor/solicitudes_oscuro.css">
@@ -61,19 +61,19 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="panel-container">
         <header class="panel-header">
             <div class="header-left">
-                <a href="../Home/home.php" class="btn-regresar"><i class="fas fa-arrow-left"></i> Volver al Home</a>
-                <h1>Panel de Control de Solicitudes</h1>
-                <p>Revisa, previsualiza y autoriza las contribuciones de la comunidad escritora.</p>
+                <a href="../Home/home.php" class="btn-regresar"><i class="fas fa-arrow-left"></i> <span data-translate="true">Volver al Home</span></a>
+                <h1 data-translate="true">Panel de Control de Solicitudes</h1>
+                <p data-translate="true">Revisa, previsualiza y autoriza las contribuciones de la comunidad escritora.</p>
             </div>
             <div class="counter-badge">
                 <span class="number"><?php echo count($solicitudes); ?></span>
-                <span class="label">Pendientes</span>
+                <span class="label" data-translate="true">Pendientes</span>
             </div>
         </header>
 
         <?php if (isset($_GET['actualizado'])): ?>
             <div style="background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.3); color: #57ab5a; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-family: Arial, sans-serif; font-size: 14px;">
-                <i class="fas fa-check-circle"></i> La solicitud ha sido procesada correctamente.
+                <i class="fas fa-check-circle"></i> <span data-translate="true">La solicitud ha sido procesada correctamente.</span>
             </div>
         <?php endif; ?>
 
@@ -81,11 +81,11 @@ if (isset($_SESSION['usuario_id'])) {
             <table class="solicitudes-table">
                 <thead>
                     <tr>
-                        <th>Escritor</th>
-                        <th>Categoría</th>
-                        <th>Título de la Publicación</th>
-                        <th>Fecha de Envío</th>
-                        <th class="text-center">Acciones</th>
+                        <th data-translate="true">Escritor</th>
+                        <th data-translate="true">Categoría</th>
+                        <th data-translate="true">Título de la Publicación</th>
+                        <th data-translate="true">Fecha de Envío</th>
+                        <th class="text-center" data-translate="true">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,7 +93,7 @@ if (isset($_SESSION['usuario_id'])) {
                         <tr>
                             <td colspan="5" class="empty-state">
                                 <i class="fas fa-check-circle" style="font-size: 40px; color: #3e464f; display:block; margin-bottom:10px;"></i>
-                                <p style="color: #8b949e; text-align:center;">No hay publicaciones pendientes de revisión por ahora.</p>
+                                <p style="color: #8b949e; text-align:center;" data-translate="true">No hay publicaciones pendientes de revisión por ahora.</p>
                             </td>
                         </tr>
                     <?php else: ?>
@@ -121,7 +121,7 @@ if (isset($_SESSION['usuario_id'])) {
                                             <button class="btn-accion btn-ver" onclick="abrirModalVer('<?php echo addslashes(htmlspecialchars($solicitud['titulo'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['contenido'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['autor'])); ?>', '<?php echo addslashes(htmlspecialchars($solicitud['imagen'])); ?>', '<?php echo $solicitud['tipo_media']; ?>')">
                                                 <i class="fa-solid fa-eye"></i>
                                             </button>
-                                            <span class="tooltip-text">Previsualizar</span>
+                                            <span class="tooltip-text" data-translate="true">Previsualizar</span>
                                         </div>
                                         
                                         <form action="procesar_revision.php" method="POST" style="display:inline;">
@@ -131,7 +131,7 @@ if (isset($_SESSION['usuario_id'])) {
                                                 <button type="submit" class="btn-accion btn-aprobar">
                                                     <i class="fa-solid fa-check"></i>
                                                 </button>
-                                                <span class="tooltip-text">Aprobar y Publicar</span>
+                                                <span class="tooltip-text" data-translate="true">Aprobar y Publicar</span>
                                             </div>
                                         </form>
 
@@ -139,7 +139,7 @@ if (isset($_SESSION['usuario_id'])) {
                                             <button class="btn-accion btn-rechazar" onclick="abrirModalRechazar(<?php echo $solicitud['id']; ?>)">
                                                 <i class="fa-solid fa-xmark"></i>
                                             </button>
-                                            <span class="tooltip-text">Rechazar Solicitud</span>
+                                            <span class="tooltip-text" data-translate="true">Rechazar Solicitud</span>
                                         </div>
 
                                     </div>
@@ -159,7 +159,7 @@ if (isset($_SESSION['usuario_id'])) {
                     <h2 id="modalVerTitulo"></h2>
                     <span id="modalVerAutor" style="color: #8b949e; font-size: 13px; font-weight: 500;"></span>
                 </div>
-                <button type="button" class="modal-close-btn" onclick="cerrarModalVer()">[Cerrar: X]</button>
+                <button type="button" class="modal-close-btn" onclick="cerrarModalVer()">[<span data-translate="true">Cerrar</span>: X]</button>
             </div>
 
             <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
@@ -172,18 +172,18 @@ if (isset($_SESSION['usuario_id'])) {
 
     <div id="modalRechazar" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px;">
-            <h3 style="color: #f87171; margin-top: 0; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Rechazar Solicitud</h3>
-            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px;">Especifica el motivo del rechazo. La publicación cambiará a estado rechazado.</p>
+            <h3 style="color: #f87171; margin-top: 0; margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> <span data-translate="true">Rechazar Solicitud</span></h3>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px;" data-translate="true">Especifica el motivo del rechazo. La publicación cambiará a estado rechazado.</p>
             
             <form action="procesar_revision.php" method="POST">
                 <input type="hidden" name="id_post" id="rechazarPostId" value="">
                 <input type="hidden" name="accion" value="rechazar">
                 
-                <textarea name="motivo" placeholder="Escribe aquí el motivo detallado del rechazo..." required style="width: 100%; height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(126, 189, 145, 0.2); border-radius: 8px; color: #fff; padding: 10px; font-family: sans-serif; resize: none; box-sizing: border-box; margin-bottom: 20px;"></textarea>
+                <textarea name="motivo" placeholder="Escribe aquí el motivo detallado del rechazo..." data-translate-placeholder="true" required style="width: 100%; height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(126, 189, 145, 0.2); border-radius: 8px; color: #fff; padding: 10px; font-family: sans-serif; resize: none; box-sizing: border-box; margin-bottom: 20px;"></textarea>
                 
                 <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" class="btn-modal btn-cancelar" onclick="cerrarModalRechazar()">Cancelar</button>
-                    <button type="submit" class="btn-modal btn-enviar">Enviar</button>
+                    <button type="button" class="btn-modal btn-cancelar" onclick="cerrarModalRechazar()" data-translate="true">Cancelar</button>
+                    <button type="submit" class="btn-modal btn-enviar" data-translate="true">Enviar</button>
                 </div>
             </form>
         </div>
@@ -246,5 +246,6 @@ if (isset($_SESSION['usuario_id'])) {
         }
     });
     </script>
+    <script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>

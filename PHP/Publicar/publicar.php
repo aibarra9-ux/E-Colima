@@ -68,7 +68,7 @@ if (isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicar en <?php echo $categoria_nombre; ?> — ECOLIMA</title>
+    <title data-translate="true">Publicar en <?php echo $categoria_nombre; ?> — ECOLIMA</title>
     
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
@@ -123,9 +123,9 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="contenedor">
         <div class="header-publicar">
             <a href="../Home/home.php" class="btn-volver">
-                <i class="fas fa-arrow-left"></i> Volver
+                <i class="fas fa-arrow-left"></i> <span data-translate="true">Volver</span>
             </a>
-            <h1 class="titulo-pagina">Crear publicación</h1>
+            <h1 class="titulo-pagina" data-translate="true">Crear publicación</h1>
             <span class="badge-categoria">
                 <i class="fas fa-<?php echo $icono; ?>"></i>
                 <?php echo $categoria_nombre; ?>
@@ -134,12 +134,12 @@ if (isset($_SESSION['usuario_id'])) {
 
         <?php if (isset($_GET['success'])): ?>
             <div class="mensaje mensaje-exito">
-                <i class="fas fa-check-circle"></i> ¡Publicación creada! Pendiente de revisión.
+                <i class="fas fa-check-circle"></i> <span data-translate="true">¡Publicación creada! Pendiente de revisión.</span>
             </div>
         <?php endif; ?>
         <?php if (isset($_GET['error'])): ?>
             <div class="mensaje mensaje-error">
-                <i class="fas fa-exclamation-circle"></i> Error al publicar. Intenta de nuevo.
+                <i class="fas fa-exclamation-circle"></i> <span data-translate="true">Error al publicar. Intenta de nuevo.</span>
             </div>
         <?php endif; ?>
 
@@ -152,71 +152,71 @@ if (isset($_SESSION['usuario_id'])) {
                     <input type="hidden" name="imagen_recortada" id="imagenRecortadaData">
                     
                     <div class="form-group">
-                        <label>Tipo de portada</label>
+                        <label data-translate="true">Tipo de portada</label>
                         <div class="selector-media">
                             <button type="button" class="btn-tipo-media activo" id="btnTipoImagen" onclick="cambiarTipoMedia('imagen')">
-                                <i class="fas fa-image"></i> Imagen
+                                <i class="fas fa-image"></i> <span data-translate="true">Imagen</span>
                             </button>
                             <button type="button" class="btn-tipo-media" id="btnTipoVideo" onclick="cambiarTipoMedia('video')">
-                                <i class="fas fa-video"></i> Video
+                                <i class="fas fa-video"></i> <span data-translate="true">Video</span>
                             </button>
                         </div>
                     </div>
 
                     <div class="form-group" id="grupoSubirImagen">
-                        <label>Imagen de portada</label>
+                        <label data-translate="true">Imagen de portada</label>
                         <div class="upload-imagen" id="uploadContainer" onclick="document.getElementById('inputImagen').click()">
                             <img id="previewImagenUpload" src="" style="display:none;">
                             <div class="upload-placeholder" id="uploadPlaceholder">
-                                <i class="fas fa-image"></i> Subir imagen
+                                <i class="fas fa-image"></i> <span data-translate="true">Subir imagen</span>
                             </div>
                         </div>
                         <input type="file" id="inputImagen" accept="image/*" style="display:none;" onchange="cargarImagen(event)">
                     </div>
 
                     <div class="form-group" id="grupoSubirVideo" style="display: none;">
-                        <label>Video de portada</label>
+                        <label data-translate="true">Video de portada</label>
                         <div class="upload-imagen" id="uploadVideoContainer" onclick="document.getElementById('inputVideo').click()">
                             <div class="upload-placeholder" id="uploadVideoPlaceholder">
-                                <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo de Video (.mp4, .webm)
+                                <i class="fas fa-cloud-upload-alt"></i> <span data-translate="true">Seleccionar archivo de Video (.mp4, .webm)</span>
                             </div>
                         </div>
                         <input type="file" id="inputVideo" name="archivo_video" accept="video/mp4,video/webm" style="display:none;" onchange="cargarVideo(event)">
                     </div>
 
                     <div class="form-group">
-                        <label for="titulo">Título</label>
-                        <input type="text" id="titulo" name="titulo" placeholder="Escribe un título claro y atractivo..." required oninput="actualizarPreview()">
+                        <label for="titulo" data-translate="true">Título</label>
+                        <input type="text" id="titulo" name="titulo" placeholder="Escribe un título claro y atractivo..." data-translate-placeholder="true" required oninput="actualizarPreview()">
                     </div>
 
                     <div class="form-group">
-                        <label for="selectSubcategoria">Subcategoría</label>
+                        <label for="selectSubcategoria" data-translate="true">Subcategoría</label>
                         <select id="selectSubcategoria" name="subcategoria_id" required>
-                            <option value="">Cargando subcategorías...</option>
+                            <option value="" data-translate="true">Cargando subcategorías...</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="contenido">Contenido</label>
-                        <textarea id="contenido" name="contenido" placeholder="Comparte información valiosa sobre <?php echo $categoria_nombre; ?>..." required oninput="actualizarPreview(); contarPalabras()"></textarea>
-                        <div class="contador-palabras ok" id="contadorPalabras">0 / <?php echo $limite_palabras; ?> palabras</div>
+                        <label for="contenido" data-translate="true">Contenido</label>
+                        <textarea id="contenido" name="contenido" placeholder="Comparte información valiosa sobre <?php echo $categoria_nombre; ?>..." data-translate-placeholder="true" required oninput="actualizarPreview(); contarPalabras()"></textarea>
+                        <div class="contador-palabras ok" id="contadorPalabras">0 / <?php echo $limite_palabras; ?> <span data-translate="true">palabras</span></div>
                     </div>
 
                     <button type="submit" class="btn-publicar" id="btnPublicar">
-                        <i class="fas fa-paper-plane"></i> Publicar
+                        <i class="fas fa-paper-plane"></i> <span data-translate="true">Publicar</span>
                     </button>
                 </form>
             </div>
 
             <div class="preview-card">
-                <div class="preview-titulo-seccion">Vista previa</div>
+                <div class="preview-titulo-seccion" data-translate="true">Vista previa</div>
                 <div class="preview-tarjeta">
                     <div class="preview-imagen" id="previewImagen">
-                        <span>Sin portada</span>
+                        <span data-translate="true">Sin portada</span>
                     </div>
                     <div class="preview-contenido">
-                        <div class="preview-titulo vacio" id="previewTitulo">Título de la publicación</div>
-                        <div class="preview-descripcion vacio" id="previewDescripcion">El contenido aparecerá aquí...</div>
+                        <div class="preview-titulo vacio" id="previewTitulo" data-translate="true">Título de la publicación</div>
+                        <div class="preview-descripcion vacio" id="previewDescripcion" data-translate="true">El contenido aparecerá aquí...</div>
                     </div>
                 </div>
             </div>
@@ -230,8 +230,8 @@ if (isset($_SESSION['usuario_id'])) {
             <div class="mascara-recorte" id="mascaraRecorte"></div>
         </div>
         <div class="botones-recorte">
-            <button class="btn-recorte btn-cancelar-recorte" onclick="cancelarRecorte()">Cancelar</button>
-            <button class="btn-recorte btn-confirmar-recorte" onclick="confirmarRecorte()">Recortar</button>
+            <button class="btn-recorte btn-cancelar-recorte" onclick="cancelarRecorte()" data-translate="true">Cancelar</button>
+            <button class="btn-recorte btn-confirmar-recorte" onclick="confirmarRecorte()" data-translate="true">Recortar</button>
         </div>
     </div>
     <canvas id="canvasRecorte" style="display:none;"></canvas>
@@ -274,9 +274,9 @@ if (isset($_SESSION['usuario_id'])) {
         fetch(`get_subcategorias.php?categoria_id=${categoriaId}`)
             .then(response => response.json())
             .then(data => {
-                selectSub.innerHTML = '<option value="">Selecciona una subcategoría</option>';
+                selectSub.innerHTML = '<option value="" data-translate="true">Selecciona una subcategoría</option>';
                 if (data.length === 0) {
-                    selectSub.innerHTML = '<option value="">General (Sin subcategorías)</option>';
+                    selectSub.innerHTML = '<option value="" data-translate="true">General (Sin subcategorías)</option>';
                     return;
                 }
                 data.forEach(sub => {
@@ -284,7 +284,7 @@ if (isset($_SESSION['usuario_id'])) {
                 });
             })
             .catch(error => {
-                selectSub.innerHTML = '<option value="">Error al cargar opciones</option>';
+                selectSub.innerHTML = '<option value="" data-translate="true">Error al cargar opciones</option>';
             });
     }
 
@@ -317,7 +317,7 @@ if (isset($_SESSION['usuario_id'])) {
         }
 
         videoDataURL = URL.createObjectURL(file);
-        document.getElementById('uploadVideoPlaceholder').innerHTML = `<i class="fas fa-file-video"></i> Video seleccionado: <b>${file.name}</b>`;
+        document.getElementById('uploadVideoPlaceholder').innerHTML = `<i class="fas fa-file-video"></i> <span data-translate="true">Video seleccionado:</span> <b>${file.name}</b>`;
         actualizarPreview();
     }
 
@@ -390,7 +390,7 @@ if (isset($_SESSION['usuario_id'])) {
         const texto = document.getElementById('contenido').value.trim();
         const palabras = texto ? texto.split(/\s+/).length : 0;
         const contador = document.getElementById('contadorPalabras');
-        contador.textContent = palabras + ' / ' + limitePalabras + ' palabras';
+        contador.textContent = palabras + ' / ' + limitePalabras + ' ' + (<?php echo json_encode($categoria === 'noticias' ? 'palabras' : 'palabras'); ?>);
         if (palabras > limitePalabras) {
             document.getElementById('btnPublicar').disabled = true;
         } else {
@@ -400,8 +400,8 @@ if (isset($_SESSION['usuario_id'])) {
 
     // ========== RENDERIZADO DE VISTA PREVIA MULTIMEDIA ==========
     function actualizarPreview() {
-        const titulo = document.getElementById('titulo').value || 'Título de la publicación';
-        const contenido = document.getElementById('contenido').value || 'El contenido aparecerá aquí...';
+        const titulo = document.getElementById('titulo').value || <?php echo json_encode("Título de la publicación"); ?>;
+        const contenido = document.getElementById('contenido').value || <?php echo json_encode("El contenido aparecerá aquí..."); ?>;
         document.getElementById('previewTitulo').textContent = titulo;
         document.getElementById('previewDescripcion').textContent = contenido.length > 200 ? contenido.substring(0, 200) + '...' : contenido;
         
@@ -411,16 +411,17 @@ if (isset($_SESSION['usuario_id'])) {
             if (imagenDataURL) {
                 contenedorPreview.innerHTML = `<img src="${imagenDataURL}" alt="Preview">`;
             } else {
-                contenedorPreview.innerHTML = '<span>Sin imagen</span>';
+                contenedorPreview.innerHTML = '<span data-translate="true">Sin imagen</span>';
             }
         } else {
             if (videoDataURL) {
                 contenedorPreview.innerHTML = `<video src="${videoDataURL}" autoplay muted loop></video>`;
             } else {
-                contenedorPreview.innerHTML = '<span>Sin video</span>';
+                contenedorPreview.innerHTML = '<span data-translate="true">Sin video</span>';
             }
         }
     }
     </script>
+    <script src="../../JavaScript/Traduccion/traduccion.js"></script>
 </body>
 </html>
