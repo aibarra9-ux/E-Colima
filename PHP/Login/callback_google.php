@@ -11,7 +11,7 @@ if (!isset($_POST['credential'])) {
 $id_token = $_POST['credential'];
 
 // Validamos el token consultando el endpoint seguro de Google
-$url = "https://oauth2.googleapis.com/tokeninfo?id_token=" . $id_token;
+$url = "" . $id_token;
 $response = file_get_contents($url);
 $payload = json_decode($response, true);
 

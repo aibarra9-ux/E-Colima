@@ -92,7 +92,7 @@ session_start();
                 <div class="divider"></div>
 
                 <div id="g_id_onload"
-     data-client_id="551526400527-d7btgc4vcgpfmqsuieooo6naols4g2la.apps.googleusercontent.com"
+     data-client_id=""
      data-context="signin"
      data-ux_mode="redirect"
      data-login_uri="http://localhost/e-Colima/PHP/Login/callback_google.php"
