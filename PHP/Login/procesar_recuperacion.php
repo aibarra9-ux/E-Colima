@@ -76,8 +76,8 @@ if ($accion === 'solicitar_codigo') {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'aibarra9@ucol.mx';               // Correo institucional
-        $mail->Password   = 'rubcngnmhgxnlbjj';              // Contraseña de aplicación
+        $mail->Username   = '';               // Correo institucional
+        $mail->Password   = '';              // Contraseña de aplicación
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->CharSet    = 'UTF-8';
